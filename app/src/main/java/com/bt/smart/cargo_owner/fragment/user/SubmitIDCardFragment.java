@@ -268,7 +268,7 @@ public class SubmitIDCardFragment extends Fragment implements View.OnClickListen
             mPopChoisePic.showChoose(img_up_head, SFZBPicPath);
         }
     }
-    
+
     private void checkWriteInfo() {
         if (MyTextUtils.isEditTextEmpty(et_name, "名称必须和证件上相同")) {
             ToastUtils.showToast(getContext(), "名称不能为空");
@@ -429,6 +429,7 @@ public class SubmitIDCardFragment extends Fragment implements View.OnClickListen
             params.put("front", IDZFileUrl);
             params.put("back", IDBFileUrl);
         }
+        params.setUseJsonStreamer(true);
         ProgressDialogUtil.startShow(getContext(), "正在提交信息...");
         HttpOkhUtils.getInstance().doPostWithHeader(postUrl, headParams, params, new HttpOkhUtils.HttpCallBack() {
             @Override
