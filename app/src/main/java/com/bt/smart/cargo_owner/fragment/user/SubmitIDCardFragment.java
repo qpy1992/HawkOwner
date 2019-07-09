@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
@@ -82,8 +83,10 @@ public class SubmitIDCardFragment extends Fragment implements View.OnClickListen
     private int RESULT_AUTHENTICA_CODE = 10111;
     private int RESULT_CHECK_FACE = 1018;
 
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
         mRootView = LayoutInflater.from(getActivity()).inflate(R.layout.frame_personal_idcard, null);
         initView();
         initData();
@@ -265,7 +268,7 @@ public class SubmitIDCardFragment extends Fragment implements View.OnClickListen
             mPopChoisePic.showChoose(img_up_head, SFZBPicPath);
         }
     }
-
+    
     private void checkWriteInfo() {
         if (MyTextUtils.isEditTextEmpty(et_name, "名称必须和证件上相同")) {
             ToastUtils.showToast(getContext(), "名称不能为空");

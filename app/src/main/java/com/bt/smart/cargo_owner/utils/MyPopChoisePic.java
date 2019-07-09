@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,15 +18,17 @@ import android.view.WindowManager;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.bt.smart.cargo_owner.R;
+
 import java.io.File;
 
 public class MyPopChoisePic {
     private PopupWindow popupWindow;
     private Activity mActivity;
     private int MY_PERMISSIONS_REQUEST_CALL_PHONE2 = 1001;//相册权限申请码
-    private int SHOT_CODE = 1069;//调用系统相册-选择图片
-    private int IMAGE = 1068;//调用系统相册-选择图片
+    private int SHOT_CODE = 10069;//调用系统相册-选择图片
+    private int IMAGE = 10068;//调用系统相册-选择图片
 
     public MyPopChoisePic(Activity activity) {
         this.mActivity = activity;
@@ -117,8 +120,16 @@ public class MyPopChoisePic {
                         ContentValues contentValues = new ContentValues(1);
                         contentValues.put(MediaStore.Images.Media.DATA, new File(filePath).getAbsolutePath());
                         photoUri = mActivity.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
+
+//                        photoUri = FileProvider.getUriForFile(mActivity,
+//                                mActivity.getApplicationContext().getPackageName() + ".fileprovider",//与清单文件中android:authorities的值保持一致
+//                                new File(filePath));//FileProvider方式或者ContentProvider。也可使用VmPolicy方式
                     }
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);// 更改系统默认存储路径
+//                    if (android.os.Build.VERSION.SDK_INT >= 24) {
+//                        //Android7.0添加临时权限标记
+//                        intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+//                    }
                     mActivity.startActivityForResult(intent, SHOT_CODE);
                     popupWindow.dismiss();
                 }

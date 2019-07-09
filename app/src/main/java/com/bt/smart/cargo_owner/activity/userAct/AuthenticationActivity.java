@@ -52,7 +52,11 @@ public class AuthenticationActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        personalFt.onActivityResult(requestCode, resultCode, data);
-        mIDCardFt.onActivityResult(requestCode, resultCode, data);
+        if (null != personalFt) {
+            personalFt.onActivityResult(requestCode, resultCode, data);
+        }
+        if (null != mIDCardFt) {
+            mIDCardFt.onActivityResult(requestCode, resultCode, data);
+        }
     }
 }
