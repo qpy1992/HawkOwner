@@ -62,7 +62,7 @@ public class Home_F extends Fragment implements View.OnClickListener {
             startActivity(new Intent(getContext(), SupplyGoodsActivity.class));
         } else {
             //提示还未通过审核
-            new MyAlertDialog(getActivity(), MyAlertDialog.WARNING_TYPE_1).setTitleText("您还未通过审核，请先去个人中心查看审核状态!")
+            new MyAlertDialog(getActivity(), MyAlertDialog.WARNING_TYPE_1).setTitleText("您还未通过审核，请先查看审核状态!")
                     .setConfirmText("确定")
                     .setCancelText("取消")
                     .showCancelButton(false)

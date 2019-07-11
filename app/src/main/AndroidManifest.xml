@@ -39,6 +39,7 @@
         <activity android:name=".activity.userAct.BankCardActivity" />
         <activity android:name=".activity.userAct.MDetailActivity" />
         <activity android:name=".activity.userAct.MoneyActivity" />
+        <activity android:name=".activity.userAct.SignPlatformActivity" />
         <activity android:name=".activity.FirstActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -49,7 +50,7 @@
         <activity android:name=".activity.LoginActivity" />
         <activity
             android:name=".activity.homeAct.AuthenticationWebAct"
-            android:launchMode="singleTop"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -58,14 +59,14 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="host1"
-                    android:path="/path1"
-                    android:port="8081"
-                    android:scheme="scheme1" />
-                <data
-                    android:host="app"
-                    android:path="/callback"
-                    android:scheme="tsign1" />
+                    android:host="host2"
+                    android:path="/path2"
+                    android:port="8082"
+                    android:scheme="scheme2" />
+                <!--<data-->
+                <!--android:host="app"-->
+                <!--android:path="/callback"-->
+                <!--android:scheme="tsign1" />-->
             </intent-filter>
         </activity>
         <activity android:name=".activity.RegisterActivity" />

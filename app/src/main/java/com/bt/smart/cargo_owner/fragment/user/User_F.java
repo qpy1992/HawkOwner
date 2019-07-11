@@ -22,9 +22,11 @@ import com.bt.smart.cargo_owner.activity.LoginActivity;
 import com.bt.smart.cargo_owner.activity.userAct.AllOrderListActivity;
 import com.bt.smart.cargo_owner.activity.userAct.AuthenticationActivity;
 import com.bt.smart.cargo_owner.activity.userAct.MoneyActivity;
+import com.bt.smart.cargo_owner.activity.userAct.SignPlatformActivity;
 import com.bt.smart.cargo_owner.messageInfo.LoginInfo;
 import com.bt.smart.cargo_owner.utils.GlideLoaderUtil;
 import com.bt.smart.cargo_owner.utils.HttpOkhUtils;
+import com.bt.smart.cargo_owner.utils.MyTextUtils;
 import com.bt.smart.cargo_owner.utils.RequestParamsFM;
 import com.bt.smart.cargo_owner.utils.SpUtils;
 import com.bt.smart.cargo_owner.utils.ToastUtils;
@@ -68,6 +70,8 @@ public class User_F extends Fragment implements View.OnClickListener {
     private int RESULT_MONEY_CODE = 10016;
     private int REQUEST_CHECK_FACE = 1017;//跳转人脸认证界面
     private int RESULT_CHECK_FACE = 1018;
+    private int REQUEST_SIGN_CODE = 1026;//跳转签署协议界面
+    private int RESULT_SIGN_CODE = 1027;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -131,8 +135,13 @@ public class User_F extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_submit:
-                //跳转身份认证界面
-                toSubmitPersonInfo();
+                if ("立即提交".equals(MyTextUtils.getTvTextContent(tv_submit))) {
+                    //跳转身份认证界面
+                    toSubmitPersonInfo();
+                } else if ("签署协议".equals(MyTextUtils.getTvTextContent(tv_submit))) {
+                    //跳转签署协议界面
+                    moveToSign();
+                }
                 break;
             case R.id.linear_money:
                 //跳转余额详情页
@@ -184,29 +193,42 @@ public class User_F extends Fragment implements View.OnClickListener {
             //刷新数据
             getNewCheckStatue();
         }
+        if (REQUEST_SIGN_CODE == requestCode && RESULT_SIGN_CODE == resultCode) {
+            //刷新数据
+            getNewCheckStatue();
+        }
     }
 
     private void checkCheckStatues() {
-        if ("1".equals(MyApplication.checkStatus)) {
-            tv_isCheck.setText("待审核");
-            tv_isCheck.setTextColor(getResources().getColor(R.color.yellow));
-            tv_warn.setText("您的认证信息已提交，请等待客服审核。");
-            tv_submit.setVisibility(View.GONE);
-        } else if ("2".equals(MyApplication.checkStatus)) {
-            tv_isCheck.setText("退回");
+        if ("0".equals(MyApplication.checkStatus)) {
+            tv_isCheck.setText("未认证");
             tv_isCheck.setTextColor(getResources().getColor(R.color.red_30));
-            tv_warn.setText("您提交的认证信息被驳回，具体失败原因，我们会通过短信通知您。");
             tv_submit.setVisibility(View.VISIBLE);
-        } else if ("3".equals(MyApplication.checkStatus)) {//审核通过
+        } else if ("1".equals(MyApplication.checkStatus)) {//审核通过
             tv_checked.setVisibility(View.VISIBLE);
             tv_isCheck.setVisibility(View.GONE);
             tv_warn.setVisibility(View.GONE);
+            tv_submit.setVisibility(View.VISIBLE);
+            if (null == MyApplication.companyContract || "".equals(MyApplication.companyContract)) {
+                tv_submit.setText("签署协议");
+            } else {
+                tv_isCheck.setText("已签署协议");
+                tv_submit.setVisibility(View.GONE);
+            }
+        } else if ("2".equals(MyApplication.checkStatus)) {
+            tv_isCheck.setText("禁用");
+            tv_isCheck.setTextColor(getResources().getColor(R.color.red_30));
+            tv_warn.setText("您提交的认证信息被驳回，具体失败原因，请联系我们。");
             tv_submit.setVisibility(View.GONE);
         } else {
             tv_isCheck.setText("未认证");
             tv_isCheck.setTextColor(getResources().getColor(R.color.red_30));
             tv_submit.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void moveToSign() {
+        startActivityForResult(new Intent(getContext(), SignPlatformActivity.class), REQUEST_SIGN_CODE);
     }
 
     private void getNewCheckStatue() {
@@ -237,6 +259,7 @@ public class User_F extends Fragment implements View.OnClickListener {
                     MyApplication.userName = loginInfo.getData().getZRegister().getCompanyName();
                     MyApplication.userPhone = loginInfo.getData().getZRegister().getFmobile();
                     MyApplication.checkStatus = loginInfo.getData().getZRegister().getCheckStatus();
+                    MyApplication.companyContract = loginInfo.getData().getZRegister().getCompanyContract();
                     MyApplication.userHeadPic = loginInfo.getData().getZRegister().getCompanyLicence();
                     MyApplication.userOrderNum = 0;
                     MyApplication.userType = loginInfo.getData().getZRegister().getFtype();

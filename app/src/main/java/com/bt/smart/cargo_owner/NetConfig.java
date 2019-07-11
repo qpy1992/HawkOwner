@@ -12,7 +12,7 @@ package com.bt.smart.cargo_owner;
 public class NetConfig {
     //服务器总地址
     public static String ROOT = "http://120.27.3.205/rest/";
-//    public static String ROOT = "http://172.16.52.63/rest/";
+    //    public static String ROOT = "http://172.16.52.63/rest/";
     //图片地址
     public static String IMG_HEAD = "http://120.27.3.205/rest/yingsu/";
 
@@ -43,6 +43,10 @@ public class NetConfig {
     public static String DOUPDATEHZ = ROOT + "zRegisterController/doUpdateHZ";
     //个人货主信息补充
     public static String DOUPDATELOGISTICS = ROOT + "zRegisterController/doUpdateLogistics";
+    //平台合同内容
+    public static String CONTENT = ROOT + "eSignController/content";
+    //用户与平台签署合同
+    public static String SIGNWITHPLATFORM = ROOT + "eSignController/signWithPlatform";
 
 
     //车辆类型

@@ -35,6 +35,7 @@ public class MyApplication extends Application {
     public static String userPhone;
     public static String userToken;
     public static String checkStatus;//审核状态
+    public static String companyContract;//平台签署协议
     public static String userHeadPic;//头像
     public static String userName;
     public static double money;//余额
@@ -43,8 +44,6 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        //        JPushInterface.setDebugMode(true);
-        //        JPushInterface.init(this);
         application = this;
         ZXingLibrary.initDisplayOpinion(this);
         openVoice();
