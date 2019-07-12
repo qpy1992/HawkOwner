@@ -134,6 +134,7 @@ public class SubmitIDCardFragment extends Fragment implements View.OnClickListen
         img_up_cardZ.setOnClickListener(this);
         img_up_cardB.setOnClickListener(this);
         tv_submit.setOnClickListener(this);
+        MyApplication.checkFace = false;
     }
 
     @Override
@@ -167,10 +168,27 @@ public class SubmitIDCardFragment extends Fragment implements View.OnClickListen
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if (MyApplication.checkFace) {
+            getActivity().setResult(RESULT_CHECK_FACE);
+            getActivity().finish();
+//            if ("2".equals(MyApplication.userType)) {
+//            } else {
+//                //提交个人资料
+//                FragmentTransaction ftt = getFragmentManager().beginTransaction();
+//                personalFt = new PersonalInfoFragment();
+//                ftt.add(R.id.frame, personalFt, "personalFt");
+//                ftt.commit();
+//            }
+        }
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         //判断人脸认证信息
-        if (REQUEST_AUTHENTICA_CODE == requestCode && RESULT_AUTHENTICA_CODE == resultCode) {
+        if (RESULT_AUTHENTICA_CODE == resultCode) {
             if ("2".equals(MyApplication.userType)) {
                 getActivity().setResult(RESULT_CHECK_FACE);
                 getActivity().finish();

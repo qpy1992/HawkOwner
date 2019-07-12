@@ -15,9 +15,11 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bt.smart.cargo_owner.MainActivity;
 import com.bt.smart.cargo_owner.MyApplication;
 import com.bt.smart.cargo_owner.NetConfig;
 import com.bt.smart.cargo_owner.R;
+import com.bt.smart.cargo_owner.activity.FirstActivity;
 import com.bt.smart.cargo_owner.activity.LoginActivity;
 import com.bt.smart.cargo_owner.activity.userAct.AllOrderListActivity;
 import com.bt.smart.cargo_owner.activity.userAct.AuthenticationActivity;
@@ -27,6 +29,7 @@ import com.bt.smart.cargo_owner.messageInfo.LoginInfo;
 import com.bt.smart.cargo_owner.utils.GlideLoaderUtil;
 import com.bt.smart.cargo_owner.utils.HttpOkhUtils;
 import com.bt.smart.cargo_owner.utils.MyTextUtils;
+import com.bt.smart.cargo_owner.utils.ProgressDialogUtil;
 import com.bt.smart.cargo_owner.utils.RequestParamsFM;
 import com.bt.smart.cargo_owner.utils.SpUtils;
 import com.bt.smart.cargo_owner.utils.ToastUtils;
@@ -233,9 +236,17 @@ public class User_F extends Fragment implements View.OnClickListener {
 
     private void getNewCheckStatue() {
         swiperefresh.setRefreshing(true);
+        String name = SpUtils.getString(getContext(), "name");
+        String psd = SpUtils.getString(getContext(), "psd");
+        //直接登录
+        loginToService(name, psd);
+    }
+
+    private void loginToService(String phone, final String psd) {
         RequestParamsFM params = new RequestParamsFM();
-        params.put("fmobile", MyApplication.userPhone);
-        HttpOkhUtils.getInstance().doPostBean(NetConfig.CodeLOGINURL, params, new HttpOkhUtils.HttpCallBack() {
+        params.put("fmobile", phone);
+        params.put("password", psd);
+        HttpOkhUtils.getInstance().doPost(NetConfig.LOGINURL, params, new HttpOkhUtils.HttpCallBack() {
             @Override
             public void onError(Request request, IOException e) {
                 swiperefresh.setRefreshing(false);
@@ -256,13 +267,17 @@ public class User_F extends Fragment implements View.OnClickListener {
                     MyApplication.userToken = loginInfo.getData().getToken();
                     MyApplication.userID = loginInfo.getData().getZRegister().getId();
                     MyApplication.userCode = loginInfo.getData().getZRegister().getUsercode();
-                    MyApplication.userName = loginInfo.getData().getZRegister().getCompanyName();
+                    MyApplication.userType = loginInfo.getData().getZRegister().getFtype();
+                    if ("2".equals(MyApplication.userType)) {
+                        MyApplication.userName = loginInfo.getData().getZRegister().getCompanyName();
+                    } else {
+                        MyApplication.userName = loginInfo.getData().getZRegister().getCompanyLxr();
+                    }
                     MyApplication.userPhone = loginInfo.getData().getZRegister().getFmobile();
                     MyApplication.checkStatus = loginInfo.getData().getZRegister().getCheckStatus();
                     MyApplication.companyContract = loginInfo.getData().getZRegister().getCompanyContract();
                     MyApplication.userHeadPic = loginInfo.getData().getZRegister().getCompanyLicence();
                     MyApplication.userOrderNum = 0;
-                    MyApplication.userType = loginInfo.getData().getZRegister().getFtype();
                     MyApplication.money = loginInfo.getData().getZRegister().getFaccount();
                     MyApplication.userFccountid = loginInfo.getData().getZRegister().getFaccountid();
                     //更改界面UI

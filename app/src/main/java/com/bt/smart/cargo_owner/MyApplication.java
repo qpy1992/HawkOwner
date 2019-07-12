@@ -30,7 +30,7 @@ public class MyApplication extends Application {
     public static int isLogin = 0;//判断是否登录
     public static String userID;
     public static String userCode;//
-    public static String userType;//2是企业，1是个人
+    public static String userType;//2是企业，3是个人
     public static String userFccountid;
     public static String userPhone;
     public static String userToken;
@@ -40,6 +40,7 @@ public class MyApplication extends Application {
     public static String userName;
     public static double money;//余额
     public static int userOrderNum;//运单数
+    public static boolean checkFace;
 
     @Override
     public void onCreate() {

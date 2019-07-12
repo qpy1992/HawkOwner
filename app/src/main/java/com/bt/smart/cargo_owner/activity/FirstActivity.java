@@ -155,13 +155,17 @@ public class FirstActivity extends Activity implements View.OnClickListener {
                     MyApplication.userToken = loginInfo.getData().getToken();
                     MyApplication.userID = loginInfo.getData().getZRegister().getId();
                     MyApplication.userCode = loginInfo.getData().getZRegister().getUsercode();
-                    MyApplication.userName = loginInfo.getData().getZRegister().getCompanyName();
+                    MyApplication.userType = loginInfo.getData().getZRegister().getFtype();
+                    if ("2".equals(MyApplication.userType)) {
+                        MyApplication.userName = loginInfo.getData().getZRegister().getCompanyName();
+                    } else {
+                        MyApplication.userName = loginInfo.getData().getZRegister().getCompanyLxr();
+                    }
                     MyApplication.userPhone = loginInfo.getData().getZRegister().getFmobile();
                     MyApplication.checkStatus = loginInfo.getData().getZRegister().getCheckStatus();
                     MyApplication.companyContract = loginInfo.getData().getZRegister().getCompanyContract();
                     MyApplication.userHeadPic = loginInfo.getData().getZRegister().getCompanyLicence();
                     MyApplication.userOrderNum = 0;
-                    MyApplication.userType = loginInfo.getData().getZRegister().getFtype();
                     MyApplication.money = loginInfo.getData().getZRegister().getFaccount();
                     MyApplication.userFccountid = loginInfo.getData().getZRegister().getFaccountid();
                     startActivity(new Intent(FirstActivity.this, MainActivity.class));

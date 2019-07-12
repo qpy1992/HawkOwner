@@ -201,25 +201,25 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 }
 
                 if (useYZCode) {
-                    if (null == mPhone) {
-                        ToastUtils.showToast(this, "请获取验证码");
-                        return;
-                    }
-                    if (!phone.equals(mPhone)) {
-                        ToastUtils.showToast(this, "您修改了手机号码，请重新获取验证码");
-                        return;
-                    }
-                    String wrtcode = String.valueOf(et_code.getText()).trim();
-                    if ("".equals(wrtcode) || "请输入验证码".equals(wrtcode)) {
-                        ToastUtils.showToast(LoginActivity.this, "请输入验证码");
-                        return;
-                    }
-                    if (!wrtcode.equals(vCode)) {
-                        ToastUtils.showToast(LoginActivity.this, "验证码不正确");
-                        return;
-                    }
-                    //验证码登录
-                    loginWithYZCode(mPhone);
+//                    if (null == mPhone) {
+//                        ToastUtils.showToast(this, "请获取验证码");
+//                        return;
+//                    }
+//                    if (!phone.equals(mPhone)) {
+//                        ToastUtils.showToast(this, "您修改了手机号码，请重新获取验证码");
+//                        return;
+//                    }
+//                    String wrtcode = String.valueOf(et_code.getText()).trim();
+//                    if ("".equals(wrtcode) || "请输入验证码".equals(wrtcode)) {
+//                        ToastUtils.showToast(LoginActivity.this, "请输入验证码");
+//                        return;
+//                    }
+//                    if (!wrtcode.equals(vCode)) {
+//                        ToastUtils.showToast(LoginActivity.this, "验证码不正确");
+//                        return;
+//                    }
+//                    //验证码登录
+//                    loginWithYZCode(mPhone);
                 } else {
                     String psd = String.valueOf(edit_psd.getText()).trim();
                     if ("".equals(psd) || "请输入密码".equals(psd)) {
@@ -243,7 +243,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         handler = null;
     }
 
-    private void loginWithYZCode(String phone) {
+   /* private void loginWithYZCode(String phone) {
         RequestParamsFM params = new RequestParamsFM();
         params.put("fmobile", phone);
         HttpOkhUtils.getInstance().doPostBean(NetConfig.CodeLOGINURL, params, new HttpOkhUtils.HttpCallBack() {
@@ -281,7 +281,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 }
             }
         });
-    }
+    }*/
 
     private void loginToService(String phone, final String psd) {
         ProgressDialogUtil.startShow(LoginActivity.this, "正在登录请稍后");
@@ -309,14 +309,19 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     MyApplication.userToken = loginInfo.getData().getToken();
                     MyApplication.userID = loginInfo.getData().getZRegister().getId();
                     MyApplication.userCode = loginInfo.getData().getZRegister().getUsercode();
-                    MyApplication.userName = loginInfo.getData().getZRegister().getCompanyName();
+                    MyApplication.userType = loginInfo.getData().getZRegister().getFtype();
+                    if ("2".equals(MyApplication.userType)) {
+                        MyApplication.userName = loginInfo.getData().getZRegister().getCompanyName();
+                    } else {
+                        MyApplication.userName = loginInfo.getData().getZRegister().getCompanyLxr();
+                    }
                     MyApplication.userPhone = loginInfo.getData().getZRegister().getFmobile();
                     MyApplication.checkStatus = loginInfo.getData().getZRegister().getCheckStatus();
                     MyApplication.companyContract = loginInfo.getData().getZRegister().getCompanyContract();
                     MyApplication.userHeadPic = loginInfo.getData().getZRegister().getCompanyLicence();
                     MyApplication.money = loginInfo.getData().getZRegister().getFaccount();
                     MyApplication.userOrderNum = 0;
-                    MyApplication.userType = loginInfo.getData().getZRegister().getFtype();
+
                     MyApplication.userFccountid = loginInfo.getData().getZRegister().getFaccountid();
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     finish();

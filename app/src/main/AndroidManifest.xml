@@ -48,9 +48,14 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.LoginActivity" />
+        <!--人脸认证-->
+        <meta-data
+            android:name="android.webkit.WebView.EnableSafeBrowsing"
+            android:value="true" />
+
         <activity
             android:name=".activity.homeAct.AuthenticationWebAct"
-            android:launchMode="singleTask"
+            android:launchMode="standard"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

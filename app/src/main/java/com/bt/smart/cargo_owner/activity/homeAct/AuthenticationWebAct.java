@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bt.smart.cargo_owner.BaseActivity;
+import com.bt.smart.cargo_owner.MyApplication;
 import com.bt.smart.cargo_owner.R;
 import com.bt.smart.cargo_owner.util.checkFaceFile.WBH5FaceVerifySDK;
 
@@ -32,7 +33,6 @@ public class AuthenticationWebAct extends BaseActivity implements View.OnClickLi
     private ImageView img_back;
     private TextView tv_title;
     private WebView web_show;
-    private String webUri;
     private int RESULT_AUTHENTICA_CODE = 10111;
 
     @Override
@@ -66,7 +66,6 @@ public class AuthenticationWebAct extends BaseActivity implements View.OnClickLi
     }
 
     private void initWebView() {
-        webUri = getIntent().getStringExtra("url");
         web_show.setWebViewClient(new H5FaceWebViewClient());
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -101,14 +100,11 @@ public class AuthenticationWebAct extends BaseActivity implements View.OnClickLi
                     e.printStackTrace();
                 }
             }
-
         } else {
             String url = intent.getStringExtra("url");
             String title = intent.getStringExtra("title");
-
             web_show.loadUrl(url);
         }
-
     }
 
     private class H5FaceWebViewClient extends WebViewClient {
@@ -128,8 +124,11 @@ public class AuthenticationWebAct extends BaseActivity implements View.OnClickLi
                     String serviceId = uri.getQueryParameter("serviceId");
                     boolean status = uri.getBooleanQueryParameter("status", false);
                     Toast.makeText(AuthenticationWebAct.this, "实名认证结束 serviceId = " + serviceId + " status = " + status, Toast.LENGTH_LONG).show();
-                    setResult(RESULT_AUTHENTICA_CODE);
-                    finish();
+                    if (status) {
+                        MyApplication.checkFace = true;
+                        setResult(RESULT_AUTHENTICA_CODE);
+                        finish();
+                    }
                 }
                 return true;
             } else {
@@ -137,6 +136,7 @@ public class AuthenticationWebAct extends BaseActivity implements View.OnClickLi
                 try {
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                     startActivity(intent);
+                    finish();
                     return true;
                 } catch (Exception e) {
                     return false;

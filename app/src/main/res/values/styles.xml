@@ -91,4 +91,17 @@
         <item name="android:windowEnterAnimation">@anim/window_in</item>
         <item name="android:windowExitAnimation">@anim/window_out</item>
     </style>
+
+    <style name="TSAppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="actionBarStyle">@style/CustomActionBarStyle</item>
+    </style>
+
+    <style name="CustomActionBarStyle" parent="Widget.AppCompat.Light.ActionBar">
+        <item name="contentInsetStart">0dp</item>
+        <item name="contentInsetEnd">0dp</item>
+        <item name="contentInsetLeft">0dp</item>
+        <item name="contentInsetRight">0dp</item>
+    </style>
+
 </resources>
