@@ -14,7 +14,7 @@ public class NetConfig {
     public static String ROOT = "http://120.27.3.205/rest/";
     //    public static String ROOT = "http://172.16.52.63/rest/";
     //图片地址
-    public static String IMG_HEAD = "http://120.27.3.205/rest/yingsu/";
+    public static String IMG_HEAD = "http://120.27.3.205/";
 
 
     //file上传图片

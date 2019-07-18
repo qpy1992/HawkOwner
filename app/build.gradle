@@ -25,9 +25,9 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         manifestPlaceholders = [
-                GETUI_APP_ID : "6xiI9sd9XEAQBkWQ053Zh7",
-                GETUI_APP_KEY : "Y7z4MDI7md9TJcgwOksGR8",
-                GETUI_APP_SECRET : "HyLYjf1AZbAujpoocrJp3A"
+                GETUI_APP_ID    : "6xiI9sd9XEAQBkWQ053Zh7",
+                GETUI_APP_KEY   : "Y7z4MDI7md9TJcgwOksGR8",
+                GETUI_APP_SECRET: "HyLYjf1AZbAujpoocrJp3A"
         ]
         ndk {
             abiFilters "armeabi", "armeabi-v7a", "x86_64"

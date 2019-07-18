@@ -121,6 +121,8 @@ public class ReadyRecOrderInfo {
         private String destination_city_id;
         private String destination_area_id;
         private String driver_id;
+        private String goodsName;
+        private String carType;
 
         public int getTempRowNumber() {
             return tempRowNumber;
@@ -320,6 +322,22 @@ public class ReadyRecOrderInfo {
 
         public void setDriver_id(String driver_id) {
             this.driver_id = driver_id;
+        }
+
+        public String getGoodsName() {
+            return goodsName;
+        }
+
+        public void setGoodsName(String goodsName) {
+            this.goodsName = goodsName;
+        }
+
+        public String getCarType() {
+            return carType;
+        }
+
+        public void setCarType(String carType) {
+            this.carType = carType;
         }
     }
 }

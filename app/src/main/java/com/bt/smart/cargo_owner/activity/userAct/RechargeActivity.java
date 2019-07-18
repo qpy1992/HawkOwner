@@ -147,6 +147,7 @@ public class RechargeActivity extends BaseActivity implements View.OnClickListen
                     params.put("userid", MyApplication.userID);
                     params.put("ip", "205.168.1.102");
                     params.put("fee", orderPrice + "");
+                    params.put("attach", "hzcz");
                     params.setUseJsonStreamer(true);
                     HttpOkhUtils.getInstance().doPostWithHeader(NetConfig.WX, headParams, params, new HttpOkhUtils.HttpCallBack() {
                         @Override
@@ -192,6 +193,7 @@ public class RechargeActivity extends BaseActivity implements View.OnClickListen
 //                    params.put("ip", "205.168.1.102");
                     Log.i("FEE", orderPrice + "");
                     params.put("fee", orderPrice);
+                    params.put("attach", "hzcz");
 //                    params.put("plateno", mPlateNo);
                     HttpOkhUtils.getInstance().doPostWithHeader(NetConfig.ALIPAY, headParams, params, new HttpOkhUtils.HttpCallBack() {
                         @Override

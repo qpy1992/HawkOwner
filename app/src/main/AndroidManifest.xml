@@ -21,10 +21,10 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <!-- iBeancon功能所需权限 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" /> <!-- iBeancon功能所需权限 -->
     <!-- 个推3.0电子围栏功能所需权限 -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -33,6 +33,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".activity.XieyiActivity"></activity>
         <activity android:name=".activity.userAct.BCardActivity" />
         <activity android:name=".activity.userAct.WithdrawActivity" />
         <activity android:name=".activity.userAct.RechargeActivity" />
@@ -47,8 +48,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.LoginActivity" />
-        <!--人脸认证-->
+        <activity android:name=".activity.LoginActivity" /> <!-- 人脸认证 -->
         <meta-data
             android:name="android.webkit.WebView.EnableSafeBrowsing"
             android:value="true" />
@@ -68,10 +68,10 @@
                     android:path="/path2"
                     android:port="8082"
                     android:scheme="scheme2" />
-                <!--<data-->
-                <!--android:host="app"-->
-                <!--android:path="/callback"-->
-                <!--android:scheme="tsign1" />-->
+                <!-- <data -->
+                <!-- android:host="app" -->
+                <!-- android:path="/callback" -->
+                <!-- android:scheme="tsign1" /> -->
             </intent-filter>
         </activity>
         <activity android:name=".activity.RegisterActivity" />
@@ -87,7 +87,6 @@
         <activity android:name=".activity.SaomiaoUIActivity" />
 
         <service android:name=".servicefile.SendLocationService" />
-
         <service
             android:name=".servicefile.MyGTPushService"
             android:exported="true"
@@ -95,9 +94,7 @@
             android:process=":pushservice" />
         <service
             android:name=".servicefile.GeTuiIntentService"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
-
-        <!--微信支付activity-->
+            android:permission="android.permission.BIND_JOB_SERVICE" /> <!-- 微信支付activity -->
         <activity
             android:name=".wxapi.WXPayEntryActivity"
             android:exported="true"

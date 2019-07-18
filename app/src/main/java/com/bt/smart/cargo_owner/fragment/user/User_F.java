@@ -21,6 +21,7 @@ import com.bt.smart.cargo_owner.NetConfig;
 import com.bt.smart.cargo_owner.R;
 import com.bt.smart.cargo_owner.activity.FirstActivity;
 import com.bt.smart.cargo_owner.activity.LoginActivity;
+import com.bt.smart.cargo_owner.activity.XieyiActivity;
 import com.bt.smart.cargo_owner.activity.userAct.AllOrderListActivity;
 import com.bt.smart.cargo_owner.activity.userAct.AuthenticationActivity;
 import com.bt.smart.cargo_owner.activity.userAct.MoneyActivity;
@@ -66,6 +67,7 @@ public class User_F extends Fragment implements View.OnClickListener {
     private RelativeLayout rtv_seal;
     private RelativeLayout rtv_phone;
     private RelativeLayout rtv_serv;
+    private RelativeLayout rtv_xieyi;
     private RelativeLayout rtv_about;
     private RelativeLayout rtv_exit;//退出登录
     private RelativeLayout rlt_allOrder;//更多订单
@@ -100,6 +102,7 @@ public class User_F extends Fragment implements View.OnClickListener {
         rtv_seal = mRootView.findViewById(R.id.rtv_seal);
         rtv_phone = mRootView.findViewById(R.id.rtv_phone);
         rtv_serv = mRootView.findViewById(R.id.rtv_serv);
+        rtv_xieyi = mRootView.findViewById(R.id.rtv_xieyi);
         rtv_about = mRootView.findViewById(R.id.rtv_about);
         rtv_exit = mRootView.findViewById(R.id.rtv_exit);
         rlt_allOrder = mRootView.findViewById(R.id.rlt_allOrder);
@@ -120,6 +123,7 @@ public class User_F extends Fragment implements View.OnClickListener {
         rtv_seal.setOnClickListener(this);
         rtv_phone.setOnClickListener(this);
         rtv_serv.setOnClickListener(this);
+        rtv_xieyi.setOnClickListener(this);
         rtv_about.setOnClickListener(this);
         rtv_exit.setOnClickListener(this);
         rlt_allOrder.setOnClickListener(this);
@@ -161,6 +165,9 @@ public class User_F extends Fragment implements View.OnClickListener {
             case R.id.rtv_serv:
                 //电话联系客服
                 contactService();
+                break;
+            case R.id.rtv_xieyi:
+                preview();
                 break;
             case R.id.rtv_about:
                 //关于我们
@@ -341,5 +348,13 @@ public class User_F extends Fragment implements View.OnClickListener {
 
     private void aboutUs() {
 
+    }
+
+    private void preview(){
+        if(MyApplication.companyContract==null){
+            moveToSign();
+        }else {
+            startActivity(new Intent(getContext(), XieyiActivity.class));
+        }
     }
 }
