@@ -214,10 +214,8 @@ public class OrderDetailFragment extends Fragment implements View.OnClickListene
     private void sureReceipt() {
         RequestParamsFM headParams = new RequestParamsFM();
         headParams.put("X-AUTH-TOKEN", MyApplication.userToken);
-        RequestParamsFM params = new RequestParamsFM();
-        params.put("id", orderID);
         ProgressDialogUtil.startShow(getContext(), "正在确认回单...");
-        HttpOkhUtils.getInstance().doPostWithHeader(NetConfig.HUIDAN, headParams, params, new HttpOkhUtils.HttpCallBack() {
+        HttpOkhUtils.getInstance().doGetWithOnlyHeader(NetConfig.HUIDAN+"/"+orderID, headParams, new HttpOkhUtils.HttpCallBack() {
             @Override
             public void onError(Request request, IOException e) {
                 ProgressDialogUtil.hideDialog();
