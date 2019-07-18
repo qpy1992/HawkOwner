@@ -116,7 +116,7 @@ public class FirstActivity extends Activity implements View.OnClickListener {
     private static final int REQUEST_PERMISSION = 101;
 
     private void requestPermission() {
-        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE},
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE, Manifest.permission.CAMERA},
                 REQUEST_PERMISSION);
     }
 
