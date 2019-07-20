@@ -102,9 +102,9 @@ public class NetConfig {
     public static String BCDEL = ROOT + "yqzlController/cancelBind";
 
     //微信支付统一下单
-    public static String WX = ROOT + "wxController/wxOrder";
+    public static String WX = ROOT + "wxController/wxOrderHz";
 
-    public static String WX_APPID = "wx6ae170b6547a71c4";
+    public static String WX_APPID = "wx614298998f514ca3";
 
     //支付宝参数拼接
     public static String ALIPAY = ROOT + "alipayController/alipayOrder";
