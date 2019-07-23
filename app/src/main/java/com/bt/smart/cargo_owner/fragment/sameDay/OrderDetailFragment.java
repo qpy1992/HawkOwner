@@ -56,7 +56,7 @@ import okhttp3.Request;
 
 public class OrderDetailFragment extends Fragment implements View.OnClickListener, View.OnTouchListener {
     private View mRootView;
-    private ImageView img_back, img_empty, iv_l1, iv_l2, iv_l3, iv_rece;
+    private ImageView img_back, img_empty, iv_l1, iv_l2, iv_l3, iv_rece, ysxy;
     private LinearLayout ll_load, ll_rece;
     private TextView tv_title, tv_orderNum, tv_place, tv_goodsname, tv_carType, tv_name, tv_fhPlace, tv_phone, tv_cont, tv_sign, tv_inter;
     private String orderID;//订单id
@@ -95,6 +95,7 @@ public class OrderDetailFragment extends Fragment implements View.OnClickListene
         ll_load = mRootView.findViewById(R.id.ll_load);
         ll_rece = mRootView.findViewById(R.id.ll_rece);
         moveBtn = mRootView.findViewById(R.id.moveBtn);
+        ysxy = mRootView.findViewById(R.id.ysxy);
     }
 
     private void initData() {
@@ -120,6 +121,11 @@ public class OrderDetailFragment extends Fragment implements View.OnClickListene
         } else if (orderType == 8) {
             tv_sign.setVisibility(View.VISIBLE);
             tv_sign.setText("确认支付");
+        }
+        if (0 == orderType || 1 == orderType || 2 == orderType) {
+            ll_load.setVisibility(View.GONE);
+            iv_rece.setVisibility(View.GONE);
+            ysxy.setVisibility(View.GONE);
         }
         //获取货源详情
         getOrderDetail();
