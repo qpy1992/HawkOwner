@@ -822,49 +822,6 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
         });
     }
 
-    /*private void setCarTypeSpinner() {
-        carTypeList = new ArrayList();
-        carTypeAdapter = new SpCarTypeAdapter(getContext(), carTypeList);
-        sp_cartype.setAdapter(carTypeAdapter);
-        sp_cartype.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                carTypeID = carTypeList.get(i).getId();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-    }*/
-
-    /*private void getAllCarType() {
-        RequestParamsFM headParams = new RequestParamsFM();
-        headParams.put("X-AUTH-TOKEN", MyApplication.userToken);
-        HttpOkhUtils.getInstance().doGetWithOnlyHeader(NetConfig.CARTYPE, headParams, new HttpOkhUtils.HttpCallBack() {
-            @Override
-            public void onError(Request request, IOException e) {
-
-            }
-
-            @Override
-            public void onSuccess(int code, String resbody) {
-                if (code == 200) {
-                    Gson gson = new Gson();
-                    CarTypeListInfo carTypeListInfo = gson.fromJson(resbody, CarTypeListInfo.class);
-                    if (carTypeListInfo.isOk()) {
-                        carTypeList.clear();
-                        carTypeList.addAll(carTypeListInfo.getData());
-                        carTypeAdapter.notifyDataSetChanged();
-                    }
-                }
-            }
-        });
-    }*/
-
-
-
     public void setChioceTerm(List<ChioceAdapterContentInfo> lengthData, List<ChioceAdapterContentInfo> modelData) {
         if (null != lengthData) {
             for (int i = 0; i < lengthData.size(); i++) {
