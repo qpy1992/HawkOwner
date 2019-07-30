@@ -6,6 +6,11 @@ import android.text.Selection;
 import android.text.TextWatcher;
 import android.widget.EditText;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.safety.Whitelist;
+
 public class CommonUtil {
     /**
      * 设置银行卡输入时每隔4位多一位空格
@@ -118,5 +123,22 @@ public class CommonUtil {
             flag = false;
         }
         return flag;
+    }
+
+    public static String toPlainText(final String html) {
+        if (html == null) {
+            return "";
+        }
+
+        final Document document = Jsoup.parse(html);
+        final Document.OutputSettings outputSettings = new Document.OutputSettings().prettyPrint(false);
+        document.outputSettings(outputSettings);
+        document.select("br").append("\\n");
+        document.select("p").prepend("\\n");
+        document.select("p").append("\\n");
+        final String newHtml = document.html().replaceAll("\\\\n", "\n");
+        final String plainText = Jsoup.clean(newHtml, "", Whitelist.none(), outputSettings);
+        final String result = StringEscapeUtils.unescapeHtml3(plainText.trim());
+        return result;
     }
 }

@@ -40,30 +40,41 @@
                         android:src="@drawable/icon_zhuanghuo" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:id="@+id/tv_zh"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
-                        android:text="装货地    "
+                        android:layout_weight="2"
                         android:textColor="@color/word_black"
                         android:textSize="14sp" />
 
-                    <TextView
-                        android:id="@+id/tv_fh_area"
+                    <LinearLayout
+                        android:id="@+id/ll_ssq"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:hint="发货地省市区"
-                        android:textColor="@color/word_black"
-                        android:textSize="14sp" />
+                        android:layout_weight="7"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
 
-                    <ImageView
-                        android:id="@+id/img_sel_fh"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_marginRight="8dp"
-                        android:padding="12dp"
-                        android:src="@drawable/me_next2" />
+                        <TextView
+                            android:id="@+id/tv_fh_area"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="6"
+                            android:hint="@string/fhssq"
+                            android:textColor="@color/word_black"
+                            android:textSize="14sp" />
+
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_marginRight="8dp"
+                            android:layout_weight="1"
+                            android:padding="12dp"
+                            android:src="@drawable/me_next2" />
+                    </LinearLayout>
+
                 </LinearLayout>
 
                 <include layout="@layout/view_line_maginleft50" />
@@ -76,11 +87,12 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:id="@+id/tv_zhadd"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="50dp"
                         android:layout_marginRight="10dp"
-                        android:text="详细地址"
+                        android:layout_weight="2"
                         android:textColor="@color/word_black"
                         android:textSize="14sp" />
 
@@ -89,7 +101,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="10dp"
-                        android:layout_weight="1"
+                        android:layout_weight="7"
                         android:background="@null"
                         android:hint="请输入发货地街道信息"
                         android:textColor="@color/gray_99"
@@ -106,11 +118,12 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="50dp"
                         android:layout_marginRight="10dp"
-                        android:text="发货人    "
+                        android:text="@string/fh"
+                        android:layout_weight="2"
                         android:textColor="@color/word_black"
                         android:textSize="14sp" />
 
@@ -119,7 +132,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="10dp"
-                        android:layout_weight="1"
+                        android:layout_weight="7"
                         android:background="@null"
                         android:hint="请输入发货人姓名"
                         android:textColor="@color/gray_99"
@@ -136,12 +149,13 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="50dp"
                         android:layout_marginRight="10dp"
-                        android:text="发货电话"
+                        android:text="@string/fhm"
                         android:textColor="@color/word_black"
+                        android:layout_weight="2"
                         android:textSize="14sp" />
 
                     <EditText
@@ -149,7 +163,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="10dp"
-                        android:layout_weight="1"
+                        android:layout_weight="7"
                         android:background="@null"
                         android:hint="请输入发货人手机号"
                         android:phoneNumber="true"
@@ -178,31 +192,42 @@
                         android:src="@drawable/icon_xiehuo" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:id="@+id/tv_xh"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
-                        android:text="卸货地    "
+                        android:layout_weight="2"
                         android:textColor="@color/word_black"
                         android:textSize="14sp" />
+
+                    <LinearLayout
+                        android:id="@+id/ll_shssq"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="7"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/tv_sh_area"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:hint="收货地省市区"
+                        android:layout_weight="6"
+                        android:hint="@string/shssq"
                         android:textColor="@color/word_black"
                         android:textColorHint="@color/gray_99"
                         android:textSize="14sp" />
 
                     <ImageView
                         android:id="@+id/img_sel_sh"
-                        android:layout_width="40dp"
+                        android:layout_width="0dp"
                         android:layout_height="40dp"
                         android:layout_marginRight="8dp"
+                        android:layout_weight="1"
                         android:padding="12dp"
                         android:src="@drawable/me_next2" />
+                    </LinearLayout>
                 </LinearLayout>
 
                 <include layout="@layout/view_line_maginleft50" />
@@ -215,11 +240,12 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:id="@+id/tv_xhadd"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="50dp"
                         android:layout_marginRight="10dp"
-                        android:text="详细地址"
+                        android:layout_weight="2"
                         android:textColor="@color/word_black"
                         android:textSize="14sp" />
 
@@ -228,7 +254,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="10dp"
-                        android:layout_weight="1"
+                        android:layout_weight="7"
                         android:background="@null"
                         android:hint="请输入收货地街道信息"
                         android:textColor="@color/gray_99"
@@ -245,11 +271,12 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="50dp"
                         android:layout_marginRight="10dp"
-                        android:text="收货人    "
+                        android:layout_weight="2"
+                        android:text="@string/sh"
                         android:textColor="@color/word_black"
                         android:textSize="14sp" />
 
@@ -258,7 +285,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="10dp"
-                        android:layout_weight="1"
+                        android:layout_weight="7"
                         android:background="@null"
                         android:hint="请输入收货人姓名"
                         android:textColor="@color/gray_99"
@@ -275,11 +302,12 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="50dp"
                         android:layout_marginRight="10dp"
-                        android:text="收货电话"
+                        android:text="@string/shm"
+                        android:layout_weight="2"
                         android:textColor="@color/word_black"
                         android:textSize="14sp" />
 
@@ -288,7 +316,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="10dp"
-                        android:layout_weight="1"
+                        android:layout_weight="7"
                         android:background="@null"
                         android:hint="请输入收货人手机号"
                         android:phoneNumber="true"
@@ -317,11 +345,11 @@
                         android:src="@drawable/icon_goodsinfo" />
 
                     <TextView
+                        android:id="@+id/tv_goods"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
-                        android:text="货物信息    "
                         android:textColor="@color/word_black"
                         android:textSize="14sp" />
 
@@ -366,19 +394,14 @@
                         android:src="@drawable/icon_otherinfo" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
-                        android:text="其他信息    "
                         android:textColor="@color/word_black"
+                        android:layout_weight="1"
+                        android:text="@string/other"
                         android:textSize="14sp" />
-
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1" />
-
                 </LinearLayout>
 
                 <include layout="@layout/view_line_maginleft50" />
@@ -391,12 +414,51 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:id="@+id/tv_ystype"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="50dp"
+                        android:layout_marginRight="10dp"
+                        android:textColor="@color/word_black"
+                        android:layout_weight="1"
+                        android:textSize="14sp" />
+
+                    <CheckBox
+                        android:id="@+id/ck_zc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="50dp"
+                        android:checked="true"
+                        android:text="@string/zc"
+                        android:textColor="@color/word_black"
+                        android:textSize="14sp" />
+
+                    <CheckBox
+                        android:id="@+id/ck_pc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="20dp"
+                        android:text="@string/pc"
+                        android:textColor="@color/word_black"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <include layout="@layout/view_line_maginleft50" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:minHeight="40dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_goodstype"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="50dp"
                         android:layout_marginRight="10dp"
                         android:layout_weight="1"
-                        android:text="货物类型"
                         android:textColor="@color/word_black"
                         android:textSize="14sp" />
 
@@ -421,20 +483,22 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:id="@+id/tv_cartype"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="50dp"
                         android:layout_marginRight="10dp"
                         android:layout_weight="1"
-                        android:text="车型        "
                         android:textColor="@color/word_black"
                         android:textSize="14sp" />
 
-                    <Spinner
-                        android:id="@+id/sp_cartype"
+                    <TextView
+                        android:id="@+id/tv_typelength"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="20dp"
+                        android:hint="@string/click"
+                        android:gravity="center_horizontal"
                         android:minWidth="100dp"
                         android:spinnerMode="dialog"
                         android:textColor="@color/word_black"
@@ -451,12 +515,12 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:id="@+id/tv_zhdate"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="50dp"
                         android:layout_marginRight="10dp"
                         android:layout_weight="1"
-                        android:text="装货日期"
                         android:textColor="@color/word_black"
                         android:textSize="14sp" />
 
@@ -486,7 +550,58 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
                             android:layout_marginRight="15dp"
-                            android:hint="选择装货日期"
+                            android:hint="@string/zhdate1"
+                            android:textColor="@color/word_black"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <include layout="@layout/view_line_maginleft50" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:minHeight="40dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_xhdate"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="50dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:textColor="@color/word_black"
+                        android:textSize="14sp" />
+
+                    <LinearLayout
+                        android:id="@+id/xh_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/bg_round_gray_line"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginTop="3dp"
+                            android:layout_marginBottom="3dp"
+                            android:padding="4dp"
+                            android:src="@drawable/icon_date" />
+
+                        <TextView
+                            android:id="@+id/tv_xhtime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="15dp"
+                            android:hint="@string/xhdate1"
                             android:textColor="@color/word_black"
                             android:textSize="14sp" />
                     </LinearLayout>
@@ -507,7 +622,7 @@
                         android:layout_marginLeft="50dp"
                         android:layout_marginRight="10dp"
                         android:layout_weight="1"
-                        android:text="指派人员"
+                        android:text="@string/asign"
                         android:textColor="@color/word_black"
                         android:textSize="14sp" />
 
@@ -522,7 +637,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="去选择"
+                            android:text="@string/gochoose"
                             android:textColor="@color/blue_87"
                             android:textSize="12sp" />
 
@@ -544,12 +659,12 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:id="@+id/tv_paytype"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="50dp"
                         android:layout_marginRight="10dp"
                         android:layout_weight="1"
-                        android:text="支付方式"
                         android:textColor="@color/word_black"
                         android:textSize="14sp" />
 
@@ -559,7 +674,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="50dp"
                         android:checked="true"
-                        android:text="现结"
+                        android:text="@string/xj"
                         android:textColor="@color/word_black"
                         android:textSize="14sp" />
 
@@ -568,46 +683,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="20dp"
-                        android:text="月结    "
-                        android:textColor="@color/word_black"
-                        android:textSize="14sp" />
-                </LinearLayout>
-
-                <include layout="@layout/view_line_maginleft50" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:minHeight="40dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="50dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_weight="1"
-                        android:text="接受拼箱"
-                        android:textColor="@color/word_black"
-                        android:textSize="14sp" />
-
-                    <CheckBox
-                        android:id="@+id/ck_acept"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="50dp"
-                        android:checked="true"
-                        android:text="接受"
-                        android:textColor="@color/word_black"
-                        android:textSize="14sp" />
-
-                    <CheckBox
-                        android:id="@+id/ck_unacept"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="20dp"
-                        android:text="不接受"
+                        android:text="@string/yj"
                         android:textColor="@color/word_black"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -643,7 +719,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
                             android:layout_marginRight="10dp"
-                            android:text="预估费用    "
+                            android:text="@string/ygfy"
                             android:textColor="@color/word_black"
                             android:textSize="14sp" />
 
@@ -663,34 +739,18 @@
                         android:minHeight="40dp"
                         android:orientation="horizontal">
 
-                        <LinearLayout
-                            android:layout_width="0dp"
+                        <TextView
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="50dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginRight="10dp"
-                            android:layout_marginBottom="5dp"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="使用油卡"
-                                android:textColor="@color/word_black"
-                                android:textSize="14sp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="(油卡部分的金额无法开票)"
-                                android:textColor="@color/red"
-                                android:textSize="12dp" />
-                        </LinearLayout>
+                            android:text="@string/oil"
+                            android:textColor="@color/word_black"
+                            android:textSize="14sp" />
 
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
                             android:orientation="vertical">
 
                             <LinearLayout
@@ -703,7 +763,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginRight="50dp"
-                                    android:text="使用"
+                                    android:text="@string/use"
                                     android:textColor="@color/word_black"
                                     android:textSize="14sp" />
 
@@ -713,7 +773,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginRight="20dp"
                                     android:checked="true"
-                                    android:text="不使用"
+                                    android:text="@string/unuse"
                                     android:textColor="@color/word_black"
                                     android:textSize="14sp" />
                             </LinearLayout>
@@ -737,7 +797,7 @@
 
                                 <EditText
                                     android:id="@+id/et_oilPrice"
-                                    android:layout_width="wrap_content"
+                                    android:layout_width="40dp"
                                     android:layout_height="wrap_content"
                                     android:layout_marginRight="20dp"
                                     android:background="@null"
@@ -745,6 +805,13 @@
                                     android:numeric="decimal"
                                     android:textColor="@color/word_black"
                                     android:textSize="14sp" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/oilwarn"
+                                    android:textColor="@color/red"
+                                    android:textSize="12dp" />
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
@@ -764,7 +831,7 @@
                             android:layout_marginLeft="50dp"
                             android:layout_marginRight="10dp"
                             android:layout_weight="1"
-                            android:text="报价"
+                            android:text="@string/bj"
                             android:textColor="@color/word_black"
                             android:textSize="14sp" />
 
@@ -782,7 +849,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginRight="20dp"
                             android:background="@null"
-                            android:hint="请输入您的报价"
+                            android:hint="@string/bjwarn"
                             android:numeric="decimal"
                             android:textColor="@color/word_black"
                             android:textSize="14sp" />

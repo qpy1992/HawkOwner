@@ -136,7 +136,7 @@ public class PersonalCarInfoFragment extends Fragment implements View.OnClickLis
 
     private void toSelectModelLength() {
         SelectModelLengthFragment mollengthFt = new SelectModelLengthFragment();
-        mollengthFt.setTopFragment(this);
+//        mollengthFt.setTopFragment(this);
         FragmentTransaction ftt = getFragmentManager().beginTransaction();
         ftt.add(R.id.frame, mollengthFt, "mollengthFt");
         ftt.addToBackStack("mollengthFt");

@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:padding="10dp"
-            android:text="取消"
+            android:text="@string/m_dialog_cancel"
             android:textColor="@color/text1"
             android:textSize="16sp" />
 
@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="请选择时间"
+            android:text="@string/selectdate"
             android:textColor="@color/text1"
             android:textSize="20sp" />
 
@@ -36,7 +36,7 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:padding="10dp"
-            android:text="确定"
+            android:text="@string/m_dialog_ok"
             android:textColor="@color/text1"
             android:textSize="16sp" />
 

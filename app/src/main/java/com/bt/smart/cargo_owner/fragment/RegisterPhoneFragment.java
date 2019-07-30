@@ -1,9 +1,14 @@
 package com.bt.smart.cargo_owner.fragment;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.StyleSpan;
+import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,22 +18,22 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.bt.smart.cargo_owner.NetConfig;
 import com.bt.smart.cargo_owner.R;
 import com.bt.smart.cargo_owner.activity.LoginActivity;
 import com.bt.smart.cargo_owner.messageInfo.CommonInfo;
 import com.bt.smart.cargo_owner.messageInfo.RegisterInfo;
+import com.bt.smart.cargo_owner.messageInfo.RuleContentInfo;
 import com.bt.smart.cargo_owner.messageInfo.SMSInfo;
+import com.bt.smart.cargo_owner.utils.CommonUtil;
 import com.bt.smart.cargo_owner.utils.HttpOkhUtils;
+import com.bt.smart.cargo_owner.utils.MyAlertDialog;
 import com.bt.smart.cargo_owner.utils.MyTextUtils;
 import com.bt.smart.cargo_owner.utils.ProgressDialogUtil;
 import com.bt.smart.cargo_owner.utils.RequestParamsFM;
 import com.bt.smart.cargo_owner.utils.ToastUtils;
 import com.google.gson.Gson;
-
 import java.io.IOException;
-
 import okhttp3.Request;
 
 
@@ -49,11 +54,11 @@ public class RegisterPhoneFragment extends Fragment implements View.OnClickListe
     private CheckBox ck_per;//个人
     private CheckBox ck_com;//企业
     private EditText et_phone;
-    private TextView tv_gcode;//点击获取验证码
+    private TextView tv_gcode,tv_seragree_reg,tv_pripolicy_reg;//点击获取验证码
     private EditText et_code;//填写验证码
     private EditText et_psd;//填写密码
     private EditText et_rec;//推荐人
-    private CheckBox cb_agree;//是否同意协议
+    private CheckBox cb_agree_reg;//是否同意协议
     private TextView tv_submit;//确认提交
 
     private String mPhone;
@@ -83,15 +88,28 @@ public class RegisterPhoneFragment extends Fragment implements View.OnClickListe
         et_phone = mRootView.findViewById(R.id.et_phone);
         et_code = mRootView.findViewById(R.id.et_code);
         et_psd = mRootView.findViewById(R.id.et_psd);
-        cb_agree = mRootView.findViewById(R.id.cb_agree);
+        cb_agree_reg = mRootView.findViewById(R.id.cb_agree_reg);
         tv_gcode = mRootView.findViewById(R.id.tv_gcode);
         tv_submit = mRootView.findViewById(R.id.tv_submit);
+        tv_seragree_reg = mRootView.findViewById(R.id.tv_seragree_reg);
+        tv_pripolicy_reg = mRootView.findViewById(R.id.tv_pripolicy_reg);
     }
 
     private void initData() {
+        UnderlineSpan underlineSpan = new UnderlineSpan();
+        StyleSpan styleSpan_B = new StyleSpan(Typeface.BOLD);
+        SpannableString spannableString = new SpannableString("服务协议");
+        spannableString.setSpan(underlineSpan, 0, spannableString.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(styleSpan_B, 0, spannableString.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        tv_seragree_reg.setText(spannableString);
+
+        SpannableString spannableString2 = new SpannableString("隐私政策");
+        spannableString2.setSpan(underlineSpan, 0, spannableString2.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        spannableString2.setSpan(styleSpan_B, 0, spannableString2.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        tv_pripolicy_reg.setText(spannableString2);
         handler = new Handler();
         img_back.setOnClickListener(this);
-        cb_agree.setChecked(true);
+//        cb_agree_reg.setChecked(true);
         if ("fgt".equals(mKind)) {
             tv_regis.setText("忘记密码");
         } else {
@@ -103,6 +121,8 @@ public class RegisterPhoneFragment extends Fragment implements View.OnClickListe
         }
         tv_gcode.setOnClickListener(this);
         tv_submit.setOnClickListener(this);
+        tv_seragree_reg.setOnClickListener(this);
+        tv_pripolicy_reg.setOnClickListener(this);
     }
 
     @Override
@@ -152,6 +172,10 @@ public class RegisterPhoneFragment extends Fragment implements View.OnClickListe
                 if ("fgt".equals(mKind)) {//修改密码
                     changePsd(mPhone, wrtpsd);
                 } else {//注册
+                    if(!cb_agree_reg.isChecked()){
+                        ToastUtils.showToast(getContext(),getString(R.string.check));
+                        return;
+                    }
                     //判断是否选择个人或企业
                     if (ck_per.isChecked()) {
                         roleType = "3";
@@ -164,6 +188,12 @@ public class RegisterPhoneFragment extends Fragment implements View.OnClickListe
                     }
                     registMember(mPhone, wrtpsd, recommen);
                 }
+                break;
+            case R.id.tv_seragree_reg:
+                showSeragree();
+                break;
+            case R.id.tv_pripolicy_reg:
+                showPripolicy();
                 break;
         }
     }
@@ -224,11 +254,12 @@ public class RegisterPhoneFragment extends Fragment implements View.OnClickListe
                 }
                 Gson gson = new Gson();
                 RegisterInfo sendSMSInfo = gson.fromJson(resbody, RegisterInfo.class);
-                ToastUtils.showToast(getContext(), sendSMSInfo.getMessage());
                 if (sendSMSInfo.isOk()) {
                     isFinish = true;
                     startActivity(new Intent(getContext(), LoginActivity.class));
                     getActivity().finish();
+                }else{
+                    ToastUtils.showToast(getContext(),sendSMSInfo.getMessage());
                 }
             }
         });
@@ -303,6 +334,56 @@ public class RegisterPhoneFragment extends Fragment implements View.OnClickListe
                     }, 1000);    //第一次执行，一秒之后。第一次执行完就没关系了
                 } else {
                     ToastUtils.showToast(getContext(), "验证码获取失败");
+                }
+            }
+        });
+    }
+
+    protected void showSeragree(){
+        HttpOkhUtils.getInstance().doGet(NetConfig.CONTENT+"/A0002", new HttpOkhUtils.HttpCallBack() {
+            @Override
+            public void onError(Request request, IOException e) {
+                ToastUtils.showToast(getContext(), "网络错误");
+            }
+
+            @Override
+            public void onSuccess(int code, String resbody) {
+                if (200 != code) {
+                    ToastUtils.showToast(getContext(), "网络错误" + code);
+                    return;
+                }
+                Gson gson = new Gson();
+                RuleContentInfo ruleContentInfo = gson.fromJson(resbody, RuleContentInfo.class);
+//                ToastUtils.showToast(getContext(), ruleContentInfo.getMessage());
+                if (ruleContentInfo.isOk()) {
+                    new MyAlertDialog(getContext())
+                            .setTitleText(getString(R.string.seragree))
+                            .setContentText(CommonUtil.toPlainText(ruleContentInfo.getData().getFcontent())).show();
+                }
+            }
+        });
+    }
+
+    protected void showPripolicy(){
+        HttpOkhUtils.getInstance().doGet(NetConfig.CONTENT + "/A0003", new HttpOkhUtils.HttpCallBack() {
+            @Override
+            public void onError(Request request, IOException e) {
+                ToastUtils.showToast(getContext(), "网络错误");
+            }
+
+            @Override
+            public void onSuccess(int code, String resbody) {
+                if (200 != code) {
+                    ToastUtils.showToast(getContext(), "网络错误" + code);
+                    return;
+                }
+                Gson gson = new Gson();
+                RuleContentInfo ruleContentInfo = gson.fromJson(resbody, RuleContentInfo.class);
+//                ToastUtils.showToast(getContext(), ruleContentInfo.getMessage());
+                if (ruleContentInfo.isOk()) {
+                    new MyAlertDialog(getContext())
+                            .setTitleText(getString(R.string.pripolicy))
+                            .setContentText(CommonUtil.toPlainText(ruleContentInfo.getData().getFcontent())).show();
                 }
             }
         });

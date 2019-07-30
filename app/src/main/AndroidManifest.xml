@@ -33,7 +33,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activity.XieyiActivity"></activity>
+        <activity android:name=".activity.samedayAct.CarTypeActivity"></activity>
+        <activity android:name=".activity.XieyiActivity" />
         <activity android:name=".activity.userAct.BCardActivity" />
         <activity android:name=".activity.userAct.WithdrawActivity" />
         <activity android:name=".activity.userAct.RechargeActivity" />

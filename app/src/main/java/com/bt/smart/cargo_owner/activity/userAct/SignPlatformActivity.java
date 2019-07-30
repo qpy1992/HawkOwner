@@ -6,6 +6,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -37,6 +38,7 @@ public class SignPlatformActivity extends BaseActivity implements View.OnClickLi
     private TextView tv_useName;
     private WebView web_rule;
     private Button bt_sign;
+    private CheckBox cb_agree_xy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,7 @@ public class SignPlatformActivity extends BaseActivity implements View.OnClickLi
         tv_useName = findViewById(R.id.tv_useName);
         web_rule = findViewById(R.id.web_rule);
         bt_sign = findViewById(R.id.bt_sign);
+        cb_agree_xy = findViewById(R.id.cb_agree_xy);
     }
 
     private void initData() {
@@ -73,6 +76,10 @@ public class SignPlatformActivity extends BaseActivity implements View.OnClickLi
                 break;
             case R.id.bt_sign:
                 //签署协议
+                if(!cb_agree_xy.isChecked()){
+                    ToastUtils.showToast(SignPlatformActivity.this,"请确认已认真阅读合同");
+                    return;
+                }
                 if ("2".equals(MyApplication.userType)) {
                     signPlat(1);
                 } else {
@@ -111,10 +118,8 @@ public class SignPlatformActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void getRuleContent() {
-        RequestParamsFM headParam = new RequestParamsFM();
-        headParam.put("X-AUTH-TOKEN", MyApplication.userToken);
         ProgressDialogUtil.startShow(this, "正在获取协议内容");
-        HttpOkhUtils.getInstance().doGetWithOnlyHeader(NetConfig.CONTENT, headParam, new HttpOkhUtils.HttpCallBack() {
+        HttpOkhUtils.getInstance().doGet(NetConfig.CONTENT+"/A0001", new HttpOkhUtils.HttpCallBack() {
             @Override
             public void onError(Request request, IOException e) {
                 ProgressDialogUtil.hideDialog();

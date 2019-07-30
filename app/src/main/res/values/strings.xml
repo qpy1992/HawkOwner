@@ -8,8 +8,70 @@
     <!--dialog相关-->
     <string name="m_default_progressbar">Default Progressbar:</string>
 
+    <string name="jia">甲方：</string>
+    <string name="yi">乙方：</string>
+    <string name="contract">鹰速物流合同</string>
+    <string name="yiyue">我已认真阅读合同并同意全部条款</string>
+    <string name="pripolicy">隐私政策</string>
+    <string name="seragree">服务协议</string>
+    <string name="check">请先同意服务协议与隐私政策</string>
+    <string name="example">样例</string>
     <string name="m_dialog_default_title">Here\'s a message!</string>
     <string name="m_dialog_ok">确定</string>
     <string name="m_dialog_cancel">取消</string>
+    <string name="submit">提交</string>
     <string name="m_LOADING">Loading...</string>
+    <string name="name">姓名</string>
+    <string name="idno">身份证号</string>
+    <string name="name_remind">姓名必须和证件上相同</string>
+    <string name="idno_remind">请输入身份证号</string>
+    <string name="warning">身份认证通过才能发布货源！请填写真实信息！</string>
+    <string name="warning1">(勿遮挡证件头像)</string>
+    <string name="legalname">法人代表</string>
+    <string name="legalname_remind">请输入法人代表姓名</string>
+    <string name="legalidno">法人身份证</string>
+    <string name="legalidno_remind">请输入法人身份证号</string>
+    <string name="buss_license">上传营业执照</string>
+    <string name="headpic">上传本人头像</string>
+    <string name="front">上传清晰的身份证正面</string>
+    <string name="back">上传清晰的身份证背面</string>
+    <string name="goodswarn">请输入货物名称</string>
+    <string name="zhdate1">请选择装货日期</string>
+    <string name="xhdate1">请选择卸货日期</string>
+    <string name="zc">整车</string>
+    <string name="pc">拼车</string>
+    <string name="xj">现结</string>
+    <string name="yj">月结</string>
+    <string name="use">使用</string>
+    <string name="unuse">不使用</string>
+    <string name="other">&#160;&#160;其他信息</string>
+    <string name="ygfy">&#160;&#160;预估费用</string>
+    <string name="zh"><Data><![CDATA[<font color="#e60012"> *</font><font color="#000000">装货地:&nbsp;</font>]]></Data></string>
+    <string name="zhadd"><Data><![CDATA[<font color="#e60012"> *</font><font color="#000000">详细地址:</font>]]></Data></string>
+    <string name="xh"><Data><![CDATA[<font color="#e60012"> *</font><font color="#000000">卸货地:</font>]]></Data></string>
+    <string name="xhadd"><Data><![CDATA[<font color="#e60012"> *</font><font color="#000000">详细地址:</font>]]></Data></string>
+    <string name="goods"><Data><![CDATA[<font color="#e60012"> *</font><font color="#000000">货物信息:</font>]]></Data></string>
+    <string name="goodsname"><Data><![CDATA[<font color="#e60012"> *</font><font color="#000000">货物名称:</font>]]></Data></string>
+    <string name="goodswei"><Data><![CDATA[<font color="#e60012"> *</font><font color="#000000">货物重量(kg):</font>]]></Data></string>
+    <string name="ystype"><Data><![CDATA[<font color="#e60012"> *</font><font color="#000000">运输方式:</font>]]></Data></string>
+    <string name="goodstype"><Data><![CDATA[<font color="#e60012"> *</font><font color="#000000">货物类型:</font>]]></Data></string>
+    <string name="cartype"><Data><![CDATA[<font color="#e60012"> *</font><font color="#000000">车长车型:</font>]]></Data></string>
+    <string name="zhdate"><Data><![CDATA[<font color="#e60012"> *</font><font color="#000000">装货日期:</font>]]></Data></string>
+    <string name="xhdate"><Data><![CDATA[<font color="#e60012"> *</font><font color="#000000">卸货日期:</font>]]></Data></string>
+    <string name="paytype"><Data><![CDATA[<font color="#e60012"> *</font><font color="#000000">支付方式:</font>]]></Data></string>
+    <string name="fh">&#160;&#160;发货人:</string>
+    <string name="fhm">&#160;&#160;发货电话:</string>
+    <string name="sh">&#160;&#160;收货人:</string>
+    <string name="shm">&#160;&#160;收货电话:</string>
+    <string name="goodsvol">&#160;&#160;货物体积(m³):</string>
+    <string name="asign">&#160;&#160;指派人员:</string>
+    <string name="gochoose">&#160;&#160;去选择:</string>
+    <string name="oil">&#160;&#160;使用油卡:</string>
+    <string name="oilwarn">(油卡部分的金额无法开票)</string>
+    <string name="bj">&#160;&#160;报价:</string>
+    <string name="bjwarn">请输入您的报价</string>
+    <string name="click">点击选择</string>
+    <string name="selectdate">请选择日期</string>
+    <string name="fhssq">发货地省市区</string>
+    <string name="shssq">收货地省市区</string>
 </resources>

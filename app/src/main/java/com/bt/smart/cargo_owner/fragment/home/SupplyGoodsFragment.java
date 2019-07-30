@@ -1,9 +1,14 @@
 package com.bt.smart.cargo_owner.fragment.home;
 
+import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,27 +18,38 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bt.smart.cargo_owner.MyApplication;
 import com.bt.smart.cargo_owner.NetConfig;
 import com.bt.smart.cargo_owner.R;
+import com.bt.smart.cargo_owner.activity.samedayAct.CarTypeActivity;
 import com.bt.smart.cargo_owner.adapter.LvAddGoodsAdapter;
 import com.bt.smart.cargo_owner.adapter.RecyPlaceAdapter;
 import com.bt.smart.cargo_owner.adapter.SpCarTypeAdapter;
+import com.bt.smart.cargo_owner.adapter.SpTypeAdapter;
+import com.bt.smart.cargo_owner.adapter.TsTypeAdapter;
+import com.bt.smart.cargo_owner.fragment.user.SelectModelLengthFragment;
 import com.bt.smart.cargo_owner.messageInfo.AddGoodsBean;
 import com.bt.smart.cargo_owner.messageInfo.ApplyOrderResultInfo;
 import com.bt.smart.cargo_owner.messageInfo.CarTypeListInfo;
 import com.bt.smart.cargo_owner.messageInfo.ChioceAdapterContentInfo;
 import com.bt.smart.cargo_owner.messageInfo.ShengDataInfo;
+import com.bt.smart.cargo_owner.messageInfo.TsTypeInfo;
+import com.bt.smart.cargo_owner.messageInfo.TypeInfo;
+import com.bt.smart.cargo_owner.utils.CommonUtil;
 import com.bt.smart.cargo_owner.utils.HttpOkhUtils;
 import com.bt.smart.cargo_owner.utils.MyFragmentManagerUtil;
 import com.bt.smart.cargo_owner.utils.PopupOpenHelper;
 import com.bt.smart.cargo_owner.utils.ProgressDialogUtil;
 import com.bt.smart.cargo_owner.utils.RequestParamsFM;
 import com.bt.smart.cargo_owner.utils.MyTextUtils;
+import com.bt.smart.cargo_owner.utils.SoftKeyboardUtils;
 import com.bt.smart.cargo_owner.utils.ToastUtils;
 import com.bt.smart.cargo_owner.viewmodel.CustomDatePicker;
 import com.bt.smart.cargo_owner.viewmodel.MyListView;
@@ -55,28 +71,27 @@ import okhttp3.Request;
 public class SupplyGoodsFragment extends Fragment implements View.OnClickListener {
     private View mRootView;
     private ImageView img_back;
-    private TextView tv_title;
+    private TextView tv_zh,tv_zhadd,tv_xh,tv_xhadd,tv_goods,tv_ystype,tv_goodstype,tv_cartype,tv_zhdate,tv_xhdate,tv_paytype,tv_typelength;
+    private TextView tv_title,tv_xhtime;
     private TextView tv_fh_area;//发货省市区
-    private ImageView img_sel_fh;//选择发货省市区
+    private RelativeLayout rl_huoyuan;
+    private LinearLayout ll_ssq;//选择发货省市区
+    private LinearLayout ll_shssq;//选择收货省市区
     private EditText et_fh_area;//发货详细地址
     private EditText et_fh_name;//发货人姓名
     private EditText et_fh_phone;//发货人电话
     private TextView tv_sh_area;//收货省市区
-    private ImageView img_sel_sh;//选择收货省市区
     private EditText et_sh_area;//收货详细地址
     private EditText et_sh_name;//收货人名字
     private EditText et_sh_phone;//收货人电话
     private ImageView img_add;//添加货物信息
     private MyListView mlv_goods;// 货物信息list
-    private Spinner sp_goodstype;//选择订单类别
-    private Spinner sp_cartype;//选择运输车辆类别
-    private LinearLayout line_time;//选择发货时间
+    private Spinner sp_goodstype;//选择货物类型
+    private LinearLayout line_time,xh_time;//选择发货时间
     private TextView tv_time;//发货时间
     private LinearLayout line_sel_zpry;//选择指派人
     private CheckBox ck_xj;//现结
     private CheckBox ck_yj;//月结
-    private CheckBox ck_acept;//接受拼箱
-    private CheckBox ck_unacept;//不接受
     private LinearLayout line_ffee;//预付费模块
     private CheckBox ck_use;//使用油卡
     private CheckBox ck_nouse;//不使用
@@ -84,6 +99,7 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
     private EditText et_oilPrice;//油卡模块
     private EditText et_price;//预算费用
     private TextView tv_submit;//发布
+    private String province,city;
 
     //省市区数据
     private List<ChioceAdapterContentInfo> mDataPopEd;
@@ -98,16 +114,24 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
     private LvAddGoodsAdapter goodsAdapter;
     private boolean bolGoodsDetail = true;
 
-    private List<CarTypeListInfo.DataBean> carTypeList;
-    private SpCarTypeAdapter carTypeAdapter;
-    private String carTypeID = "";
-    private List goodsTypeList;
-    private String goodsTypeID = "1";//普货
+    private String carLeng = "";
+    private String carModel = "";
+    private List<TypeInfo.DataBean> goodsTypeList;
+    private List<TsTypeInfo.DataBean> periodList;
+    private String goodsTypeID = "";//普货
 
     private String fh_id;
     private String sh_id;
+    private String zhtime;
+    private String xhtime;
+    private String zhperiod;
+    private String zhperiodcode;
+    private String xhperiod;
+    private String xhperiodcode;
     private String isBoxed = "0";
     private double ap_price;
+    private static String TAG = "SupplyGoodsFragment";
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -118,30 +142,42 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
     }
 
     private void initView() {
-        img_back = mRootView.findViewById(R.id.img_back);
+        rl_huoyuan = mRootView.findViewById(R.id.rl_huoyuan);
+        img_back = rl_huoyuan.findViewById(R.id.img_back_a);
         tv_title = mRootView.findViewById(R.id.tv_title);
+        tv_zh = mRootView.findViewById(R.id.tv_zh);
+        tv_zhadd = mRootView.findViewById(R.id.tv_zhadd);
+        tv_xh = mRootView.findViewById(R.id.tv_xh);
+        tv_xhadd = mRootView.findViewById(R.id.tv_xhadd);
+        tv_goods = mRootView.findViewById(R.id.tv_goods);
+        tv_ystype = mRootView.findViewById(R.id.tv_ystype);
+        tv_goodstype = mRootView.findViewById(R.id.tv_goodstype);
+        tv_cartype = mRootView.findViewById(R.id.tv_cartype);
+        tv_zhdate = mRootView.findViewById(R.id.tv_zhdate);
+        tv_xhdate = mRootView.findViewById(R.id.tv_xhdate);
+        tv_paytype = mRootView.findViewById(R.id.tv_paytype);
+        tv_xhtime = mRootView.findViewById(R.id.tv_xhtime);
         et_fh_area = mRootView.findViewById(R.id.et_fh_area);
         et_fh_name = mRootView.findViewById(R.id.et_fh_name);
         et_fh_name = mRootView.findViewById(R.id.et_fh_name);
         et_fh_phone = mRootView.findViewById(R.id.et_fh_phone);
         tv_fh_area = mRootView.findViewById(R.id.tv_fh_area);
-        img_sel_fh = mRootView.findViewById(R.id.img_sel_fh);
+        ll_ssq = mRootView.findViewById(R.id.ll_ssq);
+        ll_shssq = mRootView.findViewById(R.id.ll_shssq);
         tv_sh_area = mRootView.findViewById(R.id.tv_sh_area);
-        img_sel_sh = mRootView.findViewById(R.id.img_sel_sh);
         et_sh_area = mRootView.findViewById(R.id.et_sh_area);
         et_sh_name = mRootView.findViewById(R.id.et_sh_name);
         et_sh_phone = mRootView.findViewById(R.id.et_sh_phone);
         img_add = mRootView.findViewById(R.id.img_add);
         mlv_goods = mRootView.findViewById(R.id.mlv_goods);
         sp_goodstype = mRootView.findViewById(R.id.sp_goodstype);
-        sp_cartype = mRootView.findViewById(R.id.sp_cartype);
+        tv_typelength = mRootView.findViewById(R.id.tv_typelength);
         line_time = mRootView.findViewById(R.id.line_time);
+        xh_time = mRootView.findViewById(R.id.xh_time);
         tv_time = mRootView.findViewById(R.id.tv_time);
         line_sel_zpry = mRootView.findViewById(R.id.line_sel_zpry);
         ck_xj = mRootView.findViewById(R.id.ck_xj);
         ck_yj = mRootView.findViewById(R.id.ck_yj);
-        ck_acept = mRootView.findViewById(R.id.ck_acept);
-        ck_unacept = mRootView.findViewById(R.id.ck_unacept);
         ck_use = mRootView.findViewById(R.id.ck_use);
         ck_nouse = mRootView.findViewById(R.id.ck_nouse);
         line_oilPrice = mRootView.findViewById(R.id.line_oilPrice);
@@ -152,31 +188,41 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
     }
 
     private void initData() {
+        tv_zh.setText(Html.fromHtml(getString(R.string.zh)));
+        tv_zhadd.setText(Html.fromHtml(getString(R.string.zhadd)));
+        tv_xh.setText(Html.fromHtml(getString(R.string.xh)));
+        tv_xhadd.setText(Html.fromHtml(getString(R.string.xhadd)));
+        tv_goods.setText(Html.fromHtml(getString(R.string.goods)));
+        tv_goodstype.setText(Html.fromHtml(getString(R.string.goodstype)));
+        tv_ystype.setText(Html.fromHtml(getString(R.string.ystype)));
+        tv_cartype.setText(Html.fromHtml(getString(R.string.cartype)));
+        tv_zhdate.setText(Html.fromHtml(getString(R.string.zhdate)));
+        tv_xhdate.setText(Html.fromHtml(getString(R.string.xhdate)));
+        tv_paytype.setText(Html.fromHtml(getString(R.string.paytype)));
         img_back.setVisibility(View.VISIBLE);
         img_back.setOnClickListener(this);
         tv_title.setText("发布货源");
         img_add.setOnClickListener(this);
         tv_submit.setOnClickListener(this);
-        img_sel_fh.setOnClickListener(this);
-        img_sel_sh.setOnClickListener(this);
+        ll_ssq.setOnClickListener(this);
+        ll_shssq.setOnClickListener(this);
         tv_submit.setOnClickListener(this);
         line_time.setOnClickListener(this);
+        tv_typelength.setOnClickListener(this);
+        xh_time.setOnClickListener(this);
 
         //初始化起点线路
         initStartPlace();
-
         //初始化添加的货物信息列表
         initGoodsList();
         //设置货物类型
         setGoodsType();
         //设置车辆类型
-        setCarTypeSpinner();
-
+//        setCarTypeSpinner();
         //设置选择按钮事件
         setCheckListener();
-
         //获取车辆信息列表
-        getAllCarType();
+//        getAllCarType();
     }
 
     @Override
@@ -184,11 +230,18 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
         switch (view.getId()) {
             case R.id.img_back:
                 MyFragmentManagerUtil.closeTopFragment(this);
+//                getActivity().finish();
                 break;
-            case R.id.img_sel_fh://选择发货地
+            case R.id.ll_ssq://选择发货地
+                if(SoftKeyboardUtils.isSoftShowing(getActivity())){
+                    SoftKeyboardUtils.hideSystemSoftKeyboard(getActivity());
+                }
                 selectStartPlace(0);
                 break;
-            case R.id.img_sel_sh://收货地
+            case R.id.ll_shssq://选择收货地
+                if(SoftKeyboardUtils.isSoftShowing(getActivity())){
+                    SoftKeyboardUtils.hideSystemSoftKeyboard(getActivity());
+                }
                 selectStartPlace(1);
                 break;
             case R.id.img_add:
@@ -199,22 +252,38 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
                 break;
             case R.id.line_time://选择装货时间
                 //获取当前日期
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                 String data = simpleDateFormat.format(new Date());
                 //打开时间选择器
                 CustomDatePicker dpk1 = new CustomDatePicker(getContext(), new CustomDatePicker.ResultHandler() {
                     @Override
                     public void handle(String time) { // 回调接口，获得选中的时间
-                        tv_time.setText(time.substring(0, 10));
+                        setPeriod(0,time);
                     }
                 }, data, "2090-12-31 00:00"); // 初始化日期格式请用：yyyy-MM-dd HH:mm，否则不能正常运行
                 dpk1.showSpecificTime(false); // 显示时和分
                 dpk1.setIsLoop(true); // 允许循环滚动
                 dpk1.show(data);
                 break;
+            case R.id.xh_time:
+                //获取当前日期
+                String data1 = simpleDateFormat.format(new Date());
+                //打开时间选择器
+                CustomDatePicker dpk = new CustomDatePicker(getContext(), new CustomDatePicker.ResultHandler() {
+                    @Override
+                    public void handle(String time) { // 回调接口，获得选中的时间
+                        setPeriod(1,time);
+                    }
+                }, data1, "2090-12-31 00:00"); // 初始化日期格式请用：yyyy-MM-dd HH:mm，否则不能正常运行
+                dpk.showSpecificTime(false); // 显示时和分
+                dpk.setIsLoop(true); // 允许循环滚动
+                dpk.show(data1);
+                break;
             case R.id.tv_submit:
                 //提交前先做数据认证，是否填写有效信息
                 checkWriteInfo();
+                break;
+            case R.id.tv_typelength:
+                toSelectModelLength();
                 break;
         }
     }
@@ -253,35 +322,6 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
             }
         });
 
-        ck_acept.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ck_acept.setChecked(true);
-            }
-        });
-        ck_unacept.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ck_unacept.setChecked(true);
-            }
-        });
-        ck_acept.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                ck_unacept.setChecked(!b);
-                //接受拼箱
-                isBoxed = "0";
-            }
-        });
-        ck_unacept.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                ck_acept.setChecked(!b);
-                //不接受拼箱
-                isBoxed = "1";
-            }
-        });
-
         ck_use.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -317,7 +357,7 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
         headparam.put("X-AUTH-TOKEN", MyApplication.userToken);
 
         RequestParamsFM params = new RequestParamsFM();
-        params.put("fmainId", MyApplication.userCode);//发货地id
+        params.put("fmainId", MyApplication.userCode);//用户主账号
         params.put("fh", fh_id);//发货地id
         params.put("fhAddress", MyTextUtils.getEditTextContent(et_fh_area));//发货地地址
         params.put("fhName", MyTextUtils.getEditTextContent(et_fh_name));//发货人名字
@@ -326,7 +366,7 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
         params.put("shAddress", MyTextUtils.getEditTextContent(et_sh_area));//收货地址
         params.put("shName", MyTextUtils.getEditTextContent(et_sh_name));//收货人名字
         params.put("shTelephone", MyTextUtils.getEditTextContent(et_sh_phone));//收货人电话
-        params.put("goodsName", "4d2881f66850132a01685013f0100001");//货物种类
+        params.put("goodsName", goodsTypeID);//货物种类
         params.put("isAppoint", "0");//
 
         JSONArray jsonArray = new JSONArray();
@@ -334,7 +374,11 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
             JSONObject jsonObject = new JSONObject();
             try {
                 jsonObject.put("goodsName", goodsList.get(i).getName());
-                jsonObject.put("goodsSpace", Double.parseDouble(goodsList.get(i).getArea()));
+                if(CommonUtil.isNotEmpty(goodsList.get(i).getArea())){
+                    jsonObject.put("goodsSpace", Double.parseDouble(goodsList.get(i).getArea()));
+                }else{
+                    jsonObject.put("goodsSpace", 0);
+                }
                 jsonObject.put("goodsWeight", Double.parseDouble(goodsList.get(i).getWeight()));
                 jsonArray.put(jsonObject);
             } catch (JSONException e) {
@@ -343,8 +387,12 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
         }
         params.put("orderGoodsList", jsonArray);//货物列表
 
-        params.put("carType", carTypeID);//车型
-        params.put("zhTime", MyTextUtils.getTvTextContent(tv_time));//发货时间
+        params.put("carType", carModel);//车型
+        params.put("carLength", carLeng);
+        params.put("zhTime", zhtime);//发货时间
+        params.put("xhTime", xhtime);//卸货时间
+        params.put("zhperiod",zhperiod);
+        params.put("xhperiod",xhperiod);
         params.put("appointId", "");//指定人
         params.put("isBox", isBoxed);//是否拼箱
         if (ck_xj.isChecked()) {
@@ -376,6 +424,7 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
                 Gson gson = new Gson();
                 ApplyOrderResultInfo applyOrderResultInfo = gson.fromJson(resbody, ApplyOrderResultInfo.class);
                 if (applyOrderResultInfo.isOk()) {
+                    Toast.makeText(getContext(),"发布成功",Toast.LENGTH_LONG).show();
                     getActivity().finish();
                 }
             }
@@ -383,57 +432,34 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
     }
 
     private void checkWriteInfo() {
-        if (null == fh_id || "".equals(fh_id)) {
-            ToastUtils.showToast(getContext(), "请选择发货地区");
+        if (!CommonUtil.isNotEmpty(fh_id)) {
+            ToastUtils.showToast(getContext(), "请选择装货地");
             return;
         }
         String fh_area = MyTextUtils.getEditTextContent(et_fh_area);
-        String fh_name = MyTextUtils.getEditTextContent(et_fh_name);
-        String fh_phone = MyTextUtils.getEditTextContent(et_fh_phone);
         if ("".equals(fh_area) || "请输入发货地街道信息".equals(fh_area)) {
             ToastUtils.showToast(getContext(), "请输入发货地街道信息");
             return;
         }
-        if ("".equals(fh_name) || "请输入发货人姓名".equals(fh_name)) {
-            ToastUtils.showToast(getContext(), "请输入发货人姓名");
-            return;
-        }
-        if ("".equals(fh_phone) || "请输入发货人手机号".equals(fh_phone)) {
-            ToastUtils.showToast(getContext(), "请输入发货人手机号");
-            return;
-        }
-
-        if (null == sh_id || "".equals(sh_id)) {
-            ToastUtils.showToast(getContext(), "请选择收货地区");
+        if (!CommonUtil.isNotEmpty(sh_id)) {
+            ToastUtils.showToast(getContext(), "请选择卸货地");
             return;
         }
         String sh_area = MyTextUtils.getEditTextContent(et_sh_area);
-        String sh_name = MyTextUtils.getEditTextContent(et_sh_name);
-        String sh_phone = MyTextUtils.getEditTextContent(et_sh_phone);
-
         if ("".equals(sh_area) || "请输入收货地街道信息".equals(sh_area)) {
             ToastUtils.showToast(getContext(), "请输入收货地街道信息");
             return;
         }
-        if ("".equals(sh_name) || "请输入收货人姓名".equals(sh_name)) {
-            ToastUtils.showToast(getContext(), "请输入收货人姓名");
-            return;
-        }
-        if ("".equals(sh_phone) || "请输入发货人手机号".equals(sh_phone)) {
-            ToastUtils.showToast(getContext(), "请输入收货人手机号");
-            return;
-        }
-
         if (null == goodsList || goodsList.size() == 0) {
-            ToastUtils.showToast(getContext(), "请输入添加货物信息");
+            ToastUtils.showToast(getContext(), "请添加货物信息");
             return;
         }
         bolGoodsDetail = true;
         for (int i = 0; i < goodsList.size(); i++) {
             String name = goodsList.get(i).getName();
-            String space = goodsList.get(i).getArea();
+//            String space = goodsList.get(i).getArea();
             String weight = goodsList.get(i).getWeight();
-            if (null == name || "".equals(name) || "0".equals(space) || "0".equals(weight)) {
+            if (null == name || "".equals(name)  || "0".equals(weight)) {
                 bolGoodsDetail = false;
             }
         }
@@ -441,24 +467,28 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
             ToastUtils.showToast(getContext(), "货物具体信息不能为空");
             return;
         }
-        if (null == carTypeID || "".equals(carTypeID)) {
-            ToastUtils.showToast(getContext(), "请输选择车型");
+        if (!CommonUtil.isNotEmpty(carLeng)||!CommonUtil.isNotEmpty(carModel)) {
+            ToastUtils.showToast(getContext(), "请选择车型和车长");
             return;
         }
         String tv_sh_time = MyTextUtils.getTvTextContent(tv_time);
-        if ("".equals(tv_sh_time) || "选择装货日期".equals(tv_sh_time)) {
+        String tv_xh_time = MyTextUtils.getTvTextContent(tv_xhtime);
+        if (!CommonUtil.isNotEmpty(tv_sh_time)) {
             ToastUtils.showToast(getContext(), "请选择装货日期");
             return;
         }
-
+        if (!CommonUtil.isNotEmpty(tv_xh_time)) {
+            ToastUtils.showToast(getContext(), "请选择卸货日期");
+            return;
+        }
         if (ck_xj.isChecked()) {
             String etffee = MyTextUtils.getEditTextContent(et_price);
             if ("".equals(etffee) || "请输入您的报价".equals(etffee)) {
-                ToastUtils.showToast(getContext(), "请输入您的报价");
-                return;
+                //预算费用
+                ap_price = 0;
+            }else{
+                ap_price = Double.parseDouble(MyTextUtils.getEditTextContent(et_price));
             }
-            //预算费用
-            ap_price = Double.parseDouble(MyTextUtils.getEditTextContent(et_price));
         }
         //提交货源
         sendApplyInfo();
@@ -478,7 +508,7 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
         RequestParamsFM headParam = new RequestParamsFM();
         headParam.put("X-AUTH-TOKEN", MyApplication.userToken);
         RequestParamsFM params = new RequestParamsFM();
-        params.put("pid", "1");
+        params.put("pid", "100000");
         HttpOkhUtils.getInstance().doGetWithHeadParams(NetConfig.REGIONSELECT, headParam, params, new HttpOkhUtils.HttpCallBack() {
             @Override
             public void onError(Request request, IOException e) {
@@ -506,7 +536,7 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
                     }
                     for (ShengDataInfo.DataBean bean : mSHEData) {
                         ChioceAdapterContentInfo contentInfo = new ChioceAdapterContentInfo();
-                        contentInfo.setCont(bean.getName());
+                        contentInfo.setCont(bean.getFname());
                         contentInfo.setId(bean.getId());
                         mDataPopEd.add(contentInfo);
                     }
@@ -537,20 +567,22 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
                         if (stCityLevel == 0) {
                             //获取省份对应城市
                             getCityBySheng(id, tv_back, recyPlaceAdapter);
+                            province = mDataPopEd.get(position).getCont();
                             stCityLevel++;
                         } else if (stCityLevel == 1) {
                             //获取城市对应的区
                             getTownByCity(id, tv_back, recyPlaceAdapter);
+                            city = mDataPopEd.get(position).getCont();
                             stCityLevel++;
                         } else {
                             if (kind == 0) {
                                 //将选择的起点填写
-                                tv_fh_area.setText(mDataPopEd.get(position).getCont());
+                                tv_fh_area.setText(province + city + mDataPopEd.get(position).getCont());
                                 fh_id = mDataPopEd.get(position).getId();
                                 openHelper.dismiss();
                             } else {
                                 //将选择的目的地填写
-                                tv_sh_area.setText(mDataPopEd.get(position).getCont());
+                                tv_sh_area.setText(province + city + mDataPopEd.get(position).getCont());
                                 sh_id = mDataPopEd.get(position).getId();
                                 openHelper.dismiss();
                             }
@@ -568,7 +600,7 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
                             //添加上一级省数据
                             for (ShengDataInfo.DataBean bean : mSHEData) {
                                 ChioceAdapterContentInfo contentInfo = new ChioceAdapterContentInfo();
-                                contentInfo.setCont(bean.getName());
+                                contentInfo.setCont(bean.getFname());
                                 contentInfo.setId(bean.getId());
                                 mDataPopEd.add(contentInfo);
                             }
@@ -578,7 +610,7 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
                             //添加上一级城市数据
                             for (ShengDataInfo.DataBean bean : mSHIData) {
                                 ChioceAdapterContentInfo contentInfo = new ChioceAdapterContentInfo();
-                                contentInfo.setCont(bean.getName());
+                                contentInfo.setCont(bean.getFname());
                                 contentInfo.setId(bean.getId());
                                 mDataPopEd.add(contentInfo);
                             }
@@ -629,7 +661,7 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
                     }
                     for (ShengDataInfo.DataBean bean : mSHIData) {
                         ChioceAdapterContentInfo contentInfo = new ChioceAdapterContentInfo();
-                        contentInfo.setCont(bean.getName());
+                        contentInfo.setCont(bean.getFname());
                         contentInfo.setId(bean.getId());
                         mDataPopEd.add(contentInfo);
                     }
@@ -672,7 +704,7 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
                     }
                     for (ShengDataInfo.DataBean bean : mQUData) {
                         ChioceAdapterContentInfo contentInfo = new ChioceAdapterContentInfo();
-                        contentInfo.setCont(bean.getName());
+                        contentInfo.setCont(bean.getFname());
                         contentInfo.setId(bean.getId());
                         mDataPopEd.add(contentInfo);
                     }
@@ -688,27 +720,109 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
         mlv_goods.setAdapter(goodsAdapter);
     }
 
+
     private void setGoodsType() {
         goodsTypeList = new ArrayList();
-        CarTypeListInfo.DataBean dataBean = new CarTypeListInfo.DataBean();
-        dataBean.setTypeName("普货");
-        goodsTypeList.add(dataBean);
-        SpCarTypeAdapter goodsTypeAdapter = new SpCarTypeAdapter(getContext(), goodsTypeList);
-        sp_goodstype.setAdapter(goodsTypeAdapter);
-        sp_goodstype.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        RequestParamsFM headparam = new RequestParamsFM();
+        headparam.put("X-AUTH-TOKEN", MyApplication.userToken);
+        HttpOkhUtils.getInstance().doGetWithOnlyHeader(NetConfig.TYPE, headparam, new HttpOkhUtils.HttpCallBack() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
+            public void onError(Request request, IOException e) {
+                Log.i(TAG,"网络错误");
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
+            public void onSuccess(int code, String resbody) {
+                if (code != 200) {
+                    Log.i(TAG, "网络错误" + code);
+                    return;
+                }
+                Gson gson = new Gson();
+                TypeInfo type = gson.fromJson(resbody,TypeInfo.class);
+                List<TypeInfo.DataBean> dataBeanList = type.getData();
+                goodsTypeList.addAll(dataBeanList);
+                SpTypeAdapter goodsTypeAdapter = new SpTypeAdapter(getContext(), goodsTypeList);
+                sp_goodstype.setAdapter(goodsTypeAdapter);
+                sp_goodstype.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                            goodsTypeID = goodsTypeList.get(i).getId();
+                    }
 
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
+
+                    }
+                });
             }
         });
     }
 
-    private void setCarTypeSpinner() {
+    protected void setPeriod(final int t, final String time){
+        periodList = new ArrayList<>();
+        if(t==1&&!CommonUtil.isNotEmpty(zhtime)){
+            ToastUtils.showToast(getContext(),"请先选择装货时间");
+            return;
+        }
+        RequestParamsFM headparam = new RequestParamsFM();
+        headparam.put("X-AUTH-TOKEN", MyApplication.userToken);
+        HttpOkhUtils.getInstance().doGetWithOnlyHeader(NetConfig.TSTYPE + "/2c9f1a626c40745d016c4146de420003", headparam, new HttpOkhUtils.HttpCallBack() {
+            @Override
+            public void onError(Request request, IOException e) {
+                Log.i(TAG,"网络错误");
+            }
+
+            @Override
+            public void onSuccess(int code, String resbody) {
+                if (code != 200) {
+                    Log.i(TAG, "网络错误" + code);
+                    return;
+                }
+                Gson gson = new Gson();
+                final TsTypeInfo type = gson.fromJson(resbody,TsTypeInfo.class);
+                List<TsTypeInfo.DataBean> dataBeanList = type.getData();
+                periodList.addAll(dataBeanList);
+                TsTypeAdapter typeAdapter = new TsTypeAdapter(getContext(), periodList);
+                final ListView lv = new ListView(getContext());
+                lv.setAdapter(typeAdapter);
+                final AlertDialog builder = new AlertDialog.Builder(getContext()).create();
+                builder.setView(lv);
+                builder.setCanceledOnTouchOutside(false);
+                builder.show();
+                lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        switch(t){
+                            case 0:
+                                zhtime = time.substring(0, 10);
+                                zhperiod = periodList.get(i).getTypename();
+                                zhperiodcode = periodList.get(i).getTypecode();
+                                tv_time.setText(time.substring(0, 10)+periodList.get(i).getTypename().substring(0,2));
+                                break;
+                            case 1:
+                                xhperiodcode = periodList.get(i).getTypecode();
+                                if(zhtime.equals(time.substring(0, 10))){
+                                    if(Integer.parseInt(zhperiodcode)>Integer.parseInt(xhperiodcode)){
+                                        ToastUtils.showToast(getContext(),"卸货时间不能早于装货时间");
+                                        return;
+                                    }
+                                    if(Integer.parseInt(zhperiodcode)==Integer.parseInt(xhperiodcode)){
+                                        Toast.makeText(getContext(),"装卸货时间相近，请注意检查",Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                                xhtime = time.substring(0, 10);
+                                xhperiod = periodList.get(i).getTypename();
+                                tv_xhtime.setText(time.substring(0, 10)+periodList.get(i).getTypename().substring(0,2));
+                                break;
+                        }
+                        builder.dismiss();
+                    }
+                });
+            }
+        });
+    }
+
+    /*private void setCarTypeSpinner() {
         carTypeList = new ArrayList();
         carTypeAdapter = new SpCarTypeAdapter(getContext(), carTypeList);
         sp_cartype.setAdapter(carTypeAdapter);
@@ -723,9 +837,9 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
 
             }
         });
-    }
+    }*/
 
-    private void getAllCarType() {
+    /*private void getAllCarType() {
         RequestParamsFM headParams = new RequestParamsFM();
         headParams.put("X-AUTH-TOKEN", MyApplication.userToken);
         HttpOkhUtils.getInstance().doGetWithOnlyHeader(NetConfig.CARTYPE, headParams, new HttpOkhUtils.HttpCallBack() {
@@ -747,5 +861,45 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
                 }
             }
         });
+    }*/
+
+
+
+    public void setChioceTerm(List<ChioceAdapterContentInfo> lengthData, List<ChioceAdapterContentInfo> modelData) {
+        if (null != lengthData) {
+            for (int i = 0; i < lengthData.size(); i++) {
+                if (lengthData.get(i).isChioce()) {
+                    if ("".equals(carLeng)) {
+                        carLeng = carLeng + lengthData.get(i).getCont();
+                    } else {
+                        carLeng = carLeng + "/" + lengthData.get(i).getCont();
+                    }
+
+                }
+            }
+        }
+
+        if (null != modelData) {
+            for (int i = 0; i < modelData.size(); i++) {
+                if (modelData.get(i).isChioce()) {
+                    if ("".equals(carModel)) {
+                        carModel = carModel + modelData.get(i).getCont();
+                    } else {
+                        carModel = carModel + "/" + modelData.get(i).getCont();
+                    }
+
+                }
+            }
+        }
+        tv_typelength.setText(carLeng+"|"+carModel);
+    }
+
+    private void toSelectModelLength() {
+        SelectModelLengthFragment mollengthFt = new SelectModelLengthFragment();
+        mollengthFt.setTopFragment(this);
+        FragmentTransaction ftt = getFragmentManager().beginTransaction();
+        ftt.add(R.id.frame, mollengthFt, "mollengthFt");
+        ftt.addToBackStack("mollengthFt");
+        ftt.commit();
     }
 }

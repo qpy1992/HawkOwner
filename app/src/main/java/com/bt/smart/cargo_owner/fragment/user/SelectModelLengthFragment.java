@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,16 +12,26 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bt.smart.cargo_owner.MyApplication;
+import com.bt.smart.cargo_owner.NetConfig;
 import com.bt.smart.cargo_owner.R;
 import com.bt.smart.cargo_owner.adapter.RecyPlaceAdapter;
+import com.bt.smart.cargo_owner.fragment.home.SupplyGoodsFragment;
 import com.bt.smart.cargo_owner.messageInfo.ChioceAdapterContentInfo;
+import com.bt.smart.cargo_owner.messageInfo.TsTypeInfo;
+import com.bt.smart.cargo_owner.utils.HttpOkhUtils;
 import com.bt.smart.cargo_owner.utils.MyTextUtils;
 import com.bt.smart.cargo_owner.utils.MyFragmentManagerUtil;
+import com.bt.smart.cargo_owner.utils.RequestParamsFM;
 import com.bt.smart.cargo_owner.utils.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.google.gson.Gson;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.Request;
 
 /**
  * @创建者 AndyYan
@@ -45,7 +56,8 @@ public class SelectModelLengthFragment extends Fragment implements View.OnClickL
     private List<ChioceAdapterContentInfo> mModelData;
     private RecyPlaceAdapter               placeAdapter;
     private RecyPlaceAdapter               modelAdapter;
-    private PersonalCarInfoFragment        mTopFragment;
+    private SupplyGoodsFragment            supplyGoodsFragment;
+    private static String TAG = "SelectModelLengthFragment";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -56,7 +68,7 @@ public class SelectModelLengthFragment extends Fragment implements View.OnClickL
     }
 
     private void initView() {
-        img_back = mRootView.findViewById(R.id.img_back);
+        img_back = mRootView.findViewById(R.id.img_back_a);
         tv_title = mRootView.findViewById(R.id.tv_title);
         recy_length = mRootView.findViewById(R.id.recy_length);
         et_length = mRootView.findViewById(R.id.et_length);
@@ -103,76 +115,92 @@ public class SelectModelLengthFragment extends Fragment implements View.OnClickL
 
     private void setLengthData() {
         mLengthData = new ArrayList();
-        ChioceAdapterContentInfo contentInfo = new ChioceAdapterContentInfo();
-        contentInfo.setCont("不限车长");
-        contentInfo.setChioce(false);
-        mLengthData.add(contentInfo);
-        ChioceAdapterContentInfo contentInfo1 = new ChioceAdapterContentInfo();
-        contentInfo1.setCont("1.8米");
-        contentInfo1.setChioce(false);
-        mLengthData.add(contentInfo1);
-        ChioceAdapterContentInfo contentInfo2 = new ChioceAdapterContentInfo();
-        contentInfo2.setCont("2.7米");
-        contentInfo2.setChioce(false);
-        mLengthData.add(contentInfo2);
-        ChioceAdapterContentInfo contentInfo3 = new ChioceAdapterContentInfo();
-        contentInfo3.setCont("3.8米");
-        contentInfo3.setChioce(false);
-        mLengthData.add(contentInfo3);
-        recy_length.setLayoutManager(new GridLayoutManager(getContext(), 4));
-        placeAdapter = new RecyPlaceAdapter(R.layout.adpter_pop_city_place, getContext(), mLengthData);
-        recy_length.setAdapter(placeAdapter);
-        placeAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+        RequestParamsFM headparam = new RequestParamsFM();
+        headparam.put("X-AUTH-TOKEN", MyApplication.userToken);
+        HttpOkhUtils.getInstance().doGetWithOnlyHeader(NetConfig.TSTYPE + "/2c90b4bf6c1ccde9016c1cdb66db000c", headparam, new HttpOkhUtils.HttpCallBack() {
             @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                mLengthData.get(position).setChioce(!mLengthData.get(position).isChioce());
-                if (position == 0) {
-                    for (ChioceAdapterContentInfo bean : mLengthData) {
-                        bean.setChioce(false);
-                    }
-                    mLengthData.get(0).setChioce(true);
-                } else {
-                    mLengthData.get(0).setChioce(false);
+            public void onError(Request request, IOException e) {
+                Log.i(TAG,"网络错误");
+            }
+
+            @Override
+            public void onSuccess(int code, String resbody) {
+                if(code!=200){
+                    Log.i(TAG,"访问异常"+code);
                 }
-                placeAdapter.notifyDataSetChanged();
+                Gson gson = new Gson();
+                TsTypeInfo tsTypeInfo = gson.fromJson(resbody,TsTypeInfo.class);
+                for(TsTypeInfo.DataBean bean : tsTypeInfo.getData()){
+                    ChioceAdapterContentInfo contentInfo = new ChioceAdapterContentInfo();
+                    contentInfo.setId(bean.getTypecode());
+                    contentInfo.setCont(bean.getTypename());
+                    contentInfo.setChioce(false);
+                    mLengthData.add(contentInfo);
+                }
+                recy_length.setLayoutManager(new GridLayoutManager(getContext(), 4));
+                placeAdapter = new RecyPlaceAdapter(R.layout.adpter_pop_city_place, getContext(), mLengthData);
+                recy_length.setAdapter(placeAdapter);
+                placeAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                        mLengthData.get(position).setChioce(!mLengthData.get(position).isChioce());
+                        if (position == 0) {
+                            for (ChioceAdapterContentInfo bean : mLengthData) {
+                                bean.setChioce(false);
+                            }
+                            mLengthData.get(0).setChioce(true);
+                        } else {
+                            mLengthData.get(0).setChioce(false);
+                        }
+                        placeAdapter.notifyDataSetChanged();
+                    }
+                });
             }
         });
     }
 
     private void setModelData() {
         mModelData = new ArrayList();
-        ChioceAdapterContentInfo contentInfo = new ChioceAdapterContentInfo();
-        contentInfo.setCont("不限车型");
-        contentInfo.setChioce(false);
-        mModelData.add(contentInfo);
-        ChioceAdapterContentInfo contentInfo1 = new ChioceAdapterContentInfo();
-        contentInfo1.setCont("平板");
-        contentInfo1.setChioce(false);
-        mModelData.add(contentInfo1);
-        ChioceAdapterContentInfo contentInfo2 = new ChioceAdapterContentInfo();
-        contentInfo2.setCont("高栏");
-        contentInfo2.setChioce(false);
-        mModelData.add(contentInfo2);
-        ChioceAdapterContentInfo contentInfo3 = new ChioceAdapterContentInfo();
-        contentInfo3.setCont("厢式");
-        contentInfo3.setChioce(false);
-        mModelData.add(contentInfo3);
-        recy_model.setLayoutManager(new GridLayoutManager(getContext(), 4));
-        modelAdapter = new RecyPlaceAdapter(R.layout.adpter_pop_city_place, getContext(), mModelData);
-        recy_model.setAdapter(modelAdapter);
-        modelAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+        RequestParamsFM headparam = new RequestParamsFM();
+        headparam.put("X-AUTH-TOKEN", MyApplication.userToken);
+        HttpOkhUtils.getInstance().doGetWithOnlyHeader(NetConfig.TSTYPE + "/2c90b4bf6c1ccde9016c1cdb2c4f000a", headparam, new HttpOkhUtils.HttpCallBack() {
             @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                mModelData.get(position).setChioce(!mModelData.get(position).isChioce());
-                if (position == 0) {
-                    for (ChioceAdapterContentInfo bean : mModelData) {
-                        bean.setChioce(false);
-                    }
-                    mModelData.get(0).setChioce(true);
-                } else {
-                    mModelData.get(0).setChioce(false);
+            public void onError(Request request, IOException e) {
+                Log.i(TAG,"网络错误");
+            }
+
+            @Override
+            public void onSuccess(int code, String resbody) {
+                if(code!=200){
+                    Log.i(TAG,"访问异常"+code);
                 }
-                modelAdapter.notifyDataSetChanged();
+                Gson gson = new Gson();
+                TsTypeInfo tsTypeInfo = gson.fromJson(resbody,TsTypeInfo.class);
+                for(TsTypeInfo.DataBean bean : tsTypeInfo.getData()){
+                    ChioceAdapterContentInfo contentInfo = new ChioceAdapterContentInfo();
+                    contentInfo.setId(bean.getTypecode());
+                    contentInfo.setCont(bean.getTypename());
+                    contentInfo.setChioce(false);
+                    mModelData.add(contentInfo);
+                }
+                recy_model.setLayoutManager(new GridLayoutManager(getContext(), 4));
+                modelAdapter = new RecyPlaceAdapter(R.layout.adpter_pop_city_place, getContext(), mModelData);
+                recy_model.setAdapter(modelAdapter);
+                modelAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                        mModelData.get(position).setChioce(!mModelData.get(position).isChioce());
+                        if (position == 0) {
+                            for (ChioceAdapterContentInfo bean : mModelData) {
+                                bean.setChioce(false);
+                            }
+                            mModelData.get(0).setChioce(true);
+                        } else {
+                            mModelData.get(0).setChioce(false);
+                        }
+                        modelAdapter.notifyDataSetChanged();
+                    }
+                });
             }
         });
     }
@@ -221,11 +249,11 @@ public class SelectModelLengthFragment extends Fragment implements View.OnClickL
             ToastUtils.showToast(getContext(), "请选择车型");
             return;
         }
-        mTopFragment.setChioceTerm(mLengthData, mModelData);
+        supplyGoodsFragment.setChioceTerm(mLengthData, mModelData);
         MyFragmentManagerUtil.closeTopFragment(this);
     }
 
-    public void setTopFragment(PersonalCarInfoFragment fragment) {
-        mTopFragment = fragment;
+    public void setTopFragment(SupplyGoodsFragment fragment) {
+        supplyGoodsFragment = fragment;
     }
 }

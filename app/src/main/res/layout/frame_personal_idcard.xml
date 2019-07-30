@@ -19,7 +19,7 @@
             android:background="@color/blue_10"
             android:gravity="center"
             android:minHeight="30dp"
-            android:text="身份认证通过才能发布货源！请填写真实信息！"
+            android:text="@string/warning"
             android:textSize="14sp" />
 
         <LinearLayout
@@ -35,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:minEms="5"
-                android:text="名称"
+                android:text="@string/name"
                 android:textColor="@color/word_black"
                 android:textSize="14sp" />
 
@@ -45,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:background="@null"
-                android:hint="名称必须和证件上相同"
+                android:hint="@string/name_remind"
                 android:textSize="14sp" />
         </LinearLayout>
 
@@ -69,7 +69,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:minEms="5"
-                android:text="证件"
+                android:text="@string/idno"
                 android:textColor="@color/word_black"
                 android:textSize="14sp" />
 
@@ -79,7 +79,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:background="@null"
-                android:hint="请输入证件号"
+                android:maxLength="18"
+                android:hint="@string/idno_remind"
                 android:textSize="14sp" />
         </LinearLayout>
 
@@ -110,7 +111,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:minEms="5"
-                    android:text="法人代表"
+                    android:text="@string/legalname"
                     android:textColor="@color/word_black"
                     android:textSize="14sp" />
 
@@ -120,7 +121,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:background="@null"
-                    android:hint="请输入法人代表名称"
+                    android:hint="@string/legalname_remind"
                     android:textSize="14sp" />
             </LinearLayout>
 
@@ -144,7 +145,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:minEms="5"
-                    android:text="法人身份证"
+                    android:text="@string/legalidno"
                     android:textColor="@color/word_black"
                     android:textSize="14sp" />
 
@@ -154,7 +155,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:background="@null"
-                    android:hint="请输入法人身份证号"
+                    android:hint="@string/legalidno_remind"
                     android:textSize="14sp" />
             </LinearLayout>
         </LinearLayout>
@@ -178,7 +179,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="8dp"
-            android:text="上传营业执照"
+            android:text="@string/buss_license"
             android:textColor="@color/word_black"
             android:textSize="14sp" />
 
@@ -217,7 +218,7 @@
                     android:background="@color/trans_black"
                     android:paddingLeft="3dp"
                     android:paddingRight="3dp"
-                    android:text="样例"
+                    android:text="@string/example"
                     android:textColor="@color/white"
                     android:textSize="10dp" />
             </RelativeLayout>
@@ -248,7 +249,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="8dp"
-                android:text="上传本人头像"
+                android:text="@string/headpic"
                 android:textColor="@color/word_black"
                 android:textSize="14sp" />
 
@@ -286,7 +287,7 @@
                         android:background="@color/trans_black"
                         android:paddingLeft="3dp"
                         android:paddingRight="3dp"
-                        android:text="样例"
+                        android:text="@string/example"
                         android:textColor="@color/white"
                         android:textSize="10dp" />
                 </RelativeLayout>
@@ -310,7 +311,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="8dp"
-                android:text="上传清晰的身份证正面"
+                android:text="@string/front"
                 android:textColor="@color/word_black"
                 android:textSize="14sp" />
 
@@ -319,7 +320,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="3dp"
-                android:text="(勿遮挡证件头像)"
+                android:text="@string/warning1"
                 android:textColor="@color/word_gray"
                 android:textSize="12sp" />
 
@@ -358,7 +359,7 @@
                         android:background="@color/trans_black"
                         android:paddingLeft="3dp"
                         android:paddingRight="3dp"
-                        android:text="样例"
+                        android:text="@string/example"
                         android:textColor="@color/white"
                         android:textSize="10dp" />
                 </RelativeLayout>
@@ -381,7 +382,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="8dp"
-                android:text="上传清晰的身份证背面"
+                android:text="@string/back"
                 android:textColor="@color/word_black"
                 android:textSize="14sp" />
 
@@ -420,7 +421,7 @@
                         android:background="@color/trans_black"
                         android:paddingLeft="3dp"
                         android:paddingRight="3dp"
-                        android:text="样例"
+                        android:text="@string/example"
                         android:textColor="@color/white"
                         android:textSize="10dp" />
                 </RelativeLayout>
@@ -452,7 +453,7 @@
         android:background="@color/blue_icon"
         android:gravity="center"
         android:minHeight="45dp"
-        android:text="提交"
+        android:text="@string/submit"
         android:textColor="@color/white"
         android:textSize="16sp" />
 </RelativeLayout>

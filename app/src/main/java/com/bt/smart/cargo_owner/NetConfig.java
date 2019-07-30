@@ -44,7 +44,7 @@ public class NetConfig {
     //个人货主信息补充
     public static String DOUPDATELOGISTICS = ROOT + "zRegisterController/doUpdateLogistics";
     //平台合同内容
-    public static String CONTENT = ROOT + "eSignController/content";
+    public static String CONTENT = ROOT + "tokens/content";
     //用户与平台签署合同
     public static String SIGNWITHPLATFORM = ROOT + "eSignController/signWithPlatform";
 
@@ -110,4 +110,8 @@ public class NetConfig {
     public static String ALIPAY = ROOT + "alipayController/alipayOrder";
 
     public static String PAYACCOUNTDRIVER_LIST = ROOT + "pADriverController/listbyid";
+
+    public static String TYPE = ROOT + "typeController/list";
+
+    public static String TSTYPE = ROOT + "typeController/tstype";
 }

@@ -167,7 +167,7 @@ public class BankCardActivity extends AppCompatActivity implements View.OnClickL
                         }
                         for (ShengDataInfo.DataBean bean : mSHEData) {
                             ChioceAdapterContentInfo contentInfo = new ChioceAdapterContentInfo();
-                            contentInfo.setCont(bean.getName());
+                            contentInfo.setCont(bean.getFname());
                             contentInfo.setId(bean.getId());
                             mDataPopEd.add(contentInfo);
                         }
@@ -217,7 +217,7 @@ public class BankCardActivity extends AppCompatActivity implements View.OnClickL
                             //添加上一级省数据
                             for (ShengDataInfo.DataBean bean : mSHEData) {
                                 ChioceAdapterContentInfo contentInfo = new ChioceAdapterContentInfo();
-                                contentInfo.setCont(bean.getName());
+                                contentInfo.setCont(bean.getFname());
                                 contentInfo.setId(bean.getId());
                                 mDataPopEd.add(contentInfo);
                             }
@@ -227,7 +227,7 @@ public class BankCardActivity extends AppCompatActivity implements View.OnClickL
                             //添加上一级城市数据
                             for (ShengDataInfo.DataBean bean : mSHIData) {
                                 ChioceAdapterContentInfo contentInfo = new ChioceAdapterContentInfo();
-                                contentInfo.setCont(bean.getName());
+                                contentInfo.setCont(bean.getFname());
                                 contentInfo.setId(bean.getId());
                                 mDataPopEd.add(contentInfo);
                             }
@@ -318,7 +318,7 @@ public class BankCardActivity extends AppCompatActivity implements View.OnClickL
                     }
                     for (ShengDataInfo.DataBean bean : mSHIData) {
                         ChioceAdapterContentInfo contentInfo = new ChioceAdapterContentInfo();
-                        contentInfo.setCont(bean.getName());
+                        contentInfo.setCont(bean.getFname());
                         contentInfo.setId(bean.getId());
                         mDataPopEd.add(contentInfo);
                     }

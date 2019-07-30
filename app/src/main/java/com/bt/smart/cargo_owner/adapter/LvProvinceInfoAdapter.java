@@ -54,7 +54,7 @@ public class LvProvinceInfoAdapter extends BaseAdapter {
         } else {
             viewholder = (MyViewholder) view.getTag();
         }
-        viewholder.tv_cont.setText(mList.get(i).getName());
+        viewholder.tv_cont.setText(mList.get(i).getFname());
 
         return view;
     }

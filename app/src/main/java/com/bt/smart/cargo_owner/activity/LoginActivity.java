@@ -22,8 +22,11 @@ import com.bt.smart.cargo_owner.MyApplication;
 import com.bt.smart.cargo_owner.NetConfig;
 import com.bt.smart.cargo_owner.R;
 import com.bt.smart.cargo_owner.messageInfo.LoginInfo;
+import com.bt.smart.cargo_owner.messageInfo.RuleContentInfo;
 import com.bt.smart.cargo_owner.messageInfo.SMSInfo;
+import com.bt.smart.cargo_owner.utils.CommonUtil;
 import com.bt.smart.cargo_owner.utils.HttpOkhUtils;
+import com.bt.smart.cargo_owner.utils.MyAlertDialog;
 import com.bt.smart.cargo_owner.utils.ProgressDialogUtil;
 import com.bt.smart.cargo_owner.utils.RequestParamsFM;
 import com.bt.smart.cargo_owner.utils.SpUtils;
@@ -101,7 +104,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         tv_seragree.setOnClickListener(this);
         tv_pripolicy.setOnClickListener(this);
 
-        cb_agree.setChecked(true);
+//        cb_agree.setChecked(true);
         Boolean isRemem = SpUtils.getBoolean(LoginActivity.this, "isRem", false);
         if (isRemem) {
             isRem = true;
@@ -228,10 +231,20 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     }
                     //是否记住账号密码
                     isNeedRem(phone, psd);
+                    if(!cb_agree.isChecked()){
+                        ToastUtils.showToast(LoginActivity.this, "请同意服务协议与隐私政策");
+                        return;
+                    }
                     //登录
                     loginToService(phone, psd);
                     // startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 }
+                break;
+            case R.id.tv_seragree:
+                showSeragree();
+                break;
+            case R.id.tv_pripolicy:
+                showPripolicy();
                 break;
         }
     }
@@ -382,5 +395,55 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             SpUtils.putString(LoginActivity.this, "name", name);
             SpUtils.putString(LoginActivity.this, "psd", psd);
         }
+    }
+
+    protected void showSeragree(){
+        HttpOkhUtils.getInstance().doGet(NetConfig.CONTENT+"/A0002", new HttpOkhUtils.HttpCallBack() {
+            @Override
+            public void onError(Request request, IOException e) {
+                ToastUtils.showToast(LoginActivity.this, "网络错误");
+            }
+
+            @Override
+            public void onSuccess(int code, String resbody) {
+                if (200 != code) {
+                    ToastUtils.showToast(LoginActivity.this, "网络错误" + code);
+                    return;
+                }
+                Gson gson = new Gson();
+                RuleContentInfo ruleContentInfo = gson.fromJson(resbody, RuleContentInfo.class);
+//                ToastUtils.showToast(LoginActivity.this, ruleContentInfo.getMessage());
+                if (ruleContentInfo.isOk()) {
+                    new MyAlertDialog(LoginActivity.this)
+                            .setTitleText(getString(R.string.seragree))
+                            .setContentText(CommonUtil.toPlainText(ruleContentInfo.getData().getFcontent())).show();
+                }
+            }
+        });
+    }
+
+    protected void showPripolicy(){
+        HttpOkhUtils.getInstance().doGet(NetConfig.CONTENT + "/A0003", new HttpOkhUtils.HttpCallBack() {
+            @Override
+            public void onError(Request request, IOException e) {
+                ToastUtils.showToast(LoginActivity.this, "网络错误");
+            }
+
+            @Override
+            public void onSuccess(int code, String resbody) {
+                if (200 != code) {
+                    ToastUtils.showToast(LoginActivity.this, "网络错误" + code);
+                    return;
+                }
+                Gson gson = new Gson();
+                RuleContentInfo ruleContentInfo = gson.fromJson(resbody, RuleContentInfo.class);
+//                ToastUtils.showToast(LoginActivity.this, ruleContentInfo.getMessage());
+                if (ruleContentInfo.isOk()) {
+                    new MyAlertDialog(LoginActivity.this)
+                            .setTitleText(getString(R.string.pripolicy))
+                            .setContentText(CommonUtil.toPlainText(ruleContentInfo.getData().getFcontent())).show();
+                }
+            }
+        });
     }
 }
