@@ -41,60 +41,60 @@ public class RecyDriverOrderAdapter extends BaseQuickAdapter<DrivierOrderInfo.Da
         helper.setText(R.id.tv_goodsname, item.getGoods_name());
         helper.setText(R.id.tv_loadtime, "装货时间：" + item.getZh_time());
         helper.setText(R.id.tv_name, item.getFh_name() + "\n电话：" + item.getFh_telephone());
-        helper.setText(R.id.tv_talk, "收货人：" + item.getSh_name() + "\n电话：" + item.getSh_telephone());
-        ImageView img_call = (ImageView) helper.getView(R.id.img_call);
-        img_call.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //弹出dialog，让司机选择拨打发货还是收货人电话
-                final MyAlertDialogHelper dialogHelper = new MyAlertDialogHelper();
-                View diaView = View.inflate(mContext, R.layout.dialog_choice_phone, null);
-                dialogHelper.setDIYView(mContext, diaView);
-                dialogHelper.show();
-                final RadioButton radbt_fh = diaView.findViewById(R.id.radbt_fh);
-                final RadioButton radbt_sh = diaView.findViewById(R.id.radbt_sh);
-                TextView tv_fhPhone = diaView.findViewById(R.id.tv_fhPhone);
-                TextView tv_shPhone = diaView.findViewById(R.id.tv_shPhone);
-                TextView tv_cancel = diaView.findViewById(R.id.tv_cancel);
-                TextView tv_sure = diaView.findViewById(R.id.tv_sure);
-                tv_fhPhone.setText(item.getFh_telephone());
-                tv_shPhone.setText(item.getSh_telephone());
-                radbt_fh.setChecked(true);
-                selecPhone = item.getFh_telephone();
-                radbt_fh.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                        if (b) {
-                            selecPhone = item.getFh_telephone();
-                            radbt_sh.setChecked(false);
-                        }
-                    }
-                });
-                radbt_sh.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                        if (b) {
-                            selecPhone = item.getSh_telephone();
-                            radbt_fh.setChecked(false);
-                        }
-                    }
-                });
-
-                tv_sure.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        dialogHelper.disMiss();
-                        ShowCallUtil.showCallDialog(mContext, selecPhone);
-                    }
-                });
-                tv_cancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        dialogHelper.disMiss();
-                    }
-                });
-            }
-        });
+//        helper.setText(R.id.tv_talk, "收货人：" + item.getSh_name() + "\n电话：" + item.getSh_telephone());
+//        ImageView img_call = (ImageView) helper.getView(R.id.img_call);
+//        img_call.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                //弹出dialog，让司机选择拨打发货还是收货人电话
+//                final MyAlertDialogHelper dialogHelper = new MyAlertDialogHelper();
+//                View diaView = View.inflate(mContext, R.layout.dialog_choice_phone, null);
+//                dialogHelper.setDIYView(mContext, diaView);
+//                dialogHelper.show();
+//                final RadioButton radbt_fh = diaView.findViewById(R.id.radbt_fh);
+//                final RadioButton radbt_sh = diaView.findViewById(R.id.radbt_sh);
+//                TextView tv_fhPhone = diaView.findViewById(R.id.tv_fhPhone);
+//                TextView tv_shPhone = diaView.findViewById(R.id.tv_shPhone);
+//                TextView tv_cancel = diaView.findViewById(R.id.tv_cancel);
+//                TextView tv_sure = diaView.findViewById(R.id.tv_sure);
+//                tv_fhPhone.setText(item.getFh_telephone());
+//                tv_shPhone.setText(item.getSh_telephone());
+//                radbt_fh.setChecked(true);
+//                selecPhone = item.getFh_telephone();
+//                radbt_fh.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                    @Override
+//                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                        if (b) {
+//                            selecPhone = item.getFh_telephone();
+//                            radbt_sh.setChecked(false);
+//                        }
+//                    }
+//                });
+//                radbt_sh.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                    @Override
+//                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                        if (b) {
+//                            selecPhone = item.getSh_telephone();
+//                            radbt_fh.setChecked(false);
+//                        }
+//                    }
+//                });
+//
+//                tv_sure.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        dialogHelper.disMiss();
+//                        ShowCallUtil.showCallDialog(mContext, selecPhone);
+//                    }
+//                });
+//                tv_cancel.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        dialogHelper.disMiss();
+//                    }
+//                });
+//            }
+//        });
     }
 
 }

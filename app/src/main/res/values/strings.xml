@@ -74,4 +74,5 @@
     <string name="selectdate">请选择日期</string>
     <string name="fhssq">发货地省市区</string>
     <string name="shssq">收货地省市区</string>
+    <string name="goods1">货物信息</string>
 </resources>

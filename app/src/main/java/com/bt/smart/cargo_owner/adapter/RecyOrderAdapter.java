@@ -43,24 +43,24 @@ public class RecyOrderAdapter extends BaseQuickAdapter<AllOrderListInfo.PageList
         helper.setText(R.id.tv_name, item.getFhName());
         helper.setText(R.id.tv_interval, item.getTime_interval());
         helper.setText(R.id.tv_mark, item.getFnote());
-        if(item.getDistance().equals("")){
-            helper.setText(R.id.tv_distance, "");
-        }else {
-            helper.setText(R.id.tv_distance, "约" + item.getDistance()+"km");
-        }
-        ImageView img_call = (ImageView) helper.getView(R.id.img_call);
-        img_call.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!"3".equals(MyApplication.checkStatus)) {
-                    ToastUtils.showToast(mContext, "请先提交资料，认证通过才能联系货主哦！");
-                    //弹出dialog提示
-                    showCheckWarning();
-                    return;
-                }
-                ShowCallUtil.showCallDialog(mContext, item.getFhTele());
-            }
-        });
+//        if(item.getDistance().equals("")){
+//            helper.setText(R.id.tv_distance, "");
+//        }else {
+//            helper.setText(R.id.tv_distance, "约" + item.getDistance()+"km");
+//        }
+//        ImageView img_call = (ImageView) helper.getView(R.id.img_call);
+//        img_call.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if (!"3".equals(MyApplication.checkStatus)) {
+//                    ToastUtils.showToast(mContext, "请先提交资料，认证通过才能联系货主哦！");
+//                    //弹出dialog提示
+//                    showCheckWarning();
+//                    return;
+//                }
+//                ShowCallUtil.showCallDialog(mContext, item.getFhTele());
+//            }
+//        });
     }
 
     private void showCheckWarning() {

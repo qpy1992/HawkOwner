@@ -17,13 +17,16 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bt.smart.cargo_owner.MyApplication;
 import com.bt.smart.cargo_owner.NetConfig;
 import com.bt.smart.cargo_owner.R;
 import com.bt.smart.cargo_owner.adapter.DriverOfferAdapter;
+import com.bt.smart.cargo_owner.adapter.OrderGoodsAdapter;
 import com.bt.smart.cargo_owner.messageInfo.OfferListInfo;
 import com.bt.smart.cargo_owner.messageInfo.OrderDetailInfo;
 import com.bt.smart.cargo_owner.messageInfo.SignInfo;
@@ -58,11 +61,15 @@ public class OrderDetailFragment extends Fragment implements View.OnClickListene
     private View mRootView;
     private ImageView img_back, img_empty, iv_l1, iv_l2, iv_l3, iv_rece, ysxy;
     private LinearLayout ll_load, ll_rece;
-    private TextView tv_title, tv_orderNum, tv_place, tv_goodsname, tv_carType, tv_name, tv_fhPlace, tv_phone, tv_cont, tv_sign, tv_inter;
+    private RelativeLayout rl_driver;
+    private TextView tv_title, tv_orderNum, tv_place, tv_goodsname,
+            tv_name, tv_fhPlace, tv_phone, tv_cont, tv_sign, tv_inter, tv_company,
+            tv_zhTime,tv_xhTime, tv_note, tv_type;
     private String orderID;//订单id
     private int orderType = -1;//订单类别
     private String mOrder_no;//订单号
     private Button moveBtn;
+    private ListView lv_goods;
     private OrderDetailInfo orderDetailInfo;//订单详情
     private List<OfferListInfo.DataBean> mOfferListInfo;//司机报价列表
 
@@ -75,13 +82,13 @@ public class OrderDetailFragment extends Fragment implements View.OnClickListene
     }
 
     private void initView() {
-        img_back = mRootView.findViewById(R.id.img_back);
+        img_back = mRootView.findViewById(R.id.img_back_a);
         img_empty = mRootView.findViewById(R.id.img_empty);
         tv_title = mRootView.findViewById(R.id.tv_title);
         tv_orderNum = mRootView.findViewById(R.id.tv_orderNum);
         tv_place = mRootView.findViewById(R.id.tv_place);
         tv_goodsname = mRootView.findViewById(R.id.tv_goodsname);
-        tv_carType = mRootView.findViewById(R.id.tv_carType);
+        tv_note = mRootView.findViewById(R.id.tv_note);
         tv_name = mRootView.findViewById(R.id.tv_name);
         tv_fhPlace = mRootView.findViewById(R.id.tv_fhPlace);
         tv_phone = mRootView.findViewById(R.id.tv_phone);
@@ -96,10 +103,16 @@ public class OrderDetailFragment extends Fragment implements View.OnClickListene
         ll_rece = mRootView.findViewById(R.id.ll_rece);
         moveBtn = mRootView.findViewById(R.id.moveBtn);
         ysxy = mRootView.findViewById(R.id.ysxy);
+        tv_company = mRootView.findViewById(R.id.tv_company);
+        tv_zhTime = mRootView.findViewById(R.id.tv_zhTime);
+        tv_xhTime = mRootView.findViewById(R.id.tv_xhTime);
+        lv_goods = mRootView.findViewById(R.id.lv_goods);
+        rl_driver = mRootView.findViewById(R.id.rl_driver);
+        tv_type = mRootView.findViewById(R.id.tv_type);
     }
 
     private void initData() {
-        tv_title.setText("货源详情");
+        tv_title.setText("订单详情");
         img_back.setVisibility(View.VISIBLE);
         orderID = getActivity().getIntent().getStringExtra("orderID");
         orderType = getActivity().getIntent().getIntExtra("orderType", -1);
@@ -108,6 +121,7 @@ public class OrderDetailFragment extends Fragment implements View.OnClickListene
             moveBtn.setVisibility(View.VISIBLE);
             setMoveListener();
             moveBtn.setOnClickListener(this);
+            rl_driver.setVisibility(View.GONE);
         }
         if (orderType == 1) {
             tv_sign.setText("签署协议");
@@ -125,6 +139,9 @@ public class OrderDetailFragment extends Fragment implements View.OnClickListene
         if (0 == orderType || 1 == orderType || 2 == orderType) {
             ll_load.setVisibility(View.GONE);
             iv_rece.setVisibility(View.GONE);
+            ysxy.setVisibility(View.GONE);
+        }
+        if (-1 == orderType){
             ysxy.setVisibility(View.GONE);
         }
         //获取货源详情
@@ -146,7 +163,7 @@ public class OrderDetailFragment extends Fragment implements View.OnClickListene
                 //获取货源详情
                 getOrderDetail();
                 break;
-            case R.id.img_back:
+            case R.id.img_back_a:
                 MyFragmentManagerUtil.closeFragmentOnAct(this);
                 break;
             case R.id.tv_cont://联系货主
@@ -362,18 +379,32 @@ public class OrderDetailFragment extends Fragment implements View.OnClickListene
                 orderDetailInfo = gson.fromJson(resbody, OrderDetailInfo.class);
                 ToastUtils.showToast(getContext(), orderDetailInfo.getMessage());
                 if (orderDetailInfo.isOk()) {
+                    OrderDetailInfo.DataBean bean = orderDetailInfo.getData();
                     img_empty.setVisibility(View.GONE);
-                    mOrder_no = orderDetailInfo.getData().getOrder_no();
+                    mOrder_no = bean.getOrder_no();
                     tv_orderNum.setText(mOrder_no);
-                    tv_place.setText(orderDetailInfo.getData().getOrigin() + "  →  " + orderDetailInfo.getData().getDestination());
-                    tv_goodsname.setText(orderDetailInfo.getData().getGoodsname() + " " + orderDetailInfo.getData().getCartype() + " " + orderDetailInfo.getData().getSh_address());
-                    tv_carType.setText(orderDetailInfo.getData().getFh_address());
-                    tv_name.setText(orderDetailInfo.getData().getFh_name());
-                    tv_fhPlace.setText(orderDetailInfo.getData().getFh_address());
-                    tv_phone.setText(orderDetailInfo.getData().getFh_telephone());
-                    tv_inter.setText(orderDetailInfo.getData().getTime_interval());
-                    String getloadUrl = orderDetailInfo.getData().getFloadpics();
-                    String getreceUrl = orderDetailInfo.getData().getFrecepics();
+                    if(bean.getIs_box().equals("1")){
+                        tv_type.setText("整车");
+                        tv_type.setTextColor(getResources().getColor(R.color.orange_press));
+                    }else{
+                        tv_type.setText("拼车");
+                        tv_type.setTextColor(getResources().getColor(R.color.green_press));
+                    }
+                    tv_place.setText(bean.getOrigin() + "  →  " + bean.getDestination());
+                    tv_goodsname.setText(bean.getGoodsname() + " " + bean.getCar_type() + "|" + bean.getCar_length());
+                    tv_name.setText(bean.getFh_name());
+                    tv_fhPlace.setText(bean.getFh_address());
+                    tv_phone.setText(bean.getFh_telephone());
+                    tv_inter.setText(bean.getTime_interval());
+                    tv_zhTime.setText("装货时间："+bean.getZh_time().substring(0,10)+" "+bean.getZhperiod());
+                    tv_xhTime.setText("卸货时间："+bean.getXh_time().substring(0,10)+" "+bean.getXhperiod());
+                    if(CommonUtil.isNotEmpty(bean.getFnote())){
+                        tv_note.setText("备注："+bean.getFnote());
+                    }
+                    OrderGoodsAdapter adapter = new OrderGoodsAdapter(getContext(),bean.getOrdergoods());
+                    lv_goods.setAdapter(adapter);
+                    String getloadUrl = bean.getFloadpics();
+                    String getreceUrl = bean.getFrecepics();
                     if (CommonUtil.isNotEmpty(getloadUrl)) {
                         ll_load.setVisibility(View.VISIBLE);
                         String[] s = getloadUrl.split(",");

@@ -1,6 +1,7 @@
 package com.bt.smart.cargo_owner.adapter;
 
 import android.content.Context;
+import android.media.Image;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -36,65 +37,26 @@ public class ReadyRecDriverOrderAdapter extends BaseQuickAdapter<ReadyRecOrderIn
 
     @Override
     protected void convert(BaseViewHolder helper, final ReadyRecOrderInfo.DataBean item) {
-        //        (ImageView) helper.getView(R.id.img_call)
-        helper.setText(R.id.tv_place, item.getOrigin() + "  →  " + item.getDestination());
-        helper.setText(R.id.tv_goodsname, item.getGoodsName()+" "+item.getCarType());
-        helper.setText(R.id.tv_loadtime, "装货时间：" + item.getZh_time());
-        helper.setText(R.id.tv_name, item.getFh_name() + "\n电话：" + item.getFh_telephone());
-        helper.setText(R.id.tv_talk, "收货人：" + item.getSh_name() + "\n电话：" + item.getSh_telephone());
-        ImageView img_call = (ImageView) helper.getView(R.id.img_call);
-        img_call.setOnClickListener(new View.OnClickListener() {
+        helper.setText(R.id.tv_orderno, item.getOrder_no());
+        helper.setText(R.id.tv_place, item.getOrigin().replaceAll("市"," ").replaceAll("区"," ") + "  →  " + item.getDestination().replaceAll("市"," ").replaceAll("区"," "));
+        helper.setText(R.id.tv_goodsname, item.getName()+" "+item.getCar_type()+"|"+item.getCar_length());
+        helper.setText(R.id.tv_loadtime, "装货时间：" + item.getZhTime());
+        helper.setText(R.id.tv_xhtime, "卸货时间："+item.getXhTime());
+        helper.setText(R.id.tv_mark,item.getFnote());
+        ImageView iv_edit = helper.getView(R.id.iv_edit);
+        ImageView iv_type = helper.getView(R.id.iv_type);
+        iv_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //弹出dialog，让司机选择拨打发货还是收货人电话
-                final MyAlertDialogHelper dialogHelper = new MyAlertDialogHelper();
-                View diaView = View.inflate(mContext, R.layout.dialog_choice_phone, null);
-                dialogHelper.setDIYView(mContext, diaView);
-                dialogHelper.show();
-                final RadioButton radbt_fh = diaView.findViewById(R.id.radbt_fh);
-                final RadioButton radbt_sh = diaView.findViewById(R.id.radbt_sh);
-                TextView tv_fhPhone = diaView.findViewById(R.id.tv_fhPhone);
-                TextView tv_shPhone = diaView.findViewById(R.id.tv_shPhone);
-                TextView tv_cancel = diaView.findViewById(R.id.tv_cancel);
-                TextView tv_sure = diaView.findViewById(R.id.tv_sure);
-                tv_fhPhone.setText(item.getFh_telephone());
-                tv_shPhone.setText(item.getSh_telephone());
-                radbt_fh.setChecked(true);
-                selecPhone = item.getFh_telephone();
-                radbt_fh.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                        if (b) {
-                            selecPhone = item.getFh_telephone();
-                            radbt_sh.setChecked(false);
-                        }
-                    }
-                });
-                radbt_sh.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                        if (b) {
-                            selecPhone = item.getSh_telephone();
-                            radbt_fh.setChecked(false);
-                        }
-                    }
-                });
+                //跳转修改界面
 
-                tv_sure.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        dialogHelper.disMiss();
-                        ShowCallUtil.showCallDialog(mContext, selecPhone);
-                    }
-                });
-                tv_cancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        dialogHelper.disMiss();
-                    }
-                });
             }
         });
+        if(item.getIs_box().equals("0")){
+            iv_type.setImageResource(R.drawable.pinche);
+        }else{
+            iv_type.setImageResource(R.drawable.zhengche);
+        }
     }
 
 }

@@ -55,7 +55,7 @@ public class NetConfig {
     public static String ORDERCONTROLLER = ROOT + "orderController";
 
     //根据ID货主订单表信息
-    public static String ORDERLIST = ROOT + "orderController/orderList";
+    public static String ORDERLIST = ROOT + "orderController/orderList1";
     //获取当天货源条目详情
     public static String ALL_ORDER_DETAIL = ROOT + "orderController";
     //司机报价列表

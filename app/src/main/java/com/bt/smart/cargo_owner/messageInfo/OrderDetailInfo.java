@@ -132,7 +132,7 @@ public class OrderDetailInfo {
         private String sh_address;
         private String sh_area;
         private String car_type;
-        private ZhTimeBean zh_time;
+        private String zh_time;
         private String goods_name;
         private String fh;
         private String sh;
@@ -160,6 +160,10 @@ public class OrderDetailInfo {
         private double lng;
         private double lat;
         private Object pdf;
+        private String dstatus;
+        private String xh_time;
+        private String zhperiod;
+        private String xhperiod;
         private String origin;
         private String destination;
         private String origin_province_id;
@@ -170,7 +174,7 @@ public class OrderDetailInfo {
         private String destination_area_id;
         private String companyname;
         private String goodsname;
-        private String cartype;
+        private String car_length;
         private String time_interval;
         private List<OrdergoodsBean> ordergoods;
 
@@ -254,11 +258,11 @@ public class OrderDetailInfo {
             this.car_type = car_type;
         }
 
-        public ZhTimeBean getZh_time() {
+        public String getZh_time() {
             return zh_time;
         }
 
-        public void setZh_time(ZhTimeBean zh_time) {
+        public void setZh_time(String zh_time) {
             this.zh_time = zh_time;
         }
 
@@ -558,12 +562,12 @@ public class OrderDetailInfo {
             this.goodsname = goodsname;
         }
 
-        public String getCartype() {
-            return cartype;
+        public String getCar_length() {
+            return car_length;
         }
 
-        public void setCartype(String cartype) {
-            this.cartype = cartype;
+        public void setCar_length(String car_length) {
+            this.car_length = car_length;
         }
 
         public String getTime_interval() {
@@ -574,108 +578,44 @@ public class OrderDetailInfo {
             this.time_interval = time_interval;
         }
 
+        public String getDstatus() {
+            return dstatus;
+        }
+
+        public void setDstatus(String dstatus) {
+            this.dstatus = dstatus;
+        }
+
+        public String getXh_time() {
+            return xh_time;
+        }
+
+        public void setXh_time(String xh_time) {
+            this.xh_time = xh_time;
+        }
+
+        public String getZhperiod() {
+            return zhperiod;
+        }
+
+        public void setZhperiod(String zhperiod) {
+            this.zhperiod = zhperiod;
+        }
+
+        public String getXhperiod() {
+            return xhperiod;
+        }
+
+        public void setXhperiod(String xhperiod) {
+            this.xhperiod = xhperiod;
+        }
+
         public List<OrdergoodsBean> getOrdergoods() {
             return ordergoods;
         }
 
         public void setOrdergoods(List<OrdergoodsBean> ordergoods) {
             this.ordergoods = ordergoods;
-        }
-
-        public static class ZhTimeBean {
-            /**
-             * date : 17
-             * hours : 0
-             * seconds : 0
-             * month : 5
-             * timezoneOffset : -480
-             * year : 119
-             * minutes : 0
-             * time : 1560700800000
-             * day : 1
-             */
-
-            private int date;
-            private int hours;
-            private int seconds;
-            private int month;
-            private int timezoneOffset;
-            private int year;
-            private int minutes;
-            private long time;
-            private int day;
-
-            public int getDate() {
-                return date;
-            }
-
-            public void setDate(int date) {
-                this.date = date;
-            }
-
-            public int getHours() {
-                return hours;
-            }
-
-            public void setHours(int hours) {
-                this.hours = hours;
-            }
-
-            public int getSeconds() {
-                return seconds;
-            }
-
-            public void setSeconds(int seconds) {
-                this.seconds = seconds;
-            }
-
-            public int getMonth() {
-                return month;
-            }
-
-            public void setMonth(int month) {
-                this.month = month;
-            }
-
-            public int getTimezoneOffset() {
-                return timezoneOffset;
-            }
-
-            public void setTimezoneOffset(int timezoneOffset) {
-                this.timezoneOffset = timezoneOffset;
-            }
-
-            public int getYear() {
-                return year;
-            }
-
-            public void setYear(int year) {
-                this.year = year;
-            }
-
-            public int getMinutes() {
-                return minutes;
-            }
-
-            public void setMinutes(int minutes) {
-                this.minutes = minutes;
-            }
-
-            public long getTime() {
-                return time;
-            }
-
-            public void setTime(long time) {
-                this.time = time;
-            }
-
-            public int getDay() {
-                return day;
-            }
-
-            public void setDay(int day) {
-                this.day = day;
-            }
         }
 
         public static class OrdergoodsBean {

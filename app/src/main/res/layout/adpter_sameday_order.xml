@@ -14,22 +14,46 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="订单号："
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:gravity="center_vertical"/>
+
+        <TextView
+            android:id="@+id/tv_orderno"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:textSize="16sp"/>
 
         <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="8dp"
-            android:src="@drawable/iman" />
+            android:id="@+id/iv_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/edit"
+            android:layout_marginRight="10dp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
+            android:layout_weight="1"
             android:orientation="vertical">
 
             <LinearLayout
@@ -45,7 +69,8 @@
                     android:singleLine="true"
                     android:text="南通 如皋 → 南通 海门"
                     android:textColor="@color/word_black"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
 
                 <TextView
                     android:id="@+id/tv_interval"
@@ -68,23 +93,12 @@
 
                 <TextView
                     android:id="@+id/tv_goodsname"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
                     android:singleLine="true"
                     android:text="13米 平板/高低板 28吨"
-                    android:textColor="@color/vm_black_87"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:id="@+id/tv_distance"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="right"
-                    android:text="约***km装货"
-                    android:textColor="@color/word_gray"
-                    android:textSize="12sp" />
+                    android:textColor="@color/orange"
+                    android:textSize="14sp"/>
             </LinearLayout>
 
             <LinearLayout
@@ -110,6 +124,16 @@
                         android:textSize="12sp" />
 
                     <TextView
+                        android:id="@+id/tv_xhtime"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="3dp"
+                        android:singleLine="true"
+                        android:text="卸货时间：2019-01-09 12:20"
+                        android:textColor="@color/vm_black_87"
+                        android:textSize="12sp" />
+
+                    <TextView
                         android:id="@+id/tv_mark"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -118,48 +142,16 @@
                         android:text="备注：装货，一装一卸"
                         android:textColor="@color/vm_black_87"
                         android:textSize="12sp" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginBottom="4dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="50dp"
-                            android:layout_height="25dp"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/icon_club_member" />
-
-                        <TextView
-                            android:id="@+id/tv_name"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:text="李三"
-                            android:textColor="@color/word_gray"
-                            android:textSize="12sp" />
-                    </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/tv_talk"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="评价少于3条"
-                        android:textColor="@color/word_gray"
-                        android:textSize="12sp" />
                 </LinearLayout>
-
-                <ImageView
-                    android:id="@+id/img_call"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="8dp"
-                    android:src="@drawable/icon_phone" />
             </LinearLayout>
         </LinearLayout>
+            <ImageView
+                android:id="@+id/iv_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/zhengche"
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="10dp"/>
     </LinearLayout>
 </LinearLayout>

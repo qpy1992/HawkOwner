@@ -74,7 +74,6 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
     private TextView tv_zh,tv_zhadd,tv_xh,tv_xhadd,tv_goods,tv_ystype,tv_goodstype,tv_cartype,tv_zhdate,tv_xhdate,tv_paytype,tv_typelength;
     private TextView tv_title,tv_xhtime;
     private TextView tv_fh_area;//发货省市区
-    private RelativeLayout rl_huoyuan;
     private LinearLayout ll_ssq;//选择发货省市区
     private LinearLayout ll_shssq;//选择收货省市区
     private EditText et_fh_area;//发货详细地址
@@ -92,6 +91,8 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
     private LinearLayout line_sel_zpry;//选择指派人
     private CheckBox ck_xj;//现结
     private CheckBox ck_yj;//月结
+    private CheckBox ck_zc;//月结
+    private CheckBox ck_pc;//月结
     private LinearLayout line_ffee;//预付费模块
     private CheckBox ck_use;//使用油卡
     private CheckBox ck_nouse;//不使用
@@ -142,8 +143,7 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
     }
 
     private void initView() {
-        rl_huoyuan = mRootView.findViewById(R.id.rl_huoyuan);
-        img_back = rl_huoyuan.findViewById(R.id.img_back_a);
+        img_back = mRootView.findViewById(R.id.img_back_a);
         tv_title = mRootView.findViewById(R.id.tv_title);
         tv_zh = mRootView.findViewById(R.id.tv_zh);
         tv_zhadd = mRootView.findViewById(R.id.tv_zhadd);
@@ -178,6 +178,8 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
         line_sel_zpry = mRootView.findViewById(R.id.line_sel_zpry);
         ck_xj = mRootView.findViewById(R.id.ck_xj);
         ck_yj = mRootView.findViewById(R.id.ck_yj);
+        ck_zc = mRootView.findViewById(R.id.ck_zc);
+        ck_pc = mRootView.findViewById(R.id.ck_pc);
         ck_use = mRootView.findViewById(R.id.ck_use);
         ck_nouse = mRootView.findViewById(R.id.ck_nouse);
         line_oilPrice = mRootView.findViewById(R.id.line_oilPrice);
@@ -228,9 +230,8 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.img_back:
-                MyFragmentManagerUtil.closeTopFragment(this);
-//                getActivity().finish();
+            case R.id.img_back_a:
+                MyFragmentManagerUtil.closeFragmentOnAct(this);
                 break;
             case R.id.ll_ssq://选择发货地
                 if(SoftKeyboardUtils.isSoftShowing(getActivity())){
@@ -299,6 +300,22 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
             @Override
             public void onClick(View view) {
                 ck_yj.setChecked(true);
+            }
+        });
+        ck_zc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ck_zc.setChecked(true);
+                ck_pc.setChecked(false);
+                isBoxed = "1";
+            }
+        });
+        ck_pc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ck_pc.setChecked(true);
+                ck_zc.setChecked(false);
+                isBoxed = "0";
             }
         });
         ck_xj.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
