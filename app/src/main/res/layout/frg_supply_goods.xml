@@ -104,7 +104,7 @@
                         android:layout_weight="7"
                         android:background="@null"
                         android:hint="请输入发货地街道信息"
-                        android:textColor="@color/gray_99"
+                        android:textColor="@color/word_black"
                         android:textSize="14sp" />
                 </LinearLayout>
 
@@ -135,7 +135,7 @@
                         android:layout_weight="7"
                         android:background="@null"
                         android:hint="请输入发货人姓名"
-                        android:textColor="@color/gray_99"
+                        android:textColor="@color/word_black"
                         android:textSize="14sp" />
                 </LinearLayout>
 
@@ -167,7 +167,7 @@
                         android:background="@null"
                         android:hint="请输入发货人手机号"
                         android:phoneNumber="true"
-                        android:textColor="@color/gray_99"
+                        android:textColor="@color/word_black"
                         android:textSize="14sp" />
                 </LinearLayout>
 
@@ -257,7 +257,7 @@
                         android:layout_weight="7"
                         android:background="@null"
                         android:hint="请输入收货地街道信息"
-                        android:textColor="@color/gray_99"
+                        android:textColor="@color/word_black"
                         android:textSize="14sp" />
                 </LinearLayout>
 
@@ -288,7 +288,7 @@
                         android:layout_weight="7"
                         android:background="@null"
                         android:hint="请输入收货人姓名"
-                        android:textColor="@color/gray_99"
+                        android:textColor="@color/word_black"
                         android:textSize="14sp" />
                 </LinearLayout>
 
@@ -320,7 +320,7 @@
                         android:background="@null"
                         android:hint="请输入收货人手机号"
                         android:phoneNumber="true"
-                        android:textColor="@color/gray_99"
+                        android:textColor="@color/word_black"
                         android:textSize="14sp" />
                 </LinearLayout>
 
@@ -462,11 +462,13 @@
                         android:textColor="@color/word_black"
                         android:textSize="14sp" />
 
-                    <Spinner
-                        android:id="@+id/sp_goodstype"
+                    <TextView
+                        android:id="@+id/tv_goodstype_sel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="20dp"
+                        android:hint="@string/click"
+                        android:gravity="center_horizontal"
                         android:minWidth="100dp"
                         android:spinnerMode="dialog"
                         android:textColor="@color/word_black"

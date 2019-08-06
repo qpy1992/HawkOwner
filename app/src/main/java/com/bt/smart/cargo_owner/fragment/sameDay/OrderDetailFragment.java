@@ -337,6 +337,8 @@ public class OrderDetailFragment extends Fragment implements View.OnClickListene
                         mOfferListInfo.addAll(offerListInfo.getData());
                         //弹出pop显示报价列表
                         showPopPrice();
+                    }else{
+                        ToastUtils.showToast(getContext(),"暂无报价！");
                     }
                 }
             }

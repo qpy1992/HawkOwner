@@ -44,7 +44,7 @@ public class AuthenticationWebAct extends BaseActivity implements View.OnClickLi
     }
 
     private void setView() {
-        img_back = findViewById(R.id.img_back);
+        img_back = findViewById(R.id.img_back_a);
         tv_title = findViewById(R.id.tv_title);
         web_show = findViewById(R.id.web_show);
     }

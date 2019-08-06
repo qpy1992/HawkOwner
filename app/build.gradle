@@ -67,5 +67,5 @@ dependencies {
     implementation 'com.getui:sdk:2.13.2.0'//个推
     implementation 'org.jsoup:jsoup:1.12.1'
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.0.1'
-
+    implementation 'com.karumi:dexter:5.0.0'
 }

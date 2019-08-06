@@ -7,7 +7,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.Html;
+import android.text.Selection;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +41,7 @@ import com.bt.smart.cargo_owner.messageInfo.AddGoodsBean;
 import com.bt.smart.cargo_owner.messageInfo.ApplyOrderResultInfo;
 import com.bt.smart.cargo_owner.messageInfo.CarTypeListInfo;
 import com.bt.smart.cargo_owner.messageInfo.ChioceAdapterContentInfo;
+import com.bt.smart.cargo_owner.messageInfo.OrderDetailInfo;
 import com.bt.smart.cargo_owner.messageInfo.ShengDataInfo;
 import com.bt.smart.cargo_owner.messageInfo.TsTypeInfo;
 import com.bt.smart.cargo_owner.messageInfo.TypeInfo;
@@ -71,7 +74,9 @@ import okhttp3.Request;
 public class SupplyGoodsFragment extends Fragment implements View.OnClickListener {
     private View mRootView;
     private ImageView img_back;
-    private TextView tv_zh,tv_zhadd,tv_xh,tv_xhadd,tv_goods,tv_ystype,tv_goodstype,tv_cartype,tv_zhdate,tv_xhdate,tv_paytype,tv_typelength;
+    private TextView tv_zh,tv_zhadd,tv_xh,tv_xhadd,tv_goods,tv_ystype,tv_goodstype,
+            tv_cartype,tv_zhdate,tv_xhdate,tv_paytype,tv_typelength,
+            tv_goodstype_sel;
     private TextView tv_title,tv_xhtime;
     private TextView tv_fh_area;//发货省市区
     private LinearLayout ll_ssq;//选择发货省市区
@@ -85,7 +90,6 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
     private EditText et_sh_phone;//收货人电话
     private ImageView img_add;//添加货物信息
     private MyListView mlv_goods;// 货物信息list
-    private Spinner sp_goodstype;//选择货物类型
     private LinearLayout line_time,xh_time;//选择发货时间
     private TextView tv_time;//发货时间
     private LinearLayout line_sel_zpry;//选择指派人
@@ -130,7 +134,9 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
     private String xhperiod;
     private String xhperiodcode;
     private String isBoxed = "0";
+    private int ftype = 0;
     private double ap_price;
+    private String orderId;
     private static String TAG = "SupplyGoodsFragment";
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
@@ -159,7 +165,6 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
         tv_xhtime = mRootView.findViewById(R.id.tv_xhtime);
         et_fh_area = mRootView.findViewById(R.id.et_fh_area);
         et_fh_name = mRootView.findViewById(R.id.et_fh_name);
-        et_fh_name = mRootView.findViewById(R.id.et_fh_name);
         et_fh_phone = mRootView.findViewById(R.id.et_fh_phone);
         tv_fh_area = mRootView.findViewById(R.id.tv_fh_area);
         ll_ssq = mRootView.findViewById(R.id.ll_ssq);
@@ -170,7 +175,7 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
         et_sh_phone = mRootView.findViewById(R.id.et_sh_phone);
         img_add = mRootView.findViewById(R.id.img_add);
         mlv_goods = mRootView.findViewById(R.id.mlv_goods);
-        sp_goodstype = mRootView.findViewById(R.id.sp_goodstype);
+        tv_goodstype_sel = mRootView.findViewById(R.id.tv_goodstype_sel);
         tv_typelength = mRootView.findViewById(R.id.tv_typelength);
         line_time = mRootView.findViewById(R.id.line_time);
         xh_time = mRootView.findViewById(R.id.xh_time);
@@ -212,19 +217,24 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
         line_time.setOnClickListener(this);
         tv_typelength.setOnClickListener(this);
         xh_time.setOnClickListener(this);
+        tv_goodstype_sel.setOnClickListener(this);
 
         //初始化起点线路
         initStartPlace();
         //初始化添加的货物信息列表
         initGoodsList();
-        //设置货物类型
-        setGoodsType();
         //设置车辆类型
 //        setCarTypeSpinner();
         //设置选择按钮事件
         setCheckListener();
         //获取车辆信息列表
 //        getAllCarType();
+        //判断是否是更新
+        orderId = getActivity().getIntent().getStringExtra("orderId");
+        Log.i(TAG,"订单id为："+orderId);
+        if(orderId!=null){
+            showOrderDetail(orderId);
+        }
     }
 
     @Override
@@ -285,6 +295,9 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
                 break;
             case R.id.tv_typelength:
                 toSelectModelLength();
+                break;
+            case R.id.tv_goodstype_sel:
+                setGoodsType();
                 break;
         }
     }
@@ -758,17 +771,18 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
                 TypeInfo type = gson.fromJson(resbody,TypeInfo.class);
                 List<TypeInfo.DataBean> dataBeanList = type.getData();
                 goodsTypeList.addAll(dataBeanList);
-                SpTypeAdapter goodsTypeAdapter = new SpTypeAdapter(getContext(), goodsTypeList);
-                sp_goodstype.setAdapter(goodsTypeAdapter);
-                sp_goodstype.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                SpTypeAdapter typeAdapter = new SpTypeAdapter(getContext(), goodsTypeList);
+                final ListView lv = new ListView(getContext());
+                lv.setAdapter(typeAdapter);
+                final AlertDialog builder = new AlertDialog.Builder(getContext()).create();
+                builder.setView(lv);
+                builder.setCanceledOnTouchOutside(false);
+                builder.show();
+                lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
-                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                            goodsTypeID = goodsTypeList.get(i).getId();
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> adapterView) {
-
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        goodsTypeID = goodsTypeList.get(i).getId();
+                        tv_goodstype_sel.setText(goodsTypeList.get(i).getName());
                     }
                 });
             }
@@ -875,5 +889,101 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
         ftt.add(R.id.frame, mollengthFt, "mollengthFt");
         ftt.addToBackStack("mollengthFt");
         ftt.commit();
+    }
+
+    protected void showOrderDetail(String id){
+        RequestParamsFM headparam = new RequestParamsFM();
+        headparam.put("X-AUTH-TOKEN", MyApplication.userToken);
+        HttpOkhUtils.getInstance().doGetWithOnlyHeader(NetConfig.ALL_ORDER_DETAIL + "/" + id, headparam, new HttpOkhUtils.HttpCallBack() {
+            @Override
+            public void onError(Request request, IOException e) {
+                Log.i(TAG,"网络错误");
+            }
+
+            @Override
+            public void onSuccess(int code, String resbody) {
+                if (code != 200) {
+                    Log.i(TAG, "网络错误" + code);
+                    return;
+                }
+                Gson gson = new Gson();
+                OrderDetailInfo orderDetailInfo = gson.fromJson(resbody,OrderDetailInfo.class);
+                if(orderDetailInfo.isOk()){
+                    OrderDetailInfo.DataBean bean = orderDetailInfo.getData();
+                    tv_fh_area.setText(bean.getOrigin());
+                    fh_id = bean.getOrigin_area_id();
+                    et_fh_area.setText(bean.getFh_address());
+                    et_fh_area.setSelection(et_fh_area.getText().length());
+                    et_fh_name.setText(bean.getFh_name());
+                    et_fh_phone.setText(bean.getFh_telephone());
+                    tv_sh_area.setText(bean.getDestination());
+                    sh_id = bean.getDestination_area_id();
+                    et_sh_area.setText(bean.getSh_address());
+                    et_sh_name.setText(bean.getSh_name());
+                    et_sh_phone.setText(bean.getSh_telephone());
+                    if(bean.getIs_box().equals("1")){
+                        //整车
+                        ck_zc.setChecked(true);
+                        ck_pc.setChecked(false);
+                        isBoxed = "1";
+                    }else{
+                        //拼车
+                        ck_zc.setChecked(false);
+                        ck_pc.setChecked(true);
+                        isBoxed = "0";
+                    }
+                    tv_goodstype_sel.setText(bean.getGoodsname());
+                    goodsTypeID = bean.getGoods_name();
+                    tv_typelength.setText(bean.getCar_length()+"|"+bean.getCar_type());
+                    carLeng = bean.getCar_length();
+                    carModel = bean.getCar_type();
+                    tv_time.setText(bean.getZh_time().substring(0,10)+bean.getZhperiod().substring(0,2));
+                    tv_xhtime.setText(bean.getXh_time().substring(0,10)+bean.getXhperiod().substring(0,2));
+                    if(bean.getFtype()==0){
+                        //现结
+                        ck_xj.setChecked(true);
+                        ck_yj.setChecked(false);
+                        ftype = 0;
+                    }else{
+                        //月结
+                        ck_xj.setChecked(false);
+                        ck_yj.setChecked(true);
+                        ftype = 1;
+                    }
+                    if(bean.getFoil_card()==0){
+                        ck_nouse.setChecked(true);
+                        ck_use.setChecked(false);
+                    }else{
+                        ck_use.setChecked(true);
+                        ck_nouse.setChecked(false);
+                        et_oilPrice.setText(bean.getFoil_card());
+                    }
+                    if(bean.getFfee()!=0){
+                        et_price.setText(bean.getFfee()+"");
+                    }
+                }
+            }
+        });
+    }
+
+    protected void updateOrder(String id){
+        RequestParamsFM headparam = new RequestParamsFM();
+        headparam.put("X-AUTH-TOKEN", MyApplication.userToken);
+        RequestParamsFM params = new RequestParamsFM();
+
+        HttpOkhUtils.getInstance().doPutWithHeader(NetConfig.ALL_ORDER_DETAIL + "/" + id, headparam, params, new HttpOkhUtils.HttpCallBack() {
+            @Override
+            public void onError(Request request, IOException e) {
+                Log.i(TAG,"网络错误");
+            }
+
+            @Override
+            public void onSuccess(int code, String resbody) {
+                if (code != 200) {
+                    Log.i(TAG, "网络错误" + code);
+                    return;
+                }
+            }
+        });
     }
 }

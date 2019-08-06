@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bt.smart.cargo_owner.MainActivity;
 import com.bt.smart.cargo_owner.MyApplication;
@@ -25,8 +26,14 @@ import com.bt.smart.cargo_owner.utils.SpUtils;
 import com.bt.smart.cargo_owner.utils.ToastUtils;
 import com.google.gson.Gson;
 import com.igexin.sdk.PushManager;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
 import java.io.IOException;
+import java.util.List;
 
 import okhttp3.Request;
 
@@ -42,6 +49,14 @@ import okhttp3.Request;
 public class FirstActivity extends Activity implements View.OnClickListener {
     private TextView tv_new;
     private TextView tv_old;
+    static final String[] PERMISSIONS = new String[]{
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.CAMERA,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.READ_PHONE_STATE
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +68,7 @@ public class FirstActivity extends Activity implements View.OnClickListener {
         MyApplication.flag = 0;
         getView();
         setData();
+        initPermissions();
     }
 
     private void getView() {
@@ -75,10 +91,10 @@ public class FirstActivity extends Activity implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        if (!isGetPermission()) {
-            requestPermission();
-            return;
-        }
+//        if (!isGetPermission()) {
+//            requestPermission();
+//            return;
+//        }
         switch (view.getId()) {
             case R.id.tv_new:
                 //跳转注册界面
@@ -111,6 +127,22 @@ public class FirstActivity extends Activity implements View.OnClickListener {
         } else {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
+    }
+
+    private void initPermissions() {
+        Dexter.withActivity(this).withPermissions(PERMISSIONS)
+                .withListener(new MultiplePermissionsListener() {
+                    @Override
+                    public void onPermissionsChecked(MultiplePermissionsReport report) {
+                        if (report.areAllPermissionsGranted()){
+                            Toast.makeText(getApplication(),"权限获取成功！",Toast.LENGTH_LONG).show();
+                        }
+                    }
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+                    }
+                }).check();
     }
 
     private static final int REQUEST_PERMISSION = 101;

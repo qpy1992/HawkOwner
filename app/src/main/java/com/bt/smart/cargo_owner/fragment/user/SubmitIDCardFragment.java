@@ -10,6 +10,7 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +41,7 @@ import java.io.IOException;
 import okhttp3.Request;
 
 public class SubmitIDCardFragment extends Fragment implements View.OnClickListener {
+    private static String TAG = "SubmitIDCardFragment";
     private View mRootView;
     private ImageView img_back;
     private TextView tv_title;
@@ -94,7 +96,7 @@ public class SubmitIDCardFragment extends Fragment implements View.OnClickListen
     }
 
     private void initView() {
-        img_back = mRootView.findViewById(R.id.img_back);
+        img_back = mRootView.findViewById(R.id.img_back_a);
         tv_title = mRootView.findViewById(R.id.tv_title);
         et_name = mRootView.findViewById(R.id.et_name);
         et_code = mRootView.findViewById(R.id.et_code);
@@ -464,6 +466,7 @@ public class SubmitIDCardFragment extends Fragment implements View.OnClickListen
                     return;
                 }
                 Gson gson = new Gson();
+                Log.i(TAG,resbody);
                 AuthInfo authInfo = gson.fromJson(resbody, AuthInfo.class);
                 ToastUtils.showToast(getContext(), authInfo.getMessage());
                 if (authInfo.isOk()) {

@@ -1,7 +1,9 @@
 package com.bt.smart.cargo_owner.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.media.Image;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -9,6 +11,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.bt.smart.cargo_owner.R;
+import com.bt.smart.cargo_owner.activity.homeAct.SupplyGoodsActivity;
 import com.bt.smart.cargo_owner.messageInfo.ReadyRecOrderInfo;
 import com.bt.smart.cargo_owner.utils.MyAlertDialogHelper;
 import com.bt.smart.cargo_owner.utils.ShowCallUtil;
@@ -49,7 +52,10 @@ public class ReadyRecDriverOrderAdapter extends BaseQuickAdapter<ReadyRecOrderIn
             @Override
             public void onClick(View view) {
                 //跳转修改界面
-
+                Intent intent = new Intent(mContext, SupplyGoodsActivity.class);
+                intent.putExtra("orderId",item.getId());
+                intent.putExtra("fstatus",item.getFstatus());
+                mContext.startActivity(intent);
             }
         });
         if(item.getIs_box().equals("0")){

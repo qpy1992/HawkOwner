@@ -42,7 +42,7 @@ public class OrderListFragment extends Fragment {
     private SwipeRefreshLayout swiperefresh;
     private RecyclerView recyview;
     private ReadyRecDriverOrderAdapter orderAdapter;
-    private List<ReadyRecOrderInfo.DataBean> mData = new ArrayList();;
+    private List<ReadyRecOrderInfo.DataBean> mData = new ArrayList();
     private int mType;//fragment需要展示的订单种类//0已发布、1已报价、2已发协议、3已签署、4运输中、5已签收、6待确认、7已取消、8待支付、9已结单
 
     @Override
