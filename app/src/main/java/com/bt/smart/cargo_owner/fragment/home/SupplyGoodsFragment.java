@@ -294,9 +294,15 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
                 checkWriteInfo();
                 break;
             case R.id.tv_typelength:
+                if(SoftKeyboardUtils.isSoftShowing(getActivity())){
+                    SoftKeyboardUtils.hideSystemSoftKeyboard(getActivity());
+                }
                 toSelectModelLength();
                 break;
             case R.id.tv_goodstype_sel:
+                if(SoftKeyboardUtils.isSoftShowing(getActivity())){
+                    SoftKeyboardUtils.hideSystemSoftKeyboard(getActivity());
+                }
                 setGoodsType();
                 break;
         }
@@ -783,6 +789,7 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                         goodsTypeID = goodsTypeList.get(i).getId();
                         tv_goodstype_sel.setText(goodsTypeList.get(i).getName());
+                        builder.dismiss();
                     }
                 });
             }

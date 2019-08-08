@@ -96,7 +96,7 @@ public class SelectModelLengthFragment extends Fragment implements View.OnClickL
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.img_back:
+            case R.id.img_back_a:
                 MyFragmentManagerUtil.closeTopFragment(this);
                 break;
             case R.id.tv_sureLength://其他车长
