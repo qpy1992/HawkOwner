@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -40,6 +41,7 @@ import com.bt.smart.cargo_owner.fragment.user.SelectModelLengthFragment;
 import com.bt.smart.cargo_owner.messageInfo.AddGoodsBean;
 import com.bt.smart.cargo_owner.messageInfo.ApplyOrderResultInfo;
 import com.bt.smart.cargo_owner.messageInfo.CarTypeListInfo;
+import com.bt.smart.cargo_owner.messageInfo.CarrierInfo;
 import com.bt.smart.cargo_owner.messageInfo.ChioceAdapterContentInfo;
 import com.bt.smart.cargo_owner.messageInfo.OrderDetailInfo;
 import com.bt.smart.cargo_owner.messageInfo.ShengDataInfo;
@@ -73,11 +75,11 @@ import okhttp3.Request;
 
 public class SupplyGoodsFragment extends Fragment implements View.OnClickListener {
     private View mRootView;
-    private ImageView img_back;
+    private ImageView img_back,iv_assign;
     private TextView tv_zh,tv_zhadd,tv_xh,tv_xhadd,tv_goods,tv_ystype,tv_goodstype,
             tv_cartype,tv_zhdate,tv_xhdate,tv_paytype,tv_typelength,
             tv_goodstype_sel;
-    private TextView tv_title,tv_xhtime;
+    private TextView tv_title,tv_xhtime,tv_assign;
     private TextView tv_fh_area;//发货省市区
     private LinearLayout ll_ssq;//选择发货省市区
     private LinearLayout ll_shssq;//选择收货省市区
@@ -104,7 +106,7 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
     private EditText et_oilPrice;//油卡模块
     private EditText et_price;//预算费用
     private TextView tv_submit;//发布
-    private String province,city;
+    private String province,city,assignType,assignId;
 
     //省市区数据
     private List<ChioceAdapterContentInfo> mDataPopEd;
@@ -192,6 +194,8 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
         line_ffee = mRootView.findViewById(R.id.line_ffee);
         et_price = mRootView.findViewById(R.id.et_price);
         tv_submit = mRootView.findViewById(R.id.tv_submit);
+        tv_assign = mRootView.findViewById(R.id.tv_assign);
+        iv_assign = mRootView.findViewById(R.id.iv_assign);
     }
 
     private void initData() {
@@ -218,6 +222,7 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
         tv_typelength.setOnClickListener(this);
         xh_time.setOnClickListener(this);
         tv_goodstype_sel.setOnClickListener(this);
+        line_sel_zpry.setOnClickListener(this);
 
         //初始化起点线路
         initStartPlace();
@@ -304,6 +309,9 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
                     SoftKeyboardUtils.hideSystemSoftKeyboard(getActivity());
                 }
                 setGoodsType();
+                break;
+            case R.id.line_sel_zpry:
+                toAssignaDriver();
                 break;
         }
     }
@@ -889,6 +897,14 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
         tv_typelength.setText(carLeng+"|"+carModel);
     }
 
+    public void setAssignId(CarrierInfo.DataBean item){
+        if(item!=null){
+            assignId = item.getId();
+            tv_assign.setText(item.getFname()+" "+item.getFmobile());
+            iv_assign.setVisibility(View.GONE);
+        }
+    }
+
     private void toSelectModelLength() {
         SelectModelLengthFragment mollengthFt = new SelectModelLengthFragment();
         mollengthFt.setTopFragment(this);
@@ -896,6 +912,43 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
         ftt.add(R.id.frame, mollengthFt, "mollengthFt");
         ftt.addToBackStack("mollengthFt");
         ftt.commit();
+    }
+
+    private void toAssignaDriver() {
+        ListView lv = new ListView(getContext());
+        String[] items = new String[]{"承运商","司机"};
+        ArrayAdapter adapter = new ArrayAdapter(getContext(),android.R.layout.simple_list_item_1,items);
+        lv.setAdapter(adapter);
+        final AlertDialog builder = new AlertDialog.Builder(getContext()).create();
+        builder.setView(lv);
+        builder.setCanceledOnTouchOutside(false);
+        builder.show();
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                FragmentTransaction ftt = getFragmentManager().beginTransaction();
+                switch (position){
+                    case 0:
+                        CarrierFragment carrierFragment = new CarrierFragment();
+                        carrierFragment.setTopFragment(SupplyGoodsFragment.this);
+                        ftt.add(R.id.frame, carrierFragment, "carrierFragment");
+                        ftt.addToBackStack("carrierFragment");
+                        ftt.commit();
+                        assignType = "0";
+                        break;
+                    case 1:
+                        DriverFragment driverFragment = new DriverFragment();
+                        driverFragment.setTopFragment(SupplyGoodsFragment.this);
+                        ftt.add(R.id.frame, driverFragment, "driverFragment");
+                        ftt.addToBackStack("driverFragment");
+                        ftt.commit();
+                        assignType = "1";
+                        break;
+                }
+                builder.dismiss();
+            }
+        });
+
     }
 
     protected void showOrderDetail(String id){

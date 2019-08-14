@@ -20,6 +20,7 @@
     <string name="m_dialog_ok">确定</string>
     <string name="m_dialog_cancel">取消</string>
     <string name="submit">提交</string>
+    <string name="search">搜索</string>
     <string name="m_LOADING">Loading...</string>
     <string name="name">姓名</string>
     <string name="idno">身份证号</string>
@@ -75,4 +76,8 @@
     <string name="fhssq">发货地省市区</string>
     <string name="shssq">收货地省市区</string>
     <string name="goods1">货物信息</string>
+    <string name="driver_warn">请输入司机姓名</string>
+    <string name="driver_warn1">请输入司机手机号</string>
+    <string name="carrier_warn">请输入承运商名称</string>
+    <string name="carrier_warn1">请输入承运商电话</string>
 </resources>

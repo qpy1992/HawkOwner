@@ -114,4 +114,6 @@ public class NetConfig {
     public static String TYPE = ROOT + "typeController/list";
 
     public static String TSTYPE = ROOT + "typeController/tstype";
+
+    public static String APPOINTDRIVER = ROOT + "zRegisterController/driverOrCarrierList";
 }

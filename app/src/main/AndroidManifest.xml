@@ -33,7 +33,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activity.samedayAct.CarTypeActivity"></activity>
+        <activity android:name=".activity.homeAct.CarrierActivity"></activity>
+        <activity android:name=".activity.homeAct.DriverActivity" />
+        <activity android:name=".activity.samedayAct.CarTypeActivity" />
         <activity android:name=".activity.XieyiActivity" />
         <activity android:name=".activity.userAct.BCardActivity" />
         <activity android:name=".activity.userAct.WithdrawActivity" />
