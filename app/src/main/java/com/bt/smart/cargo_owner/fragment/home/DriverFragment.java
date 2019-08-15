@@ -41,6 +41,7 @@ public class DriverFragment extends Fragment implements View.OnClickListener{
     private RecyclerView lv_driver;
     private SupplyGoodsFragment supplyGoodsFragment;
     private int sType = 0;//搜索条件，0_姓名，1_手机号，默认姓名搜索
+    private int mType;
     private static String TAG = "DriverFragment";
 
     @Override
@@ -65,30 +66,57 @@ public class DriverFragment extends Fragment implements View.OnClickListener{
     protected void initData(){
         img_back.setVisibility(View.VISIBLE);
         img_back.setOnClickListener(this);
-        tv_title.setText("司机列表");
-        final String[] sp_items = new String[]{"姓名","手机号"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),android.R.layout.simple_spinner_dropdown_item,sp_items);
-        sp_mob_name.setAdapter(adapter);
-        sp_mob_name.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                switch (position){
-                    case 0:
-                        et_driverName.setHint(getString(R.string.driver_warn));
-                        sType = 0;
-                        break;
-                    case 1:
-                        et_driverName.setHint(getString(R.string.driver_warn1));
-                        sType = 1;
-                        break;
+        if(mType==0){
+            tv_title.setText("承运商列表");
+            final String[] sp_items = new String[]{"名称","电话"};
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),android.R.layout.simple_spinner_dropdown_item,sp_items);
+            sp_mob_name.setAdapter(adapter);
+            sp_mob_name.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    switch (position){
+                        case 0:
+                            et_driverName.setHint(getString(R.string.carrier_warn));
+                            sType = 0;
+                            break;
+                        case 1:
+                            et_driverName.setHint(getString(R.string.carrier_warn1));
+                            sType = 1;
+                            break;
+                    }
                 }
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
 
-            }
-        });
+                }
+            });
+        }else{
+            tv_title.setText("司机列表");
+            final String[] sp_items = new String[]{"姓名","手机号"};
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),android.R.layout.simple_spinner_dropdown_item,sp_items);
+            sp_mob_name.setAdapter(adapter);
+            sp_mob_name.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    switch (position){
+                        case 0:
+                            et_driverName.setHint(getString(R.string.driver_warn));
+                            sType = 0;
+                            break;
+                        case 1:
+                            et_driverName.setHint(getString(R.string.driver_warn1));
+                            sType = 1;
+                            break;
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+        }
         btn_search_driver.setOnClickListener(this);
     }
 
@@ -111,14 +139,22 @@ public class DriverFragment extends Fragment implements View.OnClickListener{
         RequestParamsFM headparam = new RequestParamsFM();
         headparam.put("X-AUTH-TOKEN", MyApplication.userToken);
         RequestParamsFM params = new RequestParamsFM();
-        params.put("ftype","1");
+        params.put("ftype",mType);
         String text = et_driverName.getText().toString();
         switch (type){
             case 0:
-                params.put("fname_individual",text);
+                if(mType==0){
+                    params.put("company_name",text);
+                }else{
+                    params.put("fname_individual",text);
+                }
                 break;
             case 1:
-                params.put("fmobile_individual",text);
+                if(mType==0) {
+                    params.put("fmobile_carrier",text);
+                }else{
+                    params.put("fmobile_individual", text);
+                }
                 break;
         }
         HttpOkhUtils.getInstance().doGetWithHeadParams(NetConfig.APPOINTDRIVER, headparam, params, new HttpOkhUtils.HttpCallBack() {
@@ -155,5 +191,9 @@ public class DriverFragment extends Fragment implements View.OnClickListener{
 
     public void setTopFragment(SupplyGoodsFragment fragment) {
         supplyGoodsFragment = fragment;
+    }
+
+    public void setType(int type) {
+        mType = type;
     }
 }

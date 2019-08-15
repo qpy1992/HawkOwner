@@ -927,24 +927,13 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 FragmentTransaction ftt = getFragmentManager().beginTransaction();
-                switch (position){
-                    case 0:
-                        CarrierFragment carrierFragment = new CarrierFragment();
-                        carrierFragment.setTopFragment(SupplyGoodsFragment.this);
-                        ftt.add(R.id.frame, carrierFragment, "carrierFragment");
-                        ftt.addToBackStack("carrierFragment");
-                        ftt.commit();
-                        assignType = "0";
-                        break;
-                    case 1:
-                        DriverFragment driverFragment = new DriverFragment();
-                        driverFragment.setTopFragment(SupplyGoodsFragment.this);
-                        ftt.add(R.id.frame, driverFragment, "driverFragment");
-                        ftt.addToBackStack("driverFragment");
-                        ftt.commit();
-                        assignType = "1";
-                        break;
-                }
+                DriverFragment driverFragment = new DriverFragment();
+                driverFragment.setType(position);
+                driverFragment.setTopFragment(SupplyGoodsFragment.this);
+                ftt.add(R.id.frame, driverFragment, "driverFragment");
+                ftt.addToBackStack("driverFragment");
+                ftt.commit();
+                assignType = position+"";
                 builder.dismiss();
             }
         });
