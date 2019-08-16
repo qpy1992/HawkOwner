@@ -24,6 +24,48 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:minHeight="40dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="10dp"
+                    android:padding="3dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/zhidan"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:text="@string/zhidan"
+                    android:layout_weight="2"
+                    android:textColor="@color/word_black"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/et_zhidan"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="7"
+                    android:background="@null"
+                    android:enabled="false"
+                    android:textColor="@color/word_black"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:background="@color/gray_ec" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

@@ -74,45 +74,24 @@ import java.util.List;
 import okhttp3.Request;
 
 public class SupplyGoodsFragment extends Fragment implements View.OnClickListener {
+    private static String TAG = "SupplyGoodsFragment";
     private View mRootView;
-    private ImageView img_back,iv_assign;
+    private ImageView img_back,iv_assign,img_add;
     private TextView tv_zh,tv_zhadd,tv_xh,tv_xhadd,tv_goods,tv_ystype,tv_goodstype,
-            tv_cartype,tv_zhdate,tv_xhdate,tv_paytype,tv_typelength,
-            tv_goodstype_sel;
-    private TextView tv_title,tv_xhtime,tv_assign;
-    private TextView tv_fh_area;//发货省市区
-    private LinearLayout ll_ssq;//选择发货省市区
-    private LinearLayout ll_shssq;//选择收货省市区
-    private EditText et_fh_area;//发货详细地址
-    private EditText et_fh_name;//发货人姓名
-    private EditText et_fh_phone;//发货人电话
-    private TextView tv_sh_area;//收货省市区
-    private EditText et_sh_area;//收货详细地址
-    private EditText et_sh_name;//收货人名字
-    private EditText et_sh_phone;//收货人电话
-    private ImageView img_add;//添加货物信息
+                     tv_cartype,tv_zhdate,tv_xhdate,tv_paytype,tv_typelength,
+                     tv_goodstype_sel,tv_title,tv_xhtime,tv_assign,tv_fh_area,
+                     tv_sh_area,tv_time,tv_submit;
+    private LinearLayout ll_ssq,ll_shssq;
+    private EditText et_fh_area,et_fh_name,et_fh_phone,et_zhidan,et_sh_area,et_sh_name,
+                     et_sh_phone,et_oilPrice,et_price;
     private MyListView mlv_goods;// 货物信息list
-    private LinearLayout line_time,xh_time;//选择发货时间
-    private TextView tv_time;//发货时间
-    private LinearLayout line_sel_zpry;//选择指派人
-    private CheckBox ck_xj;//现结
-    private CheckBox ck_yj;//月结
-    private CheckBox ck_zc;//月结
-    private CheckBox ck_pc;//月结
-    private LinearLayout line_ffee;//预付费模块
-    private CheckBox ck_use;//使用油卡
-    private CheckBox ck_nouse;//不使用
-    private LinearLayout line_oilPrice;//油卡模块
-    private EditText et_oilPrice;//油卡模块
-    private EditText et_price;//预算费用
-    private TextView tv_submit;//发布
+    private LinearLayout line_time,xh_time,line_sel_zpry,line_ffee,line_oilPrice;//选择发货时间
+    private CheckBox ck_xj,ck_yj,ck_zc,ck_pc,ck_use,ck_nouse;//现结
     private String province,city,assignType,assignId;
 
     //省市区数据
     private List<ChioceAdapterContentInfo> mDataPopEd;
-    private List<ShengDataInfo.DataBean> mSHEData;
-    private List<ShengDataInfo.DataBean> mSHIData;
-    private List<ShengDataInfo.DataBean> mQUData;
+    private List<ShengDataInfo.DataBean> mSHEData,mSHIData,mQUData;
     private int stCityLevel;
     //选择省市区弹窗
     private PopupOpenHelper openHelper;
@@ -121,25 +100,15 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
     private LvAddGoodsAdapter goodsAdapter;
     private boolean bolGoodsDetail = true;
 
-    private String carLeng = "";
-    private String carModel = "";
+    private String carLeng,carModel,goodsTypeID = "";
     private List<TypeInfo.DataBean> goodsTypeList;
     private List<TsTypeInfo.DataBean> periodList;
-    private String goodsTypeID = "";//普货
 
-    private String fh_id;
-    private String sh_id;
-    private String zhtime;
-    private String xhtime;
-    private String zhperiod;
-    private String zhperiodcode;
-    private String xhperiod;
-    private String xhperiodcode;
-    private String isBoxed = "0";
+    private String fh_id,sh_id,zhtime,xhtime,zhperiod,zhperiodcode,xhperiod,xhperiodcode,orderId;
+    private String isBoxed = "1";
     private int ftype = 0;
     private double ap_price;
-    private String orderId;
-    private static String TAG = "SupplyGoodsFragment";
+
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
     @Override
@@ -167,7 +136,11 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
         tv_xhtime = mRootView.findViewById(R.id.tv_xhtime);
         et_fh_area = mRootView.findViewById(R.id.et_fh_area);
         et_fh_name = mRootView.findViewById(R.id.et_fh_name);
+        et_fh_name.setText(MyApplication.userName);
         et_fh_phone = mRootView.findViewById(R.id.et_fh_phone);
+        et_fh_phone.setText(MyApplication.userPhone);
+        et_zhidan = mRootView.findViewById(R.id.et_zhidan);
+        et_zhidan.setText(MyApplication.userName);
         tv_fh_area = mRootView.findViewById(R.id.tv_fh_area);
         ll_ssq = mRootView.findViewById(R.id.ll_ssq);
         ll_shssq = mRootView.findViewById(R.id.ll_shssq);

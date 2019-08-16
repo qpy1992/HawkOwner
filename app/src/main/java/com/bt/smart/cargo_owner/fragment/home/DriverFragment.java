@@ -20,6 +20,7 @@ import com.bt.smart.cargo_owner.NetConfig;
 import com.bt.smart.cargo_owner.R;
 import com.bt.smart.cargo_owner.adapter.CarrierAdapter;
 import com.bt.smart.cargo_owner.messageInfo.CarrierInfo;
+import com.bt.smart.cargo_owner.utils.CommonUtil;
 import com.bt.smart.cargo_owner.utils.HttpOkhUtils;
 import com.bt.smart.cargo_owner.utils.MyFragmentManagerUtil;
 import com.bt.smart.cargo_owner.utils.RequestParamsFM;
@@ -34,11 +35,11 @@ import okhttp3.Request;
 public class DriverFragment extends Fragment implements View.OnClickListener{
     private View mRootView;
     private ImageView img_back;
-    private TextView tv_title;
+    private TextView tv_title,tv_history_driver;
     private Spinner sp_mob_name;
     private EditText et_driverName;
     private Button btn_search_driver;
-    private RecyclerView lv_driver;
+    private RecyclerView lv_driver,lv_history_driver;
     private SupplyGoodsFragment supplyGoodsFragment;
     private int sType = 0;//搜索条件，0_姓名，1_手机号，默认姓名搜索
     private int mType;
@@ -57,10 +58,12 @@ public class DriverFragment extends Fragment implements View.OnClickListener{
     protected void initView(){
         img_back = mRootView.findViewById(R.id.img_back_a);
         tv_title = mRootView.findViewById(R.id.tv_title);
+        tv_history_driver = mRootView.findViewById(R.id.tv_history_driver);
         sp_mob_name = mRootView.findViewById(R.id.sp_mob_name);
         et_driverName = mRootView.findViewById(R.id.et_driverName);
         btn_search_driver = mRootView.findViewById(R.id.btn_seach_driver);
         lv_driver = mRootView.findViewById(R.id.lv_driver);
+        lv_history_driver = mRootView.findViewById(R.id.lv_history_driver);
     }
 
     protected void initData(){
@@ -91,6 +94,7 @@ public class DriverFragment extends Fragment implements View.OnClickListener{
 
                 }
             });
+
         }else{
             tv_title.setText("司机列表");
             final String[] sp_items = new String[]{"姓名","手机号"};
@@ -118,6 +122,7 @@ public class DriverFragment extends Fragment implements View.OnClickListener{
             });
         }
         btn_search_driver.setOnClickListener(this);
+        setHistoryDrivers();
     }
 
     @Override
@@ -132,6 +137,48 @@ public class DriverFragment extends Fragment implements View.OnClickListener{
         }
     }
 
+    protected void setHistoryDrivers(){
+        RequestParamsFM headparam = new RequestParamsFM();
+        headparam.put("X-AUTH-TOKEN", MyApplication.userToken);
+        RequestParamsFM params = new RequestParamsFM();
+        params.put("usercode",MyApplication.userCode);
+        params.put("type",mType);
+        HttpOkhUtils.getInstance().doGetWithHeadParams(NetConfig.COMMONUSE, headparam, params, new HttpOkhUtils.HttpCallBack() {
+            @Override
+            public void onError(Request request, IOException e) {
+                Log.i(TAG,"网络错误");
+            }
+
+            @Override
+            public void onSuccess(int code, String resbody) {
+                if (code != 200) {
+                    Log.i(TAG, "网络错误" + code);
+                    return;
+                }
+                Gson gson = new Gson();
+                final CarrierInfo info = gson.fromJson(resbody,CarrierInfo.class);
+                if(info.isOk()){
+                    if(mType==0){
+                        tv_history_driver.setText(getString(R.string.carriers));
+                    }else{
+                        tv_history_driver.setText(getString(R.string.drivers));
+                    }
+                    tv_history_driver.setVisibility(View.VISIBLE);
+                    lv_history_driver.setLayoutManager(new LinearLayoutManager(getContext()));
+                    CarrierAdapter adapter = new CarrierAdapter(R.layout.item_carrier,getContext(),info.getData());
+                    lv_history_driver.setAdapter(adapter);
+                    adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                            supplyGoodsFragment.setAssignId(info.getData().get(position));
+                            MyFragmentManagerUtil.closeTopFragment(DriverFragment.this);
+                        }
+                    });
+                }
+            }
+        });
+    }
+
     protected void searchDrivers(int type){
         if(SoftKeyboardUtils.isSoftShowing(getActivity())){
             SoftKeyboardUtils.hideSystemSoftKeyboard(getActivity());
@@ -141,6 +188,10 @@ public class DriverFragment extends Fragment implements View.OnClickListener{
         RequestParamsFM params = new RequestParamsFM();
         params.put("ftype",mType);
         String text = et_driverName.getText().toString();
+        if(!CommonUtil.isNotEmpty(text)){
+            ToastUtils.showToast(getContext(),et_driverName.getHint()+"");
+            return;
+        }
         switch (type){
             case 0:
                 if(mType==0){

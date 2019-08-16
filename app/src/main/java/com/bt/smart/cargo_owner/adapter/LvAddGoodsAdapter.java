@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.bt.smart.cargo_owner.R;
 import com.bt.smart.cargo_owner.messageInfo.AddGoodsBean;
+import com.bt.smart.cargo_owner.utils.MoneyTextWatcher;
+
 import java.util.List;
 
 /**
@@ -77,6 +79,7 @@ public class LvAddGoodsAdapter extends BaseAdapter {
         }
         viewholder.et_name.setText(null == mList.get(i).getName() ? "" : mList.get(i).getName());
         viewholder.et_area.setText(null == mList.get(i).getArea() ? "" : mList.get(i).getArea());
+        viewholder.et_weight.addTextChangedListener(new MoneyTextWatcher(viewholder.et_weight));
         viewholder.et_weight.setText(null == mList.get(i).getWeight() ? "" : mList.get(i).getWeight());
         initCjWatcher(i, viewholder.et_name, 0);
         initCjWatcher(i, viewholder.et_area, 1);

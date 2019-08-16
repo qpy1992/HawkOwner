@@ -20,8 +20,7 @@
         <Spinner
             android:id="@+id/sp_mob_name"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:background="@null">
+            android:layout_height="match_parent">
         </Spinner>
 
         <EditText
@@ -31,7 +30,7 @@
             android:layout_weight="1"
             android:background="@null"
             android:hint="@string/driver_warn"
-            android:textSize="12sp"/>
+            android:textSize="14sp"/>
 
         <Button
             android:id="@+id/btn_seach_driver"
@@ -52,11 +51,31 @@
         android:layout_marginRight="10dp"
         android:background="@color/gray_10" />
 
+
+    <TextView
+        android:id="@+id/tv_history_driver"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/drivers"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:textSize="12sp"
+        android:visibility="gone"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/lv_history_driver"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp">
+    </android.support.v7.widget.RecyclerView>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/lv_driver"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:layout_marginLeft="5dp"></android.support.v7.widget.RecyclerView>
+        android:layout_marginLeft="5dp">
+    </android.support.v7.widget.RecyclerView>
 
 </LinearLayout>

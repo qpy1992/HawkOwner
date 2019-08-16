@@ -53,15 +53,16 @@
     <string name="xhadd"><Data><![CDATA[<font color="#e60012"> *</font><font color="#000000">详细地址:</font>]]></Data></string>
     <string name="goods"><Data><![CDATA[<font color="#e60012"> *</font><font color="#000000">货物信息:</font>]]></Data></string>
     <string name="goodsname"><Data><![CDATA[<font color="#e60012"> *</font><font color="#000000">货物名称:</font>]]></Data></string>
-    <string name="goodswei"><Data><![CDATA[<font color="#e60012"> *</font><font color="#000000">货物重量(kg):</font>]]></Data></string>
+    <string name="goodswei"><Data><![CDATA[<font color="#e60012"> *</font><font color="#000000">货物重量(吨):</font>]]></Data></string>
     <string name="ystype"><Data><![CDATA[<font color="#e60012"> *</font><font color="#000000">运输方式:</font>]]></Data></string>
     <string name="goodstype"><Data><![CDATA[<font color="#e60012"> *</font><font color="#000000">货物类型:</font>]]></Data></string>
     <string name="cartype"><Data><![CDATA[<font color="#e60012"> *</font><font color="#000000">车长车型:</font>]]></Data></string>
     <string name="zhdate"><Data><![CDATA[<font color="#e60012"> *</font><font color="#000000">装货日期:</font>]]></Data></string>
     <string name="xhdate"><Data><![CDATA[<font color="#e60012"> *</font><font color="#000000">卸货日期:</font>]]></Data></string>
     <string name="paytype"><Data><![CDATA[<font color="#e60012"> *</font><font color="#000000">支付方式:</font>]]></Data></string>
-    <string name="fh">&#160;&#160;发货人:</string>
-    <string name="fhm">&#160;&#160;发货电话:</string>
+    <string name="fh">&#160;&#160;提货人:</string>
+    <string name="zhidan">&#160;&#160;制单人:</string>
+    <string name="fhm">&#160;&#160;提货电话:</string>
     <string name="sh">&#160;&#160;收货人:</string>
     <string name="shm">&#160;&#160;收货电话:</string>
     <string name="goodsvol">&#160;&#160;货物体积(m³):</string>
@@ -80,4 +81,6 @@
     <string name="driver_warn1">请输入司机手机号</string>
     <string name="carrier_warn">请输入承运商名称</string>
     <string name="carrier_warn1">请输入承运商电话</string>
+    <string name="drivers">合作过的司机</string>
+    <string name="carriers">合作过的承运商</string>
 </resources>
