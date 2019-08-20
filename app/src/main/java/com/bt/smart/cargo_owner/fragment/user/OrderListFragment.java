@@ -43,7 +43,7 @@ public class OrderListFragment extends Fragment {
     private RecyclerView recyview;
     private ReadyRecDriverOrderAdapter orderAdapter;
     private List<ReadyRecOrderInfo.DataBean> mData = new ArrayList();
-    private int mType;//fragment需要展示的订单种类//0已发布、1已报价、2已发协议、3已签署、4运输中、5已签收、6待确认、7已取消、8待支付、9已结单
+    private int mType;//fragment需要展示的订单种类//0已发布，待确认取消，已取消、1已接单，已发起协议、2已签署，运输中、3签收，待支付、4已结单，已评价
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
