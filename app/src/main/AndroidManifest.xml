@@ -86,7 +86,7 @@
         <activity android:name=".activity.userAct.AllOrderListActivity" />
         <activity android:name=".activity.OpenLockActivity" />
         <activity android:name=".activity.SaomiaoUIActivity" />
-
+        <receiver android:name=".util.UpApkDataFile.UpdateAppReceiver"/>
         <service android:name=".servicefile.SendLocationService" />
         <service
             android:name=".servicefile.MyGTPushService"

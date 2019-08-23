@@ -17,6 +17,7 @@ public class NetConfig {
 //    public static String IMG_HEAD = "http://120.27.3.205/";
     public static String IMG_HEAD = "http://172.16.52.63/";
 
+    public static String TOKEN = "X-AUTH-TOKEN";
 
     //file上传图片
     public static String PHOTO = ROOT + "registerDriverController/photo";
@@ -24,6 +25,8 @@ public class NetConfig {
     public static String FACE = ROOT + "orderController/face";
     public static String PHOTO1 = ROOT + "orderController/photo";
 
+    //检查更新
+    public static String CHECKUPDATE = "tokens/checkUpdate";
 
     //注册用户
     public static String REGISTERDRIVER = ROOT + "tokens/register";

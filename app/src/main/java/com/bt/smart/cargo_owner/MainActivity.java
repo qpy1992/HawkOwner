@@ -1,10 +1,15 @@
 package com.bt.smart.cargo_owner;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,15 +20,23 @@ import com.bt.smart.cargo_owner.fragment.home.Home_F;
 import com.bt.smart.cargo_owner.fragment.mineOrders.MyOrders_F;
 import com.bt.smart.cargo_owner.fragment.sameDay.SameDay_F;
 import com.bt.smart.cargo_owner.fragment.user.User_F;
+import com.bt.smart.cargo_owner.messageInfo.CommenInfo;
+import com.bt.smart.cargo_owner.utils.HttpOkhUtils;
 import com.bt.smart.cargo_owner.utils.MyAlertDialog;
 import com.bt.smart.cargo_owner.utils.MyAlertDialogHelper;
+import com.bt.smart.cargo_owner.utils.RequestParamsFM;
 import com.bt.smart.cargo_owner.utils.ToastUtils;
+import com.google.gson.Gson;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.Request;
+
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
+    private static String TAG = "MainActivity";
     // 界面底部的菜单按钮
     private ImageView[] bt_menu = new ImageView[4];
     // 界面底部的未选中菜单按钮资源
@@ -64,7 +77,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         tv_menu_2 = findViewById(R.id.tv_menu_2);
         tv_menu_3 = findViewById(R.id.tv_menu_3);
         //获取最新的版本
-        //        getNewApkInfo();
+        getNewApkInfo();
     }
 
     private void setData() {
@@ -271,5 +284,49 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         }
         ft.show(fragment);
         ft.commitAllowingStateLoss();
+    }
+
+    protected void getNewApkInfo(){
+        RequestParamsFM headparam = new RequestParamsFM();
+        headparam.put(NetConfig.TOKEN,MyApplication.userToken);
+        HttpOkhUtils.getInstance().doGetWithOnlyHeader(NetConfig.CHECKUPDATE + "/1", headparam, new HttpOkhUtils.HttpCallBack() {
+            @Override
+            public void onError(Request request, IOException e) {
+                Log.i(TAG,"网络错误!");
+            }
+
+            @Override
+            public void onSuccess(int code, String resbody) {
+                if(code!=200){
+                    Log.i(TAG,"网络错误!");
+                    return;
+                }
+                CommenInfo info = new Gson().fromJson(resbody,CommenInfo.class);
+                int versionCode = (int) info.getData();
+                if(getAppVersionCode(MainActivity.this)<versionCode){
+                    //弹出对话框，提示需要更新
+                    MyAlertDialog dialog = new MyAlertDialog(MainActivity.this).setContentText("APP需要更新")
+                            .setConfirmClickListener(new MyAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(MyAlertDialog sweetAlertDialog) {
+
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    public static int getAppVersionCode(Context context) {
+        int appVersionCode = 0;
+        try {
+            PackageInfo packageInfo = context.getApplicationContext()
+                    .getPackageManager()
+                    .getPackageInfo(context.getPackageName(), 0);
+            appVersionCode = packageInfo.versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e("", e.getMessage());
+        }
+        return appVersionCode;
     }
 }
