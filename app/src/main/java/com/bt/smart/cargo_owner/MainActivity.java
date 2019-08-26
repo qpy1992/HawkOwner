@@ -20,7 +20,9 @@ import com.bt.smart.cargo_owner.fragment.home.Home_F;
 import com.bt.smart.cargo_owner.fragment.mineOrders.MyOrders_F;
 import com.bt.smart.cargo_owner.fragment.sameDay.SameDay_F;
 import com.bt.smart.cargo_owner.fragment.user.User_F;
+import com.bt.smart.cargo_owner.messageInfo.ApkInfo;
 import com.bt.smart.cargo_owner.messageInfo.CommenInfo;
+import com.bt.smart.cargo_owner.util.UpApkDataFile.UpdateAppUtil;
 import com.bt.smart.cargo_owner.utils.HttpOkhUtils;
 import com.bt.smart.cargo_owner.utils.MyAlertDialog;
 import com.bt.smart.cargo_owner.utils.MyAlertDialogHelper;
@@ -301,17 +303,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     Log.i(TAG,"网络错误!");
                     return;
                 }
-                CommenInfo info = new Gson().fromJson(resbody,CommenInfo.class);
-                int versionCode = (int) info.getData();
-                if(getAppVersionCode(MainActivity.this)<versionCode){
-                    //弹出对话框，提示需要更新
-                    MyAlertDialog dialog = new MyAlertDialog(MainActivity.this).setContentText("APP需要更新")
-                            .setConfirmClickListener(new MyAlertDialog.OnSweetClickListener() {
-                        @Override
-                        public void onClick(MyAlertDialog sweetAlertDialog) {
-
-                        }
-                    });
+                ApkInfo info = new Gson().fromJson(resbody,ApkInfo.class);
+                if(getAppVersionCode(MainActivity.this)<info.getData().getVersionCode()){
+                    showDialogToDown(info);
                 }
             }
         });
@@ -328,5 +322,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             Log.e("", e.getMessage());
         }
         return appVersionCode;
+    }
+
+    private void showDialogToDown(ApkInfo apkInfo) {
+        MyApplication.loadUrl = NetConfig.IMG_HEAD + apkInfo.getData().getApkPath();
+        UpdateAppUtil.from(this)
+                .serverVersionCode(apkInfo.getData().getVersionCode())  //服务器versionCode
+                .serverVersionName(apkInfo.getData().getVersionName()) //服务器versionName
+                .apkPath(MyApplication.loadUrl) //最新apk下载地址
+                .updateInfo(apkInfo.getData().getApkInfo())
+                .update();
     }
 }

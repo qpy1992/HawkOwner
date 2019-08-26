@@ -41,6 +41,7 @@ public class MyApplication extends Application {
     public static double money;//余额
     public static int userOrderNum;//运单数
     public static boolean checkFace;
+    public static String  loadUrl;
 
     @Override
     public void onCreate() {
