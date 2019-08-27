@@ -465,7 +465,7 @@
                         android:layout_weight="1"
                         android:textSize="14sp" />
 
-                    <CheckBox
+                    <!--<CheckBox
                         android:id="@+id/ck_zc"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -473,16 +473,24 @@
                         android:checked="true"
                         android:text="@string/zc"
                         android:textColor="@color/word_black"
-                        android:textSize="14sp" />
+                        android:textSize="14sp" />-->
 
                     <CheckBox
                         android:id="@+id/ck_pc"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="20dp"
                         android:text="@string/pc"
                         android:textColor="@color/word_black"
                         android:textSize="14sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/youhui"
+                        android:layout_marginRight="20dp"
+                        android:textColor="@color/red"
+                        android:textSize="8sp"
+                        android:gravity="bottom"/>
                 </LinearLayout>
 
                 <include layout="@layout/view_line_maginleft50" />
@@ -698,6 +706,7 @@
                 <include layout="@layout/view_line_maginleft50" />
 
                 <LinearLayout
+                    android:id="@+id/ll_ftype"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"

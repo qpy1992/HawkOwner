@@ -40,7 +40,8 @@
     <string name="zhdate1">请选择装货日期</string>
     <string name="xhdate1">请选择卸货日期</string>
     <string name="zc">整车</string>
-    <string name="pc">拼车</string>
+    <string name="pc">可接受拼车</string>
+    <string name="youhui">（拼车更优惠）</string>
     <string name="xj">现结</string>
     <string name="yj">月结</string>
     <string name="use">使用</string>

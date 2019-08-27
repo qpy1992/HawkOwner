@@ -58,7 +58,7 @@ public class ApkInfo {
         int isnew;
         String apkInfo;
         int ftype;
-        Date updateTime;
+        String updateTime;
 
         public String getId() {
             return id;
@@ -116,11 +116,11 @@ public class ApkInfo {
             this.ftype = ftype;
         }
 
-        public Date getUpdateTime() {
+        public String getUpdateTime() {
             return updateTime;
         }
 
-        public void setUpdateTime(Date updateTime) {
+        public void setUpdateTime(String updateTime) {
             this.updateTime = updateTime;
         }
     }

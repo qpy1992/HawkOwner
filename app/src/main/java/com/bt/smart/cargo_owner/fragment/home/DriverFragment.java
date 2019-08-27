@@ -170,7 +170,7 @@ public class DriverFragment extends Fragment implements View.OnClickListener{
                     adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
                         @Override
                         public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                            supplyGoodsFragment.setAssignId(info.getData().get(position));
+                            supplyGoodsFragment.setAssignId(info.getData().get(position),sType);
                             MyFragmentManagerUtil.closeTopFragment(DriverFragment.this);
                         }
                     });
@@ -229,7 +229,7 @@ public class DriverFragment extends Fragment implements View.OnClickListener{
                     adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
                         @Override
                         public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                            supplyGoodsFragment.setAssignId(info.getData().get(position));
+                            supplyGoodsFragment.setAssignId(info.getData().get(position),sType);
                             MyFragmentManagerUtil.closeTopFragment(DriverFragment.this);
                         }
                     });

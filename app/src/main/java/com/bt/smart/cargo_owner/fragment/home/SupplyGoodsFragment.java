@@ -81,12 +81,12 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
                      tv_cartype,tv_zhdate,tv_xhdate,tv_paytype,tv_typelength,
                      tv_goodstype_sel,tv_title,tv_xhtime,tv_assign,tv_fh_area,
                      tv_sh_area,tv_time,tv_submit;
-    private LinearLayout ll_ssq,ll_shssq;
+    private LinearLayout ll_ftype,ll_ssq,ll_shssq;
     private EditText et_fh_area,et_fh_name,et_fh_phone,et_zhidan,et_sh_area,et_sh_name,
                      et_sh_phone,et_oilPrice,et_price;
     private MyListView mlv_goods;// 货物信息list
     private LinearLayout line_time,xh_time,line_sel_zpry,line_ffee,line_oilPrice;//选择发货时间
-    private CheckBox ck_xj,ck_yj,ck_zc,ck_pc,ck_use,ck_nouse;//现结
+    private CheckBox ck_xj,ck_yj,ck_pc,ck_use,ck_nouse;//现结
     private String province,city,assignType,assignId;
 
     //省市区数据
@@ -142,6 +142,10 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
         et_zhidan = mRootView.findViewById(R.id.et_zhidan);
         et_zhidan.setText(MyApplication.userName);
         tv_fh_area = mRootView.findViewById(R.id.tv_fh_area);
+        ll_ftype = mRootView.findViewById(R.id.ll_ftype);
+        if(MyApplication.userType.equals("3")){
+            ll_ftype.setVisibility(View.GONE);
+        }
         ll_ssq = mRootView.findViewById(R.id.ll_ssq);
         ll_shssq = mRootView.findViewById(R.id.ll_shssq);
         tv_sh_area = mRootView.findViewById(R.id.tv_sh_area);
@@ -158,7 +162,7 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
         line_sel_zpry = mRootView.findViewById(R.id.line_sel_zpry);
         ck_xj = mRootView.findViewById(R.id.ck_xj);
         ck_yj = mRootView.findViewById(R.id.ck_yj);
-        ck_zc = mRootView.findViewById(R.id.ck_zc);
+//        ck_zc = mRootView.findViewById(R.id.ck_zc);
         ck_pc = mRootView.findViewById(R.id.ck_pc);
         ck_use = mRootView.findViewById(R.id.ck_use);
         ck_nouse = mRootView.findViewById(R.id.ck_nouse);
@@ -294,28 +298,29 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
             @Override
             public void onClick(View view) {
                 ck_xj.setChecked(true);
+                ftype = 0;
             }
         });
         ck_yj.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ck_yj.setChecked(true);
-            }
-        });
-        ck_zc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ck_zc.setChecked(true);
-                ck_pc.setChecked(false);
-                isBoxed = "1";
+                ftype = 1;
             }
         });
         ck_pc.setOnClickListener(new View.OnClickListener() {
+            int index = 0;
             @Override
             public void onClick(View view) {
-                ck_pc.setChecked(true);
-                ck_zc.setChecked(false);
-                isBoxed = "0";
+                if(index%2==0){
+                    ck_pc.setChecked(true);
+                    isBoxed = "0";
+                    index++;
+                }else{
+                    ck_pc.setChecked(false);
+                    isBoxed = "1";
+                    index++;
+                }
             }
         });
         ck_xj.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -369,6 +374,9 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
         });
     }
 
+    /**
+     * 订单新增
+     */
     private void sendApplyInfo() {
         RequestParamsFM headparam = new RequestParamsFM();
         headparam.put("X-AUTH-TOKEN", MyApplication.userToken);
@@ -412,16 +420,15 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
         params.put("xhperiod",xhperiod);
         params.put("appointId", "");//指定人
         params.put("isBox", isBoxed);//是否拼箱
-        if (ck_xj.isChecked()) {
-            params.put("ftype", 0);//现结
+        params.put("ftype",ftype);
+        if(ftype==0){
+            //现结
             params.put("ffee", ap_price);//预算费用
             if (ck_use.isChecked()) {
                 params.put("foilCard", Double.parseDouble(MyTextUtils.getEditTextContent(et_oilPrice)));//是否使用油卡
             } else {
                 params.put("foilCard", 0);//是否使用油卡
             }
-        }else {
-            params.put("ftype", 1);//月结
         }
         params.setUseJsonStreamer(true);
         ProgressDialogUtil.startShow(getContext(), "正在提交...");
@@ -870,8 +877,9 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
         tv_typelength.setText(carLeng+"|"+carModel);
     }
 
-    public void setAssignId(CarrierInfo.DataBean item){
+    public void setAssignId(CarrierInfo.DataBean item,int type){
         if(item!=null){
+            assignType = type+"";
             assignId = item.getId();
             tv_assign.setText(item.getFname()+" "+item.getFmobile());
             iv_assign.setVisibility(View.GONE);
@@ -943,14 +951,8 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
                     et_sh_area.setText(bean.getSh_address());
                     et_sh_name.setText(bean.getSh_name());
                     et_sh_phone.setText(bean.getSh_telephone());
-                    if(bean.getIs_box().equals("1")){
-                        //整车
-                        ck_zc.setChecked(true);
-                        ck_pc.setChecked(false);
-                        isBoxed = "1";
-                    }else{
+                    if(bean.getIs_box().equals("0")){
                         //拼车
-                        ck_zc.setChecked(false);
                         ck_pc.setChecked(true);
                         isBoxed = "0";
                     }

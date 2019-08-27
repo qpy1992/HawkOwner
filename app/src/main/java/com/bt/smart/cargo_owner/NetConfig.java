@@ -26,7 +26,7 @@ public class NetConfig {
     public static String PHOTO1 = ROOT + "orderController/photo";
 
     //检查更新
-    public static String CHECKUPDATE = "tokens/checkUpdate";
+    public static String CHECKUPDATE = ROOT + "versionController/checkUpdate";
 
     //注册用户
     public static String REGISTERDRIVER = ROOT + "tokens/register";

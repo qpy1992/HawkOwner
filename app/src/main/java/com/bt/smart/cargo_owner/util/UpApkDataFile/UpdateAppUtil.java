@@ -121,7 +121,7 @@ public class UpdateAppUtil {
         ConfirmDialog dialog = new ConfirmDialog(activity, new ConfirmDialog.OnClickListener() {
             @Override
             public void sureBtnClick() { //点击确认按钮
-                DownloadAppUtil.downloadWithAutoInstall(activity, apkPath, "smartHox.apk", serverVersionName);
+                DownloadAppUtil.downloadWithAutoInstall(activity, apkPath, "eagle_owner.apk", serverVersionName);
             }
 
             @Override

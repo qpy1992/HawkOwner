@@ -291,7 +291,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     protected void getNewApkInfo(){
         RequestParamsFM headparam = new RequestParamsFM();
         headparam.put(NetConfig.TOKEN,MyApplication.userToken);
-        HttpOkhUtils.getInstance().doGetWithOnlyHeader(NetConfig.CHECKUPDATE + "/1", headparam, new HttpOkhUtils.HttpCallBack() {
+        HttpOkhUtils.getInstance().doGetWithOnlyHeader(NetConfig.CHECKUPDATE + "/0", headparam, new HttpOkhUtils.HttpCallBack() {
             @Override
             public void onError(Request request, IOException e) {
                 Log.i(TAG,"网络错误!");
