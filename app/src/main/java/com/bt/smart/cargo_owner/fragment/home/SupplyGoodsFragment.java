@@ -43,6 +43,7 @@ import com.bt.smart.cargo_owner.messageInfo.ApplyOrderResultInfo;
 import com.bt.smart.cargo_owner.messageInfo.CarTypeListInfo;
 import com.bt.smart.cargo_owner.messageInfo.CarrierInfo;
 import com.bt.smart.cargo_owner.messageInfo.ChioceAdapterContentInfo;
+import com.bt.smart.cargo_owner.messageInfo.DriverOrderInfo;
 import com.bt.smart.cargo_owner.messageInfo.OrderDetailInfo;
 import com.bt.smart.cargo_owner.messageInfo.ShengDataInfo;
 import com.bt.smart.cargo_owner.messageInfo.TsTypeInfo;
@@ -77,7 +78,7 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
     private static String TAG = "SupplyGoodsFragment";
     private View mRootView;
     private ImageView img_back,iv_assign,img_add;
-    private TextView tv_zh,tv_zhadd,tv_xh,tv_xhadd,tv_goods,tv_ystype,tv_goodstype,
+    private TextView tv_zh,tv_zhadd,tv_xh,tv_xhadd,tv_goods,tv_goodstype,
                      tv_cartype,tv_zhdate,tv_xhdate,tv_paytype,tv_typelength,
                      tv_goodstype_sel,tv_title,tv_xhtime,tv_assign,tv_fh_area,
                      tv_sh_area,tv_time,tv_submit;
@@ -100,7 +101,7 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
     private LvAddGoodsAdapter goodsAdapter;
     private boolean bolGoodsDetail = true;
 
-    private String carLeng,carModel,goodsTypeID = "";
+    private String carLeng="",carModel="",goodsTypeID = "";
     private List<TypeInfo.DataBean> goodsTypeList;
     private List<TsTypeInfo.DataBean> periodList;
 
@@ -127,7 +128,7 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
         tv_xh = mRootView.findViewById(R.id.tv_xh);
         tv_xhadd = mRootView.findViewById(R.id.tv_xhadd);
         tv_goods = mRootView.findViewById(R.id.tv_goods);
-        tv_ystype = mRootView.findViewById(R.id.tv_ystype);
+//        tv_ystype = mRootView.findViewById(R.id.tv_ystype);
         tv_goodstype = mRootView.findViewById(R.id.tv_goodstype);
         tv_cartype = mRootView.findViewById(R.id.tv_cartype);
         tv_zhdate = mRootView.findViewById(R.id.tv_zhdate);
@@ -182,7 +183,7 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
         tv_xhadd.setText(Html.fromHtml(getString(R.string.xhadd)));
         tv_goods.setText(Html.fromHtml(getString(R.string.goods)));
         tv_goodstype.setText(Html.fromHtml(getString(R.string.goodstype)));
-        tv_ystype.setText(Html.fromHtml(getString(R.string.ystype)));
+//        tv_ystype.setText(Html.fromHtml(getString(R.string.ystype)));
         tv_cartype.setText(Html.fromHtml(getString(R.string.cartype)));
         tv_zhdate.setText(Html.fromHtml(getString(R.string.zhdate)));
         tv_xhdate.setText(Html.fromHtml(getString(R.string.xhdate)));
@@ -448,6 +449,11 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
                 Gson gson = new Gson();
                 ApplyOrderResultInfo applyOrderResultInfo = gson.fromJson(resbody, ApplyOrderResultInfo.class);
                 if (applyOrderResultInfo.isOk()) {
+                    if(CommonUtil.isNotEmpty(assignId)){
+                        //指定司机
+                        String orderid = applyOrderResultInfo.getData().getId();
+                        assignDriver(orderid);
+                    }
                     Toast.makeText(getContext(),"发布成功",Toast.LENGTH_LONG).show();
                     getActivity().finish();
                 }
@@ -1006,6 +1012,39 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
                 if (code != 200) {
                     Log.i(TAG, "网络错误" + code);
                     return;
+                }
+            }
+        });
+    }
+
+    protected void assignDriver(String orderid){
+        RequestParamsFM headparam = new RequestParamsFM();
+        headparam.put(NetConfig.TOKEN,MyApplication.userToken);
+        RequestParamsFM params = new RequestParamsFM();
+        params.put("orderId",orderid);
+        params.put("orderStatus","1");
+        if(assignType.equals("0")){
+            //承运商
+            params.put("registerId",assignId);
+        }else{
+            //个体司机
+            params.put("driverId",assignId);
+        }
+        params.setUseJsonStreamer(true);
+        HttpOkhUtils.getInstance().doPostWithHeader(NetConfig.ASSIGNDRIVER, headparam, params, new HttpOkhUtils.HttpCallBack() {
+            @Override
+            public void onError(Request request, IOException e) {
+                Log.i(TAG,"网络错误");
+            }
+
+            @Override
+            public void onSuccess(int code, String resbody) {
+                if(code!=200){
+                    Log.i(TAG,"网络错误");
+                }
+                DriverOrderInfo info = new Gson().fromJson(resbody,DriverOrderInfo.class);
+                if(info.isOk()){
+                    ToastUtils.showToast(getContext(),"指定司机成功");
                 }
             }
         });

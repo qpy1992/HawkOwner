@@ -47,6 +47,9 @@ public class ReadyRecDriverOrderAdapter extends BaseQuickAdapter<ReadyRecOrderIn
         helper.setText(R.id.tv_xhtime, "卸货时间："+item.getXhTime());
         helper.setText(R.id.tv_mark,item.getFnote());
         ImageView iv_edit = helper.getView(R.id.iv_edit);
+        if(item.getFstatus().equals("0")){
+            iv_edit.setVisibility(View.VISIBLE);
+        }
         ImageView iv_type = helper.getView(R.id.iv_type);
         iv_edit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,6 +65,41 @@ public class ReadyRecDriverOrderAdapter extends BaseQuickAdapter<ReadyRecOrderIn
             iv_type.setImageResource(R.drawable.pinche);
         }else{
             iv_type.setImageResource(R.drawable.zhengche);
+        }
+        switch(item.getFstatus()){
+            case "0":
+                helper.setText(R.id.tv_interval,"已发布");
+                break;
+            case "1":
+                helper.setText(R.id.tv_interval,"已接单");
+                break;
+            case "2":
+                helper.setText(R.id.tv_interval,"已发协议");
+                break;
+            case "3":
+                helper.setText(R.id.tv_interval,"已签署");
+                break;
+            case "4":
+                helper.setText(R.id.tv_interval,"运输中");
+                break;
+            case "5":
+                helper.setText(R.id.tv_interval,"已签收");
+                break;
+            case "6":
+                helper.setText(R.id.tv_interval,"取消待确认");
+                break;
+            case "7":
+                helper.setText(R.id.tv_interval,"已取消");
+                break;
+            case "8":
+                helper.setText(R.id.tv_interval,"待支付");
+                break;
+            case "9":
+                helper.setText(R.id.tv_interval,"已结单");
+                break;
+            case "10":
+                helper.setText(R.id.tv_interval,"已评价");
+                break;
         }
     }
 

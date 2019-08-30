@@ -22,9 +22,11 @@ import android.widget.TextView;
 import com.bt.smart.cargo_owner.MyApplication;
 import com.bt.smart.cargo_owner.NetConfig;
 import com.bt.smart.cargo_owner.R;
+import com.bt.smart.cargo_owner.adapter.CarInfoAdapter;
 import com.bt.smart.cargo_owner.adapter.RecyOrderAdapter;
 import com.bt.smart.cargo_owner.adapter.RecyPlaceAdapter;
 import com.bt.smart.cargo_owner.messageInfo.AllOrderListInfo;
+import com.bt.smart.cargo_owner.messageInfo.CarInfo;
 import com.bt.smart.cargo_owner.messageInfo.ChioceAdapterContentInfo;
 import com.bt.smart.cargo_owner.messageInfo.ShengDataInfo;
 import com.bt.smart.cargo_owner.utils.HttpOkhUtils;
@@ -66,15 +68,14 @@ public class SameDay_F extends Fragment implements View.OnClickListener {
     private LinearLayout       line_screen;
     private ImageView          img_start, img_end;//起点终点的箭头
     private RecyclerView                        rec_order;
-    private RecyOrderAdapter                    orderAdapter;
-    private List<AllOrderListInfo.PageListBean> mData;
+    private CarInfoAdapter      carAdapter;
+    private List<CarInfo.CarBean> mData;
     private int REQUEST_FOR_TAKE_ORDER = 12087;//接单返回
     private int RESULT_TAKE_ORDER      = 12088;//接单成功响应值
     private int mOrderSize;//总条目
     private int mSumPageSize;//总共页数
     private int mWhichPage;//获取哪页数据
     private static String TAG = "SameDay_F";
-    private double lat,lng;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -98,27 +99,24 @@ public class SameDay_F extends Fragment implements View.OnClickListener {
         rec_order = mRootView.findViewById(R.id.rec_order);
         tv_start = mRootView.findViewById(R.id.tv_start);
         tv_end = mRootView.findViewById(R.id.tv_end);
-        Bundle bundle = getArguments();
-        lat = bundle.getDouble("lat");
-        lng = bundle.getDouble("lng");
     }
 
     private void initData() {
-        tv_title.setText("最新货源");
+        tv_title.setText("车源信息");
         //初始化货源列表
         initOrderList();
         //初始化起点线路
         initStartPlace();
 
         //获取订单列表信息
-        getOrderList(1, 10, lat, lng);
+        getJourneyList(1, 10);
 
         swiperefresh.setColorSchemeColors(getResources().getColor(R.color.blue_icon), getResources().getColor(R.color.yellow_40), getResources().getColor(R.color.red_160));
         swiperefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 //获取订单列表信息
-                getOrderList(1, 10, lat, lng);
+                getJourneyList(1, 10);
             }
         });
         //设置rec_order滑动事件
@@ -163,7 +161,7 @@ public class SameDay_F extends Fragment implements View.OnClickListener {
         super.onActivityResult(requestCode, resultCode, data);
         if (REQUEST_FOR_TAKE_ORDER == requestCode && RESULT_TAKE_ORDER == resultCode) {
             //刷新界面
-            getOrderList(1, 10, lat, lng);
+            getJourneyList(1, 10);
         }
     }
 
@@ -186,20 +184,9 @@ public class SameDay_F extends Fragment implements View.OnClickListener {
         //解决数据加载完成后, 没有停留在顶部的问题
         rec_order.setFocusable(false);
         rec_order.setNestedScrollingEnabled(false);
-        orderAdapter = new RecyOrderAdapter(R.layout.adpter_sameday_order, getContext(), mData);
-        rec_order.setAdapter(orderAdapter);
-        orderAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                if (!"3".equals(MyApplication.checkStatus)) {
-                    ToastUtils.showToast(getContext(), "请先提交资料，认证通过才能联系司机哦！");
-                    //弹出dialog提示
-                    showCheckWarning();
-                    return;
-                }
-            }
-        });
-        orderAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
+        carAdapter = new CarInfoAdapter(R.layout.adapter_carinfo, getContext(), mData);
+        rec_order.setAdapter(carAdapter);
+        carAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
             public void onLoadMoreRequested() {
                 //上拉加载
@@ -223,18 +210,18 @@ public class SameDay_F extends Fragment implements View.OnClickListener {
 
     private void getMorePageInfo() {
         if (mSumPageSize > 1 && mWhichPage < mSumPageSize) {
-            getMoreOrderList(mWhichPage + 1, 10, lat, lng);
+            getMoreOrderList(mWhichPage + 1, 10);
         } else {
-            orderAdapter.disableLoadMoreIfNotFullPage();
+            carAdapter.disableLoadMoreIfNotFullPage();
             ToastUtils.showToast(getContext(), "没有更多数据了");
         }
     }
 
-    private void getMoreOrderList(int no, int size, double lat, double lng) {
+    private void getMoreOrderList(int no, int size) {
         RequestParamsFM headParams = new RequestParamsFM();
         headParams.put("X-AUTH-TOKEN", MyApplication.userToken);
         String finalUrl;
-        finalUrl = NetConfig.ALL_ORDER_LIST + "/" + no + "/" + size +"/" + lat +"/" + lng;
+        finalUrl = NetConfig.JOURNEY + "/" + no + "/" + size;
         HttpOkhUtils.getInstance().doGetWithOnlyHeader(finalUrl, headParams, new HttpOkhUtils.HttpCallBack() {
             @Override
             public void onError(Request request, IOException e) {
@@ -248,24 +235,24 @@ public class SameDay_F extends Fragment implements View.OnClickListener {
                     return;
                 }
                 Gson gson = new Gson();
-                AllOrderListInfo allOrderListInfo = gson.fromJson(resbody, AllOrderListInfo.class);
+                CarInfo info = gson.fromJson(resbody, CarInfo.class);
                 Log.i(TAG,resbody);
-                ToastUtils.showToast(getContext(), allOrderListInfo.getMessage());
-                if (allOrderListInfo.getOk()) {
+                ToastUtils.showToast(getContext(), info.getMessage());
+                if (info.getOk()) {
                     mWhichPage++;
-                    mData.addAll(allOrderListInfo.getData());
-                    orderAdapter.notifyDataSetChanged();
+                    mData.addAll(info.getData());
+                    carAdapter.notifyDataSetChanged();
                 }
             }
         });
     }
 
-    private void getOrderList(int no, int size, double lat, double lng) {
+    private void getJourneyList(int no, int size) {
         swiperefresh.setRefreshing(true);
         RequestParamsFM headParams = new RequestParamsFM();
         headParams.put("X-AUTH-TOKEN", MyApplication.userToken);
         String finalUrl;
-        finalUrl = NetConfig.ALL_ORDER_LIST + "/" + no + "/" + size + "/" + lat + "/" + lng;
+        finalUrl = NetConfig.JOURNEY + "/" + no + "/" + size ;
         HttpOkhUtils.getInstance().doGetWithOnlyHeader(finalUrl, headParams, new HttpOkhUtils.HttpCallBack() {
             @Override
             public void onError(Request request, IOException e) {
@@ -282,18 +269,15 @@ public class SameDay_F extends Fragment implements View.OnClickListener {
                 }
                 Log.i(TAG,resbody);
                 Gson gson = new Gson();
-                AllOrderListInfo allOrderListInfo = gson.fromJson(resbody, AllOrderListInfo.class);
-                ToastUtils.showToast(getContext(), allOrderListInfo.getMessage());
-                if (allOrderListInfo.getOk()) {
+                CarInfo info = gson.fromJson(resbody, CarInfo.class);
+                ToastUtils.showToast(getContext(), info.getMessage());
+                if (info.getOk()) {
                     mData.clear();
-                    mOrderSize = allOrderListInfo.getSize();
+                    mOrderSize = info.getSize();
                     mSumPageSize = mOrderSize % 10 == 0 ? mOrderSize / 10 : mOrderSize / 10 + 1;
                     mWhichPage = 1;
-                    for (AllOrderListInfo.PageListBean bean : allOrderListInfo.getData()) {
-                        bean.setZh_time(bean.getZh_time());
-                    }
-                    mData.addAll(allOrderListInfo.getData());
-                    orderAdapter.notifyDataSetChanged();
+                    mData.addAll(info.getData());
+                    carAdapter.notifyDataSetChanged();
                 }
             }
         });

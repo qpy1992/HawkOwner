@@ -103,9 +103,7 @@ public class OrderListFragment extends Fragment {
         swiperefresh.setRefreshing(true);
         RequestParamsFM heardParam = new RequestParamsFM();
         heardParam.put("X-AUTH-TOKEN", MyApplication.userToken);
-        RequestParamsFM params = new RequestParamsFM();
-        params.put("fstatus", type);
-        HttpOkhUtils.getInstance().doGetWithHeadParams(NetConfig.ORDERLIST + "/" +MyApplication.userCode+"/"+ no + "/" + size, heardParam, params, new HttpOkhUtils.HttpCallBack() {
+        HttpOkhUtils.getInstance().doGetWithOnlyHeader(NetConfig.ORDERLIST + "/" +MyApplication.userCode+"/"+ no + "/" + size + "/" + type, heardParam, new HttpOkhUtils.HttpCallBack() {
             @Override
             public void onError(Request request, IOException e) {
                 swiperefresh.setRefreshing(false);

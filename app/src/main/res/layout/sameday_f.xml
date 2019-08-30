@@ -18,35 +18,14 @@
             app:layout_scrollFlags="scroll">
 
             <TextView
-                android:id="@+id/tv_mine"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
-                android:text="消息"
-                android:textColor="@color/white"
-                android:textSize="14sp"/>
-
-            <TextView
                 android:id="@+id/tv_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:layout_marginLeft="10dp"
-                android:text="配货大厅"
+                android:text="车源信息"
                 android:textColor="@color/white"
                 android:textSize="18sp"/>
-
-            <TextView
-                android:id="@+id/tv_record"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="10dp"
-                android:text="找货记录"
-                android:textColor="@color/white"
-                android:textSize="14sp"/>
         </RelativeLayout>
 
         <LinearLayout
@@ -54,7 +33,8 @@
             android:layout_width="match_parent"
             android:layout_height="35dp"
             android:background="@color/white"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <LinearLayout
                 android:id="@+id/line_start"

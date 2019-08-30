@@ -11,11 +11,11 @@ package com.bt.smart.cargo_owner;
 
 public class NetConfig {
     //服务器总地址
-//    public static String ROOT = "http://120.27.3.205/rest/";
-        public static String ROOT = "http://172.16.52.63/rest/";
+    public static String ROOT = "http://120.27.3.205/rest/";
+//        public static String ROOT = "http://172.16.52.63/rest/";
     //图片地址
-//    public static String IMG_HEAD = "http://120.27.3.205/";
-    public static String IMG_HEAD = "http://172.16.52.63/";
+    public static String IMG_HEAD = "http://120.27.3.205/";
+//    public static String IMG_HEAD = "http://172.16.52.63/";
 
     public static String TOKEN = "X-AUTH-TOKEN";
 
@@ -122,4 +122,8 @@ public class NetConfig {
     public static String APPOINTDRIVER = ROOT + "zRegisterController/driverOrCarrierList";
 
     public static String COMMONUSE = ROOT + "driverOrderController/commonuseList";
+
+    public static String ASSIGNDRIVER = ROOT + "driverOrderController/assignDriver";
+
+    public static String JOURNEY = ROOT + "driverJourneyController/getRouteList";
 }

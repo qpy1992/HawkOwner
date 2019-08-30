@@ -130,7 +130,18 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.linear1:// 车源信息
                 if ("1".equals(MyApplication.checkStatus)) {
-                    ToastUtils.showToast(this, "敬请期待");
+                    if (sameDay_F == null) {
+                        sameDay_F = new SameDay_F();
+                        // 判断当前界面是否隐藏，如果隐藏就进行添加显示，false表示显示，true表示当前界面隐藏
+                        addFragment(sameDay_F);
+                        showFragment(sameDay_F);
+                        changeTVColor(1);
+                    } else {
+                        if (sameDay_F.isHidden()) {
+                            showFragment(sameDay_F);
+                            changeTVColor(1);
+                        }
+                    }
                 } else {
                     //提示还未通过审核
                     ToastUtils.showToast(this, "您还未通过审核，请先去个人中心查看审核状态!");

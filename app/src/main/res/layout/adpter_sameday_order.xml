@@ -39,7 +39,8 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:src="@drawable/edit"
-            android:layout_marginRight="10dp"/>
+            android:layout_marginRight="10dp"
+            android:visibility="gone"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -65,7 +66,7 @@
                     android:id="@+id/tv_place"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="4"
+                    android:layout_weight="1"
                     android:singleLine="true"
                     android:text="南通 如皋 → 南通 海门"
                     android:textColor="@color/word_black"
@@ -74,15 +75,13 @@
 
                 <TextView
                     android:id="@+id/tv_interval"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_weight="1"
                     android:gravity="right"
-                    android:text="**分钟前"
-                    android:textColor="@color/word_gray"
-                    android:textSize="12sp"
-                    android:visibility="gone" />
+                    android:text="已发布"
+                    android:textColor="@color/green"
+                    android:textSize="12sp"/>
             </LinearLayout>
 
             <LinearLayout
