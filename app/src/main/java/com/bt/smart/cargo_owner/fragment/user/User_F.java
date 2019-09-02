@@ -27,6 +27,7 @@ import com.bt.smart.cargo_owner.activity.userAct.AuthenticationActivity;
 import com.bt.smart.cargo_owner.activity.userAct.MoneyActivity;
 import com.bt.smart.cargo_owner.activity.userAct.SignPlatformActivity;
 import com.bt.smart.cargo_owner.messageInfo.LoginInfo;
+import com.bt.smart.cargo_owner.utils.CommonUtil;
 import com.bt.smart.cargo_owner.utils.GlideLoaderUtil;
 import com.bt.smart.cargo_owner.utils.HttpOkhUtils;
 import com.bt.smart.cargo_owner.utils.MyAlertDialog;
@@ -286,6 +287,7 @@ public class User_F extends Fragment implements View.OnClickListener {
                     MyApplication.companyContract = loginInfo.getData().getZRegister().getCompanyContract();
                     MyApplication.userHeadPic = loginInfo.getData().getZRegister().getCompanyLicence();
                     MyApplication.userOrderNum = 0;
+                    MyApplication.paccountid = loginInfo.getData().getZRegister().getPaccountid();
                     MyApplication.money = loginInfo.getData().getZRegister().getFaccount();
                     MyApplication.userFccountid = loginInfo.getData().getZRegister().getFaccountid();
                     //更改界面UI
@@ -354,10 +356,32 @@ public class User_F extends Fragment implements View.OnClickListener {
     }
 
     private void preview(){
-        if(MyApplication.companyContract==null){
-            moveToSign();
-        }else {
+        if(MyApplication.checkStatus.equals("0")){
+            ToastUtils.showToast(getContext(),"尚未认证，请先提交认证资料！");
+            return;
+        }
+        if(CommonUtil.isNotEmpty(MyApplication.companyContract)){
             startActivity(new Intent(getContext(), XieyiActivity.class));
+        }else {
+            new MyAlertDialog(getContext(), MyAlertDialog.WARNING_TYPE_1)
+                    .setContentText("还未签署平台协议，现在签署？")
+                    .setConfirmText("好的")
+                    .setCancelText("稍后")
+                    .showCancelButton(true)
+                    .setConfirmClickListener(new MyAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(MyAlertDialog sweetAlertDialog) {
+                            moveToSign();
+                            sweetAlertDialog.dismiss();
+                        }
+                    })
+                    .setCancelClickListener(new MyAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(MyAlertDialog sweetAlertDialog) {
+                            sweetAlertDialog.dismiss();
+                        }
+                    })
+                    .show();
         }
     }
 }

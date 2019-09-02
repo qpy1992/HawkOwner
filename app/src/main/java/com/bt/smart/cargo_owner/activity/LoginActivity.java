@@ -334,7 +334,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     MyApplication.userHeadPic = loginInfo.getData().getZRegister().getCompanyLicence();
                     MyApplication.money = loginInfo.getData().getZRegister().getFaccount();
                     MyApplication.userOrderNum = 0;
-
+                    MyApplication.paccountid = loginInfo.getData().getZRegister().getPaccountid();
                     MyApplication.userFccountid = loginInfo.getData().getZRegister().getFaccountid();
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     finish();

@@ -156,6 +156,7 @@ public class LoginInfo {
             private String fbankNo;
             private String usercode;
             private double faccount;
+            private String paccountid;
             /**
              * faccountid :
              */
@@ -416,6 +417,14 @@ public class LoginInfo {
 
             public void setFaccountid(String faccountid) {
                 this.faccountid = faccountid;
+            }
+
+            public String getPaccountid() {
+                return paccountid;
+            }
+
+            public void setPaccountid(String paccountid) {
+                this.paccountid = paccountid;
             }
         }
     }

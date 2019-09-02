@@ -42,6 +42,7 @@ public class MyApplication extends Application {
     public static int userOrderNum;//运单数
     public static boolean checkFace;
     public static String  loadUrl;
+    public static String paccountid;
 
     @Override
     public void onCreate() {

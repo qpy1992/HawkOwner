@@ -121,7 +121,9 @@ public class UpdateAppUtil {
         ConfirmDialog dialog = new ConfirmDialog(activity, new ConfirmDialog.OnClickListener() {
             @Override
             public void sureBtnClick() { //点击确认按钮
-                DownloadAppUtil.downloadWithAutoInstall(activity, apkPath, "eagle_owner.apk", serverVersionName);
+//                DownloadAppUtil.downloadWithAutoInstall(activity, apkPath, "eagle_owner.apk", serverVersionName);
+                DownloadUtils utils = new DownloadUtils(activity);
+                utils.downloadAPK(apkPath,"eagle_owner.apk");
             }
 
             @Override

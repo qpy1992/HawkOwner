@@ -20,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bt.smart.cargo_owner.MainActivity;
 import com.bt.smart.cargo_owner.MyApplication;
 import com.bt.smart.cargo_owner.NetConfig;
 import com.bt.smart.cargo_owner.R;
@@ -59,9 +60,7 @@ public class SubmitIDCardFragment extends Fragment implements View.OnClickListen
     private RelativeLayout rlt_headex;
     private ImageView img_head;
     private ImageView img_up_cardZ;
-    private RelativeLayout rlt_carZ;
     private ImageView img_cardZ;
-    private RelativeLayout rlt_carB;
     private ImageView img_up_cardB;
     private ImageView img_cardB;
     private TextView tv_submit;
@@ -112,10 +111,8 @@ public class SubmitIDCardFragment extends Fragment implements View.OnClickListen
         rlt_headex = mRootView.findViewById(R.id.rlt_headex);
         img_head = mRootView.findViewById(R.id.img_head);
         img_up_cardZ = mRootView.findViewById(R.id.img_up_cardZ);
-        rlt_carZ = mRootView.findViewById(R.id.rlt_carZ);
         img_cardZ = mRootView.findViewById(R.id.img_cardZ);
         img_up_cardB = mRootView.findViewById(R.id.img_up_cardB);
-        rlt_carB = mRootView.findViewById(R.id.rlt_carB);
         img_cardB = mRootView.findViewById(R.id.img_cardB);
         tv_submit = mRootView.findViewById(R.id.tv_submit);
     }
@@ -219,11 +216,9 @@ public class SubmitIDCardFragment extends Fragment implements View.OnClickListen
                 showImage(img_head, headPicPath);
             } else if (2 == picWhich) {
                 SFZZPicPath = c.getString(columnIndex);
-                rlt_carZ.setVisibility(View.GONE);
                 showImage(img_cardZ, SFZZPicPath);
             } else if (3 == picWhich) {
                 SFZBPicPath = c.getString(columnIndex);
-                rlt_carB.setVisibility(View.GONE);
                 showImage(img_cardB, SFZBPicPath);
             }
             c.close();
@@ -250,14 +245,12 @@ public class SubmitIDCardFragment extends Fragment implements View.OnClickListen
                     ToastUtils.showToast(getContext(), "未获取到照片");
                     return;
                 }
-                rlt_carZ.setVisibility(View.GONE);
                 showImage(img_cardZ, SFZZPicPath);
             } else if (3 == picWhich) {
                 if (null == SFZBPicPath || "".equals(SFZBPicPath)) {
                     ToastUtils.showToast(getContext(), "未获取到照片");
                     return;
                 }
-                rlt_carB.setVisibility(View.GONE);
                 showImage(img_cardB, SFZBPicPath);
             } else {
                 ToastUtils.showToast(getContext(), "出现未知状况，请重新选择");
@@ -299,7 +292,10 @@ public class SubmitIDCardFragment extends Fragment implements View.OnClickListen
             ToastUtils.showToast(getContext(), "证件号不能为空");
             return;
         }
-
+        if(et_code.getText().toString().length()!=18){
+            ToastUtils.showToast(getContext(),"身份证号码为18位");
+            return;
+        }
         //先提交图片，在提交信息
         if ("2".equals(MyApplication.userType)) {
             if (MyTextUtils.isEditTextEmpty(et_legalName, "请输入法人代表名称")) {
@@ -448,6 +444,8 @@ public class SubmitIDCardFragment extends Fragment implements View.OnClickListen
             params.put("headpic", headFileUrl);
             params.put("front", IDZFileUrl);
             params.put("back", IDBFileUrl);
+            Log.i("paccountid",MyApplication.paccountid);
+            params.put("accountid",MyApplication.paccountid);
         }
         params.setUseJsonStreamer(true);
         ProgressDialogUtil.startShow(getContext(), "正在提交信息...");
@@ -470,8 +468,9 @@ public class SubmitIDCardFragment extends Fragment implements View.OnClickListen
                 AuthInfo authInfo = gson.fromJson(resbody, AuthInfo.class);
                 ToastUtils.showToast(getContext(), authInfo.getMessage());
                 if (authInfo.isOk()) {
+                    MyApplication.paccountid = authInfo.getData().getPaccountid();
                     //先跳转支付宝人脸认证
-                    String webUri = authInfo.getData().toString();
+                    String webUri = authInfo.getData().getPersonalUrl();
                     if (null == webUri || "".equals(webUri)) {
                         ToastUtils.showToast(getContext(), "未获取到个人认证信息");
                         return;
@@ -494,6 +493,8 @@ public class SubmitIDCardFragment extends Fragment implements View.OnClickListen
 //                        ftt.add(R.id.frame, personalFt, "personalFt");
 //                        ftt.commit();
 //                    }
+                }else{
+                    ToastUtils.showToast(getContext(),authInfo.getMessage());
                 }
             }
         });

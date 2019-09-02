@@ -1,5 +1,6 @@
 package com.bt.smart.cargo_owner.activity.userAct;
 
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebSettings;
@@ -17,6 +18,7 @@ import com.bt.smart.cargo_owner.R;
 import com.bt.smart.cargo_owner.messageInfo.RuleContentInfo;
 import com.bt.smart.cargo_owner.messageInfo.SignInfo;
 import com.bt.smart.cargo_owner.utils.HttpOkhUtils;
+import com.bt.smart.cargo_owner.utils.MyFragmentManagerUtil;
 import com.bt.smart.cargo_owner.utils.ProgressDialogUtil;
 import com.bt.smart.cargo_owner.utils.RequestParamsFM;
 import com.bt.smart.cargo_owner.utils.ToastUtils;
@@ -49,7 +51,7 @@ public class SignPlatformActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void setView() {
-        img_back = findViewById(R.id.img_back);
+        img_back = findViewById(R.id.img_back_a);
         tv_title = findViewById(R.id.tv_title);
         tv_plat = findViewById(R.id.tv_plat);
         tv_useName = findViewById(R.id.tv_useName);

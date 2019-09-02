@@ -198,6 +198,7 @@ public class FirstActivity extends Activity implements View.OnClickListener {
                     MyApplication.companyContract = loginInfo.getData().getZRegister().getCompanyContract();
                     MyApplication.userHeadPic = loginInfo.getData().getZRegister().getCompanyLicence();
                     MyApplication.userOrderNum = 0;
+                    MyApplication.paccountid = loginInfo.getData().getZRegister().getPaccountid();
                     MyApplication.money = loginInfo.getData().getZRegister().getFaccount();
                     MyApplication.userFccountid = loginInfo.getData().getZRegister().getFaccountid();
                     startActivity(new Intent(FirstActivity.this, MainActivity.class));

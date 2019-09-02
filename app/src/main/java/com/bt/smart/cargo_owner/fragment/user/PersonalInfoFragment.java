@@ -51,8 +51,6 @@ public class PersonalInfoFragment extends Fragment implements View.OnClickListen
     private ImageView img_cardZ;
     private ImageView img_up_cardB;//选择身份证背面
     private ImageView img_cardB;
-    private RelativeLayout rlt_carZ;//正面示意图
-    private RelativeLayout rlt_carB;//背面示意图
     private TextView tv_submit;
 
     private int SHOT_CODE = 10069;//调用系统相册-选择图片
@@ -80,10 +78,8 @@ public class PersonalInfoFragment extends Fragment implements View.OnClickListen
         img_up_head = mRootView.findViewById(R.id.img_up_head);
         img_head = mRootView.findViewById(R.id.img_head);
         img_up_cardZ = mRootView.findViewById(R.id.img_up_cardZ);
-        rlt_carZ = mRootView.findViewById(R.id.rlt_carZ);
         img_cardZ = mRootView.findViewById(R.id.img_cardZ);
         img_up_cardB = mRootView.findViewById(R.id.img_up_cardB);
-        rlt_carB = mRootView.findViewById(R.id.rlt_carB);
         img_cardB = mRootView.findViewById(R.id.img_cardB);
         tv_submit = mRootView.findViewById(R.id.tv_submit);
     }
