@@ -81,6 +81,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         edit_num = (EditText) findViewById(R.id.edit_num);
         edit_psd = (EditText) findViewById(R.id.edit_psd);
         ck_remPas = (CheckBox) findViewById(R.id.ck_remPas);
+//        ck_remPas.setChecked(true);
+//        isRem = true;
         bt_login = (Button) findViewById(R.id.bt_login);
         cb_agree = findViewById(R.id.cb_agree);
         tv_fgt = (TextView) findViewById(R.id.tv_fgt);
@@ -336,6 +338,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     MyApplication.userOrderNum = 0;
                     MyApplication.paccountid = loginInfo.getData().getZRegister().getPaccountid();
                     MyApplication.userFccountid = loginInfo.getData().getZRegister().getFaccountid();
+                    if(loginInfo.getData().getZRegister().getCheckface()==1){
+                        MyApplication.checkFace = true;
+                    }else {
+                        MyApplication.checkFace = false;
+                    }
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     finish();
                 }

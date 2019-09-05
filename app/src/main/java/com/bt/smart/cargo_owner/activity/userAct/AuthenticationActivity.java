@@ -32,17 +32,17 @@ public class AuthenticationActivity extends BaseActivity {
     }
 
     private void setView() {
-        if (null == MyApplication.userFccountid || "".equals(MyApplication.userFccountid)) {
+//        if (null == MyApplication.userFccountid || "".equals(MyApplication.userFccountid)) {
             mIDCardFt = new SubmitIDCardFragment();
             FragmentTransaction ftt = getSupportFragmentManager().beginTransaction();
             ftt.add(R.id.frame, mIDCardFt, "mIDCardFt");
             ftt.commit();
-        } else {
-            personalFt = new PersonalInfoFragment();
-            FragmentTransaction ftt = getSupportFragmentManager().beginTransaction();
-            ftt.add(R.id.frame, personalFt, "personalFt");
-            ftt.commit();
-        }
+//        } else {
+//            personalFt = new PersonalInfoFragment();
+//            FragmentTransaction ftt = getSupportFragmentManager().beginTransaction();
+//            ftt.add(R.id.frame, personalFt, "personalFt");
+//            ftt.commit();
+//        }
     }
 
     private void setData() {

@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.bt.smart.cargo_owner.NetConfig;
 import com.bt.smart.cargo_owner.R;
 import com.bt.smart.cargo_owner.activity.LoginActivity;
+import com.bt.smart.cargo_owner.messageInfo.CommenInfo;
 import com.bt.smart.cargo_owner.messageInfo.CommonInfo;
 import com.bt.smart.cargo_owner.messageInfo.RegisterInfo;
 import com.bt.smart.cargo_owner.messageInfo.RuleContentInfo;
@@ -282,9 +283,9 @@ public class RegisterPhoneFragment extends Fragment implements View.OnClickListe
                     return;
                 }
                 Gson gson = new Gson();
-                CommonInfo sendSMSInfo = gson.fromJson(resbody, CommonInfo.class);
-                ToastUtils.showToast(getContext(), sendSMSInfo.getMessage());
-                if (1 == sendSMSInfo.getCode()) {
+                CommenInfo sendSMSInfo = gson.fromJson(resbody, CommenInfo.class);
+                ToastUtils.showToast(getContext(), sendSMSInfo.getData().toString());
+                if (sendSMSInfo.isOk()) {
                     startActivity(new Intent(getContext(), LoginActivity.class));
                     isFinish = true;
                     getActivity().finish();

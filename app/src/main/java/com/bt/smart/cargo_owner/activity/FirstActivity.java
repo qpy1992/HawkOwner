@@ -201,6 +201,11 @@ public class FirstActivity extends Activity implements View.OnClickListener {
                     MyApplication.paccountid = loginInfo.getData().getZRegister().getPaccountid();
                     MyApplication.money = loginInfo.getData().getZRegister().getFaccount();
                     MyApplication.userFccountid = loginInfo.getData().getZRegister().getFaccountid();
+                    if(loginInfo.getData().getZRegister().getCheckface()==1){
+                        MyApplication.checkFace = true;
+                    }else{
+                        MyApplication.checkFace = false;
+                    }
                     startActivity(new Intent(FirstActivity.this, MainActivity.class));
                     finish();
                 }

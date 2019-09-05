@@ -1,5 +1,7 @@
 package com.bt.smart.cargo_owner;
 
+import android.provider.DocumentsContract;
+
 /**
  * @创建者 AndyYan
  * @创建时间 2018/8/28 8:48
@@ -126,4 +128,8 @@ public class NetConfig {
     public static String ASSIGNDRIVER = ROOT + "driverOrderController/assignDriver";
 
     public static String JOURNEY = ROOT + "driverJourneyController/getRouteList";
+
+    public static String CHECKFACE = ROOT + "eSignController/CheckFace";
+
+    public static String EXECUTESQL= ROOT + "driverOrderController/executeSql";
 }

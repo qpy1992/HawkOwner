@@ -339,6 +339,31 @@
                     android:scaleType="centerCrop"
                     android:src="@drawable/up_front" />
 
+                <RelativeLayout
+                    android:id="@+id/rlt_carZ"
+                    android:layout_width="80dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginLeft="20dp">
+
+                    <ImageView
+                        android:layout_width="80dp"
+                        android:layout_height="50dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/up_idcard_z" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:background="@color/trans_black"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"
+                        android:text="@string/example"
+                        android:textColor="@color/white"
+                        android:textSize="10dp" />
+                </RelativeLayout>
+
                 <ImageView
                     android:id="@+id/img_cardZ"
                     android:layout_width="120dp"
@@ -375,6 +400,31 @@
                     android:layout_marginLeft="10dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/up_back" />
+
+                <RelativeLayout
+                    android:id="@+id/rlt_carB"
+                    android:layout_width="80dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginLeft="20dp">
+
+                    <ImageView
+                        android:layout_width="80dp"
+                        android:layout_height="50dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/up_idcard_b" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:background="@color/trans_black"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"
+                        android:text="@string/example"
+                        android:textColor="@color/white"
+                        android:textSize="10dp" />
+                </RelativeLayout>
 
                 <ImageView
                     android:id="@+id/img_cardB"

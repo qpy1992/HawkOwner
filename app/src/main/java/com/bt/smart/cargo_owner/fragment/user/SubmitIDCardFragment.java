@@ -27,6 +27,7 @@ import com.bt.smart.cargo_owner.R;
 import com.bt.smart.cargo_owner.activity.homeAct.AuthenticationWebAct;
 import com.bt.smart.cargo_owner.messageInfo.AuthInfo;
 import com.bt.smart.cargo_owner.messageInfo.UpPicInfo;
+import com.bt.smart.cargo_owner.utils.CheckIDCardRule;
 import com.bt.smart.cargo_owner.utils.GlideLoaderUtil;
 import com.bt.smart.cargo_owner.utils.HttpOkhUtils;
 import com.bt.smart.cargo_owner.utils.MyPopChoisePic;
@@ -59,8 +60,10 @@ public class SubmitIDCardFragment extends Fragment implements View.OnClickListen
     private ImageView img_up_head;
     private RelativeLayout rlt_headex;
     private ImageView img_head;
+    private RelativeLayout rlt_carZ;
     private ImageView img_up_cardZ;
     private ImageView img_cardZ;
+    private RelativeLayout rlt_carB;
     private ImageView img_up_cardB;
     private ImageView img_cardB;
     private TextView tv_submit;
@@ -115,6 +118,8 @@ public class SubmitIDCardFragment extends Fragment implements View.OnClickListen
         img_up_cardB = mRootView.findViewById(R.id.img_up_cardB);
         img_cardB = mRootView.findViewById(R.id.img_cardB);
         tv_submit = mRootView.findViewById(R.id.tv_submit);
+        rlt_carZ = mRootView.findViewById(R.id.rlt_carZ);
+        rlt_carB = mRootView.findViewById(R.id.rlt_carB);
     }
 
     private void initData() {
@@ -216,9 +221,11 @@ public class SubmitIDCardFragment extends Fragment implements View.OnClickListen
                 showImage(img_head, headPicPath);
             } else if (2 == picWhich) {
                 SFZZPicPath = c.getString(columnIndex);
+                rlt_carZ.setVisibility(View.GONE);
                 showImage(img_cardZ, SFZZPicPath);
             } else if (3 == picWhich) {
                 SFZBPicPath = c.getString(columnIndex);
+                rlt_carB.setVisibility(View.GONE);
                 showImage(img_cardB, SFZBPicPath);
             }
             c.close();
@@ -245,12 +252,14 @@ public class SubmitIDCardFragment extends Fragment implements View.OnClickListen
                     ToastUtils.showToast(getContext(), "未获取到照片");
                     return;
                 }
+                rlt_carZ.setVisibility(View.GONE);
                 showImage(img_cardZ, SFZZPicPath);
             } else if (3 == picWhich) {
                 if (null == SFZBPicPath || "".equals(SFZBPicPath)) {
                     ToastUtils.showToast(getContext(), "未获取到照片");
                     return;
                 }
+                rlt_carB.setVisibility(View.GONE);
                 showImage(img_cardB, SFZBPicPath);
             } else {
                 ToastUtils.showToast(getContext(), "出现未知状况，请重新选择");
@@ -292,8 +301,9 @@ public class SubmitIDCardFragment extends Fragment implements View.OnClickListen
             ToastUtils.showToast(getContext(), "证件号不能为空");
             return;
         }
-        if(et_code.getText().toString().length()!=18){
-            ToastUtils.showToast(getContext(),"身份证号码为18位");
+        CheckIDCardRule regex = new CheckIDCardRule(et_code.getText().toString(), null);
+        if(!regex.validate()){
+            ToastUtils.showToast(getContext(),"身份证号码有误");
             return;
         }
         //先提交图片，在提交信息
@@ -444,7 +454,7 @@ public class SubmitIDCardFragment extends Fragment implements View.OnClickListen
             params.put("headpic", headFileUrl);
             params.put("front", IDZFileUrl);
             params.put("back", IDBFileUrl);
-            Log.i("paccountid",MyApplication.paccountid);
+            Log.i("paccountid",MyApplication.paccountid+"");
             params.put("accountid",MyApplication.paccountid);
         }
         params.setUseJsonStreamer(true);

@@ -109,6 +109,7 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
     private String isBoxed = "1";
     private int ftype = 0;
     private double ap_price;
+    private String current_select;
 
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
@@ -525,6 +526,8 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
     }
 
     private void initStartPlace() {
+        stCityLevel = 0;
+        current_select = "选择：全国";
         //获取省的数据
         mSHEData = new ArrayList();
         mSHIData = new ArrayList();
@@ -582,6 +585,7 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
             @Override
             public void onViewListener(PopupWindow popupWindow, View inflateView) {
                 RecyclerView recy_city = inflateView.findViewById(R.id.recy_city);
+                final TextView tv_current_select = inflateView.findViewById(R.id.tv_current_select);
                 final TextView tv_back = inflateView.findViewById(R.id.tv_back);
                 final TextView tv_cancel = inflateView.findViewById(R.id.tv_cancel);
                 if (stCityLevel != 0) {
@@ -594,14 +598,15 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
                     @Override
                     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                         String id = mDataPopEd.get(position).getId();
+                        current_select = current_select + "-" + mDataPopEd.get(position).getCont();
                         if (stCityLevel == 0) {
                             //获取省份对应城市
-                            getCityBySheng(id, tv_back, recyPlaceAdapter);
+                            getCityBySheng(id, tv_back,tv_current_select, recyPlaceAdapter);
                             province = mDataPopEd.get(position).getCont();
                             stCityLevel++;
                         } else if (stCityLevel == 1) {
                             //获取城市对应的区
-                            getTownByCity(id, tv_back, recyPlaceAdapter);
+                            getTownByCity(id, tv_back,tv_current_select, recyPlaceAdapter);
                             city = mDataPopEd.get(position).getCont();
                             stCityLevel++;
                         } else {
@@ -610,11 +615,13 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
                                 tv_fh_area.setText(province + city + mDataPopEd.get(position).getCont());
                                 fh_id = mDataPopEd.get(position).getId();
                                 openHelper.dismiss();
+                                initStartPlace();
                             } else {
                                 //将选择的目的地填写
                                 tv_sh_area.setText(province + city + mDataPopEd.get(position).getCont());
                                 sh_id = mDataPopEd.get(position).getId();
                                 openHelper.dismiss();
+                                initStartPlace();
                             }
                         }
                     }
@@ -626,6 +633,8 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
                         stCityLevel--;
                         if (stCityLevel == 0) {
                             tv_back.setVisibility(View.GONE);
+                            current_select = "选择：全国";
+                            tv_current_select.setText(current_select);
                             mDataPopEd.clear();
                             //添加上一级省数据
                             for (ShengDataInfo.DataBean bean : mSHEData) {
@@ -636,6 +645,8 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
                             }
                             recyPlaceAdapter.notifyDataSetChanged();
                         } else if (stCityLevel == 1) {
+                            current_select = current_select.split("-")[0]+"-"+current_select.split("-")[1];
+                            tv_current_select.setText(current_select);
                             mDataPopEd.clear();
                             //添加上一级城市数据
                             for (ShengDataInfo.DataBean bean : mSHIData) {
@@ -658,7 +669,7 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
         });
     }
 
-    private void getCityBySheng(String id, final TextView tv_back, final RecyPlaceAdapter recyPlaceAdapter) {
+    private void getCityBySheng(String id, final TextView tv_back,final TextView tv_current, final RecyPlaceAdapter recyPlaceAdapter) {
         RequestParamsFM headParam = new RequestParamsFM();
         headParam.put("X-AUTH-TOKEN", MyApplication.userToken);
         RequestParamsFM params = new RequestParamsFM();
@@ -682,6 +693,7 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
                 ToastUtils.showToast(getContext(), shengDataInfo.getMessage());
                 if (shengDataInfo.isOk()) {
                     tv_back.setVisibility(View.VISIBLE);
+                    tv_current.setText(current_select);
                     mSHIData.clear();
                     mSHIData.addAll(shengDataInfo.getData());
                     if (null == mDataPopEd) {
@@ -701,7 +713,7 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
         });
     }
 
-    private void getTownByCity(String id, final TextView tv_back, final RecyPlaceAdapter recyPlaceAdapter) {
+    private void getTownByCity(String id, final TextView tv_back,final TextView tv_current, final RecyPlaceAdapter recyPlaceAdapter) {
         RequestParamsFM headParam = new RequestParamsFM();
         headParam.put("X-AUTH-TOKEN", MyApplication.userToken);
         RequestParamsFM params = new RequestParamsFM();
@@ -725,6 +737,7 @@ public class SupplyGoodsFragment extends Fragment implements View.OnClickListene
                 ToastUtils.showToast(getContext(), shengDataInfo.getMessage());
                 if (shengDataInfo.isOk()) {
                     tv_back.setVisibility(View.VISIBLE);
+                    tv_current.setText(current_select);
                     mQUData.clear();
                     mQUData.addAll(shengDataInfo.getData());
                     if (null == mDataPopEd) {

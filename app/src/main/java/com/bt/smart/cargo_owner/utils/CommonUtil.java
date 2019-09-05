@@ -129,7 +129,6 @@ public class CommonUtil {
         if (html == null) {
             return "";
         }
-
         final Document document = Jsoup.parse(html);
         final Document.OutputSettings outputSettings = new Document.OutputSettings().prettyPrint(false);
         document.outputSettings(outputSettings);

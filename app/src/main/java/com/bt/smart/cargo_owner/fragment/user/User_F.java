@@ -6,7 +6,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,10 +24,12 @@ import com.bt.smart.cargo_owner.R;
 import com.bt.smart.cargo_owner.activity.FirstActivity;
 import com.bt.smart.cargo_owner.activity.LoginActivity;
 import com.bt.smart.cargo_owner.activity.XieyiActivity;
+import com.bt.smart.cargo_owner.activity.homeAct.AuthenticationWebAct;
 import com.bt.smart.cargo_owner.activity.userAct.AllOrderListActivity;
 import com.bt.smart.cargo_owner.activity.userAct.AuthenticationActivity;
 import com.bt.smart.cargo_owner.activity.userAct.MoneyActivity;
 import com.bt.smart.cargo_owner.activity.userAct.SignPlatformActivity;
+import com.bt.smart.cargo_owner.messageInfo.CommenInfo;
 import com.bt.smart.cargo_owner.messageInfo.LoginInfo;
 import com.bt.smart.cargo_owner.utils.CommonUtil;
 import com.bt.smart.cargo_owner.utils.GlideLoaderUtil;
@@ -53,6 +57,7 @@ import okhttp3.Request;
  */
 
 public class User_F extends Fragment implements View.OnClickListener {
+    private static String TAG = "User_F";
     private View mRootView;
     private TextView tv_title;
     private SwipeRefreshLayout swiperefresh;
@@ -73,12 +78,15 @@ public class User_F extends Fragment implements View.OnClickListener {
     private RelativeLayout rtv_about;
     private RelativeLayout rtv_exit;//退出登录
     private RelativeLayout rlt_allOrder;//更多订单
+    private PersonalInfoFragment personalFt;
     private int REQUEST_MONEY_CODE = 10015;
     private int RESULT_MONEY_CODE = 10016;
     private int REQUEST_CHECK_FACE = 1017;//跳转人脸认证界面
     private int RESULT_CHECK_FACE = 1018;
     private int REQUEST_SIGN_CODE = 1026;//跳转签署协议界面
     private int RESULT_SIGN_CODE = 1027;
+    private int REQUEST_AUTHENTICA_CODE = 10110;//跳转人脸认证协议码
+    private int RESULT_AUTHENTICA_CODE = 10111;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -150,6 +158,9 @@ public class User_F extends Fragment implements View.OnClickListener {
                 } else if ("签署协议".equals(MyTextUtils.getTvTextContent(tv_submit))) {
                     //跳转签署协议界面
                     moveToSign();
+                }else if("人脸认证".equals(MyTextUtils.getTvTextContent(tv_submit))){
+                    //跳转人脸认证界面
+                    toCheckFace();
                 }
                 break;
             case R.id.linear_money:
@@ -209,6 +220,19 @@ public class User_F extends Fragment implements View.OnClickListener {
             //刷新数据
             getNewCheckStatue();
         }
+        //判断人脸认证信息
+        if (RESULT_AUTHENTICA_CODE == resultCode) {
+            if ("2".equals(MyApplication.userType)) {
+                getActivity().setResult(RESULT_CHECK_FACE);
+                getActivity().finish();
+            } else {
+                //提交个人资料
+                FragmentTransaction ftt = getFragmentManager().beginTransaction();
+                personalFt = new PersonalInfoFragment();
+                ftt.add(R.id.frame, personalFt, "personalFt");
+                ftt.commit();
+            }
+        }
     }
 
     private void checkCheckStatues() {
@@ -217,6 +241,13 @@ public class User_F extends Fragment implements View.OnClickListener {
             tv_isCheck.setTextColor(getResources().getColor(R.color.red_30));
             tv_submit.setVisibility(View.VISIBLE);
         } else if ("1".equals(MyApplication.checkStatus)) {//审核通过
+            if(!MyApplication.checkFace){
+                tv_isCheck.setText("未人脸认证");
+                tv_isCheck.setTextColor(getResources().getColor(R.color.red_30));
+                tv_submit.setVisibility(View.VISIBLE);
+                tv_submit.setText("人脸认证");
+                return;
+            }
             tv_checked.setVisibility(View.VISIBLE);
             tv_isCheck.setVisibility(View.GONE);
             tv_warn.setVisibility(View.GONE);
@@ -347,6 +378,40 @@ public class User_F extends Fragment implements View.OnClickListener {
 
     private void contactService() {
 
+    }
+
+    protected void toCheckFace(){
+        RequestParamsFM headParam = new RequestParamsFM();
+        headParam.put(NetConfig.TOKEN,MyApplication.userToken);
+        RequestParamsFM params = new RequestParamsFM();
+        params.put("paccountid",MyApplication.paccountid);
+        params.put("type",0);
+        HttpOkhUtils.getInstance().doPostWithHeader(NetConfig.CHECKFACE, headParam, params, new HttpOkhUtils.HttpCallBack() {
+            @Override
+            public void onError(Request request, IOException e) {
+                Log.i(TAG,"网络错误");
+            }
+
+            @Override
+            public void onSuccess(int code, String resbody) {
+                if(code!=200){
+                    Log.i(TAG,"网络错误");
+                    return;
+                }
+                Log.i(TAG,resbody);
+                CommenInfo info = new Gson().fromJson(resbody,CommenInfo.class);
+                String webUri = info.getData().toString();
+                if (CommonUtil.isNotEmpty(webUri)) {
+                    Intent intent = new Intent(getContext(), AuthenticationWebAct.class);
+                    intent.putExtra("url", webUri);
+                    getActivity().startActivityForResult(intent, REQUEST_AUTHENTICA_CODE);
+                }else {
+                    ToastUtils.showToast(getContext(), "未获取到个人认证信息");
+                    return;
+                }
+
+            }
+        });
     }
 
     private void aboutUs() {

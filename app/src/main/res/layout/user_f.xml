@@ -87,7 +87,7 @@
                                 android:id="@+id/tv_warn"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="请先提交资料，认证通过后才能联系货主哦！"
+                                android:text="请先进行身份认证，认证通过后才能联系货主哦！"
                                 android:textColor="@color/vm_black_54"
                                 android:textSize="12sp"/>
 

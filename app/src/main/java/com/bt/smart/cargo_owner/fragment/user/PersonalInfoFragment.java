@@ -73,7 +73,7 @@ public class PersonalInfoFragment extends Fragment implements View.OnClickListen
     }
 
     private void initView() {
-        img_back = mRootView.findViewById(R.id.img_back);
+        img_back = mRootView.findViewById(R.id.img_back_a);
         tv_title = mRootView.findViewById(R.id.tv_title);
         img_up_head = mRootView.findViewById(R.id.img_up_head);
         img_head = mRootView.findViewById(R.id.img_head);

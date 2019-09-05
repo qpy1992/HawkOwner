@@ -157,6 +157,7 @@ public class LoginInfo {
             private String usercode;
             private double faccount;
             private String paccountid;
+            private int    checkface;
             /**
              * faccountid :
              */
@@ -425,6 +426,14 @@ public class LoginInfo {
 
             public void setPaccountid(String paccountid) {
                 this.paccountid = paccountid;
+            }
+
+            public int getCheckface() {
+                return checkface;
+            }
+
+            public void setCheckface(int checkface) {
+                this.checkface = checkface;
             }
         }
     }
