@@ -21,8 +21,8 @@ android {
         applicationId "com.bt.smart.cargo_owner"
         minSdkVersion 19
         targetSdkVersion 26
-        versionCode 2
-        versionName "鹰速1.0.1"
+        versionCode 3
+        versionName "鹰速1.0.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         manifestPlaceholders = [
                 GETUI_APP_ID    : "6xiI9sd9XEAQBkWQ053Zh7",

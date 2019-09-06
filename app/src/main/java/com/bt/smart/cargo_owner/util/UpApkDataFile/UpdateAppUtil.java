@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.Toast;
+import com.bt.smart.cargo_owner.utils.MyAlertDialog;
 
 /**
  * @创建者 AndyYan
@@ -118,10 +119,9 @@ public class UpdateAppUtil {
     }
 
     private void realUpdate() {
-        ConfirmDialog dialog = new ConfirmDialog(activity, new ConfirmDialog.OnClickListener() {
+        /*ConfirmDialog dialog = new ConfirmDialog(activity, new ConfirmDialog.OnClickListener() {
             @Override
             public void sureBtnClick() { //点击确认按钮
-//                DownloadAppUtil.downloadWithAutoInstall(activity, apkPath, "eagle_owner.apk", serverVersionName);
                 DownloadUtils utils = new DownloadUtils(activity);
                 utils.downloadAPK(apkPath,"eagle_owner.apk");
             }
@@ -135,6 +135,26 @@ public class UpdateAppUtil {
         dialog.setTitle("发现新版本:" + serverVersionName + "是否下载更新?");
         dialog.setContent(serviceCont);
         dialog.setCancelable(false);
-        dialog.show();
+        dialog.show();*/
+        final MyAlertDialog dialog = new MyAlertDialog(activity, MyAlertDialog.NORMAL_TYPE);
+        dialog.setTitleText("发现新版本:" + serverVersionName)
+                .setContentText(serviceCont)
+                .setConfirmText("好的")
+                .setCancelText("再说")
+                .showCancelButton(true)
+                .setConfirmClickListener(new MyAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(MyAlertDialog sweetAlertDialog) {
+                        DownloadUtils utils = new DownloadUtils(activity);
+                        utils.downloadAPK(apkPath,"eagle_owner.apk");
+                    }
+                })
+                .setCancelClickListener(new MyAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(MyAlertDialog sweetAlertDialog) {
+                        dialog.dismiss();
+                    }
+                });
+                dialog.show();
     }
 }

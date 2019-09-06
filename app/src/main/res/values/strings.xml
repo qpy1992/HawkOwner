@@ -84,4 +84,7 @@
     <string name="carrier_warn1">请输入承运商电话</string>
     <string name="drivers">合作过的司机</string>
     <string name="carriers">合作过的承运商</string>
+    <string name="version">©HawkOwner1.0.0</string>
+    <string name="create">创建新账户</string>
+    <string name="loginown">使用已有账户登录</string>
 </resources>

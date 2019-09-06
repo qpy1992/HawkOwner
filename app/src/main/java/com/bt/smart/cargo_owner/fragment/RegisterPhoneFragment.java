@@ -58,6 +58,7 @@ public class RegisterPhoneFragment extends Fragment implements View.OnClickListe
     private TextView tv_gcode,tv_seragree_reg,tv_pripolicy_reg;//点击获取验证码
     private EditText et_code;//填写验证码
     private EditText et_psd;//填写密码
+    private EditText et_psd_repeat;//确认密码
     private EditText et_rec;//推荐人
     private CheckBox cb_agree_reg;//是否同意协议
     private TextView tv_submit;//确认提交
@@ -89,6 +90,7 @@ public class RegisterPhoneFragment extends Fragment implements View.OnClickListe
         et_phone = mRootView.findViewById(R.id.et_phone);
         et_code = mRootView.findViewById(R.id.et_code);
         et_psd = mRootView.findViewById(R.id.et_psd);
+        et_psd_repeat = mRootView.findViewById(R.id.et_psd_repeat);
         cb_agree_reg = mRootView.findViewById(R.id.cb_agree_reg);
         tv_gcode = mRootView.findViewById(R.id.tv_gcode);
         tv_submit = mRootView.findViewById(R.id.tv_submit);
@@ -158,6 +160,7 @@ public class RegisterPhoneFragment extends Fragment implements View.OnClickListe
                 }
                 String wrtcode = String.valueOf(et_code.getText()).trim();
                 String wrtpsd = String.valueOf(et_psd.getText()).trim();
+                String wrtpsd_repeat = String.valueOf(et_psd_repeat.getText()).trim();
                 if ("".equals(wrtcode) || "请输入验证码".equals(wrtcode)) {
                     ToastUtils.showToast(getContext(), "请输入验证码");
                     return;
@@ -168,6 +171,14 @@ public class RegisterPhoneFragment extends Fragment implements View.OnClickListe
                 }
                 if ("".equals(wrtpsd) || "请设置密码".equals(wrtpsd)) {
                     ToastUtils.showToast(getContext(), "请设置密码");
+                    return;
+                }
+                if ("".equals(wrtpsd_repeat) || "请确认密码".equals(wrtpsd_repeat)) {
+                    ToastUtils.showToast(getContext(), "请确认密码");
+                    return;
+                }
+                if(!wrtpsd.equals(wrtpsd_repeat)){
+                    ToastUtils.showToast(getContext(),"密码不一致，请重新输入");
                     return;
                 }
                 if ("fgt".equals(mKind)) {//修改密码

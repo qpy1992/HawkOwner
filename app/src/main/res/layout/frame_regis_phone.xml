@@ -127,6 +127,16 @@
                 android:password="true" />
 
             <EditText
+                android:id="@+id/et_psd_repeat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="20dp"
+                android:hint="请确认密码"
+                android:password="true" />
+
+            <EditText
                 android:id="@+id/et_rec"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
