@@ -45,7 +45,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:text="@string/zhidan"
-                    android:layout_weight="2"
+                    android:layout_weight="3"
                     android:textColor="@color/word_black"
                     android:textSize="14sp" />
 
@@ -87,7 +87,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
-                        android:layout_weight="2"
+                        android:layout_weight="3"
                         android:textColor="@color/word_black"
                         android:textSize="14sp" />
 
@@ -134,7 +134,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="50dp"
                         android:layout_marginRight="10dp"
-                        android:layout_weight="2"
+                        android:layout_weight="3"
                         android:textColor="@color/word_black"
                         android:textSize="14sp" />
 
@@ -165,7 +165,7 @@
                         android:layout_marginLeft="50dp"
                         android:layout_marginRight="10dp"
                         android:text="@string/fh"
-                        android:layout_weight="2"
+                        android:layout_weight="3"
                         android:textColor="@color/word_black"
                         android:textSize="14sp" />
 
@@ -197,7 +197,7 @@
                         android:layout_marginRight="10dp"
                         android:text="@string/fhm"
                         android:textColor="@color/word_black"
-                        android:layout_weight="2"
+                        android:layout_weight="3"
                         android:textSize="14sp" />
 
                     <EditText
@@ -239,7 +239,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
-                        android:layout_weight="2"
+                        android:layout_weight="3"
                         android:textColor="@color/word_black"
                         android:textSize="14sp" />
 
@@ -287,7 +287,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="50dp"
                         android:layout_marginRight="10dp"
-                        android:layout_weight="2"
+                        android:layout_weight="3"
                         android:textColor="@color/word_black"
                         android:textSize="14sp" />
 
@@ -317,7 +317,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="50dp"
                         android:layout_marginRight="10dp"
-                        android:layout_weight="2"
+                        android:layout_weight="3"
                         android:text="@string/sh"
                         android:textColor="@color/word_black"
                         android:textSize="14sp" />
@@ -349,7 +349,7 @@
                         android:layout_marginLeft="50dp"
                         android:layout_marginRight="10dp"
                         android:text="@string/shm"
-                        android:layout_weight="2"
+                        android:layout_weight="3"
                         android:textColor="@color/word_black"
                         android:textSize="14sp" />
 
@@ -387,12 +387,45 @@
                         android:src="@drawable/icon_goodsinfo" />
 
                     <TextView
-                        android:id="@+id/tv_goods"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/tv_goodstype"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
+                        android:layout_weight="1"
                         android:textColor="@color/word_black"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/tv_goodstype_sel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="20dp"
+                        android:hint="@string/click"
+                        android:gravity="center_horizontal"
+                        android:minWidth="100dp"
+                        android:spinnerMode="dialog"
+                        android:textColor="@color/word_black"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <include layout="@layout/view_line_maginleft50" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:minHeight="40dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_goods"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="50dp"
+                        android:layout_marginRight="10dp"
+                        android:textColor="@color/word_black"
+                        android:text="@string/goods"
                         android:textSize="14sp" />
 
                     <View
@@ -443,38 +476,6 @@
                         android:textColor="@color/word_black"
                         android:layout_weight="1"
                         android:text="@string/other"
-                        android:textSize="14sp" />
-                </LinearLayout>
-
-                <include layout="@layout/view_line_maginleft50" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:minHeight="40dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/tv_goodstype"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="50dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_weight="1"
-                        android:textColor="@color/word_black"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:id="@+id/tv_goodstype_sel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="20dp"
-                        android:hint="@string/click"
-                        android:gravity="center_horizontal"
-                        android:minWidth="100dp"
-                        android:spinnerMode="dialog"
-                        android:textColor="@color/word_black"
                         android:textSize="14sp" />
                 </LinearLayout>
 

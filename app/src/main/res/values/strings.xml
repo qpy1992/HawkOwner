@@ -52,7 +52,7 @@
     <string name="zhadd"><Data><![CDATA[<font color="#e60012"> *</font><font color="#000000">详细地址:</font>]]></Data></string>
     <string name="xh"><Data><![CDATA[<font color="#e60012"> *</font><font color="#000000">卸货地:</font>]]></Data></string>
     <string name="xhadd"><Data><![CDATA[<font color="#e60012"> *</font><font color="#000000">详细地址:</font>]]></Data></string>
-    <string name="goods"><Data><![CDATA[<font color="#e60012"> *</font><font color="#000000">货物信息:</font>]]></Data></string>
+    <string name="goods">&#160;&#160;货物信息:</string>
     <string name="goodsname"><Data><![CDATA[<font color="#e60012"> *</font><font color="#000000">货物名称:</font>]]></Data></string>
     <string name="goodswei"><Data><![CDATA[<font color="#e60012"> *</font><font color="#000000">货物重量(吨):</font>]]></Data></string>
     <string name="ystype"><Data><![CDATA[<font color="#e60012"> *</font><font color="#000000">运输方式:</font>]]></Data></string>

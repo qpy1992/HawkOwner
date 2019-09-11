@@ -144,7 +144,7 @@ public class SubmitIDCardFragment extends Fragment implements View.OnClickListen
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.img_back:
+            case R.id.img_back_a:
                 getActivity().finish();
                 break;
             case R.id.img_up_lic:

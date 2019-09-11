@@ -270,6 +270,7 @@ public class RegisterPhoneFragment extends Fragment implements View.OnClickListe
                     isFinish = true;
                     startActivity(new Intent(getContext(), LoginActivity.class));
                     getActivity().finish();
+                    ToastUtils.showToast(getContext(),"注册成功");
                 }else{
                     ToastUtils.showToast(getContext(),sendSMSInfo.getMessage());
                 }

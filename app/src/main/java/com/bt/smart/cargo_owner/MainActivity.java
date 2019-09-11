@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bt.smart.cargo_owner.activity.userAct.AuthenticationActivity;
 import com.bt.smart.cargo_owner.fragment.home.Home_F;
 import com.bt.smart.cargo_owner.fragment.mineOrders.MyOrders_F;
 import com.bt.smart.cargo_owner.fragment.sameDay.SameDay_F;
@@ -60,6 +61,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private SameDay_F sameDay_F;//车源信息
     private MyOrders_F myOrders_F;//我的订单
     private User_F user_F;//个人中心
+    private int REQUEST_CHECK_FACE = 1017;//跳转人脸认证界面
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +82,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         tv_menu_3 = findViewById(R.id.tv_menu_3);
         //获取最新的版本
         getNewApkInfo();
+        //检查认证状态，提醒认证
+        checkStatus();
     }
 
     private void setData() {
@@ -343,5 +347,38 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 .apkPath(MyApplication.loadUrl) //最新apk下载地址
                 .updateInfo(apkInfo.getData().getApkInfo())
                 .update();
+    }
+
+    protected void checkStatus(){
+        final MyAlertDialog dialog = new MyAlertDialog(MainActivity.this);
+        if(MyApplication.checkStatus.equals("0")){
+            dialog.setTitleText("尚未认证")
+                    .setContentText("现在认证？")
+                    .setCancelText("稍后再说")
+                    .setCancelClickListener(new MyAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(MyAlertDialog sweetAlertDialog) {
+                            dialog.dismiss();
+                        }
+                    }).setConfirmText("立即认证")
+                    .setConfirmClickListener(new MyAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(MyAlertDialog sweetAlertDialog) {
+                            Intent intent = new Intent(MainActivity.this, AuthenticationActivity.class);
+                            startActivityForResult(intent, REQUEST_CHECK_FACE);
+                            dialog.dismiss();
+                        }
+                    }).show();
+        }else if(MyApplication.checkStatus.equals("2")){
+            dialog.setTitleText("账号异常")
+                    .setContentText("账号被禁用，具体原因请联系客服：400-8888-8888")
+                    .setConfirmText("知道了")
+                    .setConfirmClickListener(new MyAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(MyAlertDialog sweetAlertDialog) {
+                            dialog.dismiss();
+                        }
+                    }).show();
+        }
     }
 }
